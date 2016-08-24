@@ -1,0 +1,2 @@
+tuple/row id
+table.blockid.offset
