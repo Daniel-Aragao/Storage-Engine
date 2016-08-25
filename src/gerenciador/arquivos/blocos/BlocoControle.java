@@ -11,7 +11,10 @@ public class BlocoControle implements IBinarizable<BlocoControle> {
 // byte 4 - status do container
 // byte 5, 6, 7, 8 - indica id do proximo bloco livre
 // byte 9, 10 - tamanho do header do container (body do bloco de controle)
-
+// descritor bloco de controle: nome, tipo, tamanho
+// primeira linha será descrição do arquivo
+// cada linha do arquivo será uma linha da tabela 
+	
 	public BlocoControle(byte[] bytes)throws ByteArrayIncorrectFormatException {
 
 	}
