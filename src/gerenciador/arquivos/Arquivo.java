@@ -8,7 +8,9 @@ import gerenciador.arquivos.exceptions.ByteArrayIncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
 
 public class Arquivo implements IBinarizable<Arquivo>{
+	@SuppressWarnings("unused")
 	private BlocoControle blocoControle;
+	@SuppressWarnings("unused")
 	private ArrayList<Bloco> blocos;
 	
 	private Arquivo(byte[] bytes)throws ByteArrayIncorrectFormatException{
