@@ -1,2 +1,7 @@
-cada bloco, arquivo, bcontrole pode ter um atributo referente ao header e um método getbytearray para retornar o valor de cada um no formato de array, já o construtor deles pode ter a regra de formação do bytearray e exigir que os seus campos sejam preenchidos, assim posso limitar o int a 3 bytes
-também posso criar uma validação mais aperfeiçoada nos prórpios sets
+cada bloco, arquivo, bcontrole pode ter um atributo referente ao header e um método getbytearray para retornar 
+o valor de cada um no formato de array, já o construtor deles pode ter a regra de formação do bytearray e 
+exigir que os seus campos sejam preenchidos, assim posso limitar o int a 3 bytes também posso criar uma 
+validação mais aperfeiçoada nos prórpios sets
+
+criar tuplas, blocos, arquivos ainda é pra ser implementado, tirar dúvidas quanto a separadores, identificar
+quem é quem no bytearray

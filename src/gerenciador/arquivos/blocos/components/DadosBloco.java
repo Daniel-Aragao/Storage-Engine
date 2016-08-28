@@ -1,5 +1,5 @@
 package gerenciador.arquivos.blocos.components;
 
-public class BControleBody {
+public class DadosBloco {
 
 }

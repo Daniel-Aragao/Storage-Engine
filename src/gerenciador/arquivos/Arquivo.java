@@ -3,7 +3,7 @@ package gerenciador.arquivos;
 import java.util.ArrayList;
 
 import gerenciador.arquivos.blocos.Bloco;
-import gerenciador.arquivos.blocos.BlocoControle;
+import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.exceptions.ByteArrayIncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
 
@@ -16,7 +16,9 @@ public class Arquivo implements IBinarizable<Arquivo>{
 	private Arquivo(byte[] bytes)throws ByteArrayIncorrectFormatException{
 		
 		if(BlocoControle.MIN_ARRAY_SIZE > bytes.length){
-			throw new ByteArrayIncorrectFormatException();
+			throw new ByteArrayIncorrectFormatException("too small array");
+		}else if(BlocoControle.MAX_ARRAY_SIZE < bytes.length){
+			throw new ByteArrayIncorrectFormatException("too long array");
 		}
 		blocoControle = new BlocoControle(bytes);
 		blocos = new ArrayList<Bloco>();
