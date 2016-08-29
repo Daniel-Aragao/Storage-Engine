@@ -12,12 +12,7 @@ public class BlocoControle implements IBinarizable<BlocoControle> {
 	private HeaderControle header;
 	private Descritor descritor;
 	
-	//HEADER 11b
-// byte 0 - id do container
-// byte 123 - size dos blocos = 4096b
-// byte 4 - status do container
-// byte 5, 6, 7, 8 - indica id do proximo bloco livre
-// byte 9, 10 - tamanho do header do container (body do bloco de controle)
+	//atualizar tamanho do descritor ao acrescentar colunas
 // descritor bloco de controle é representado por nome, tipo e tamanho de cada coluna
 // primeira linha será descrição do arquivo
 // cada linha do arquivo será uma linha da tabela 
@@ -29,11 +24,18 @@ public class BlocoControle implements IBinarizable<BlocoControle> {
 //		descritor = new HeaderControle(ArrayTools.subArray(bytes,, BlocoControle.MIN_ARRAY_SIZE));
 	}
 	
+	public HeaderControle getHeader() {
+		return header;
+	}
+
+	public Descritor getDescritor() {
+		return descritor;
+	}
+
 	@Override
 	public byte[] getByteArray() {
-		header.getByteArray();
-		descritor.getByteArray();
-		
-		throw new RuntimeException();
+		return ByteArrayTools.concatArrays(
+					header.getByteArray(), 
+					descritor.getByteArray());
 	}
 }

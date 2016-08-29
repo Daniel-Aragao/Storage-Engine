@@ -1,6 +1,10 @@
 package gerenciador.utils;
 
 public class ByteArrayTools {
+	
+	private ByteArrayTools() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public static byte[] subArray(byte[] objarray, int size) {
 		return subArray(objarray, 0, size);
@@ -19,12 +23,30 @@ public class ByteArrayTools {
 	public static byte[] intToByteArray(int a){
 		byte[] retorno = new byte[4];
 				
-		retorno[0] = (byte) (a >> 24); // pegou o byte mais significativo
+		retorno[0] = (byte) (a >> 24); // pegou o bYte mais significativo
 		retorno[1] = (byte) (a >> 16);
 		retorno[2] = (byte) (a >> 8);
-		retorno[3] = (byte) (a >> 0); // pegou o byte menos significativo
+		retorno[3] = (byte) (a >> 0); // pegou o bYte menos significativo
 		
 		return retorno;
+	}
+
+	public static byte[] concatArrays(byte[] a, byte[] b) {
+		int alen = a.length;
+		int blen = b.length;
+		byte[] novoArray = new byte[alen + blen];
+		
+		System.arraycopy(a, 0, novoArray, 0, alen);
+		System.arraycopy(b, 0, novoArray, alen, blen);
+		
+		return novoArray;		
+	}
+	
+	public static void appendArrays(byte[] target, byte[] newData){
+		int targetlen = target.length;
+		int newDatalen = newData.length;
+		
+		System.arraycopy(newData, 0, target, targetlen, newDatalen);
 	}
 
 }

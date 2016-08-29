@@ -1,8 +1,10 @@
 package gerenciador.arquivos.blocos;
 
+import gerenciador.arquivos.Arquivo;
 import gerenciador.arquivos.exceptions.ByteArrayIncorrectFormatException;
+import gerenciador.arquivos.interfaces.IBinarizable;
 
-public class Bloco {
+public class Bloco implements IBinarizable<Arquivo>{
 	// header
 //byte 0 id do container
 //byte 1, 2, 3 id do bloco
@@ -17,4 +19,9 @@ public class Bloco {
 	public Bloco(byte[] Headerbytes)throws ByteArrayIncorrectFormatException{
 		Size = new byte[3];
 	}
+@Override
+public byte[] getByteArray() {
+	// TODO Auto-generated method stub
+	return null;
+}
 }

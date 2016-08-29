@@ -6,6 +6,7 @@ import gerenciador.arquivos.blocos.Bloco;
 import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.exceptions.ByteArrayIncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
+import gerenciador.utils.ByteArrayTools;
 
 public class Arquivo implements IBinarizable<Arquivo>{
 	@SuppressWarnings("unused")
@@ -36,7 +37,12 @@ public class Arquivo implements IBinarizable<Arquivo>{
 	
 	@Override
 	public byte[] getByteArray() {
-		// TODO Auto-generated method stub
-		return null;
+		byte[] blocosArray = new byte[0];
+		
+		for(Bloco bloco : blocos){
+			blocosArray = ByteArrayTools.concatArrays(blocosArray, bloco.getByteArray());
+		}
+		
+		return ByteArrayTools.concatArrays(blocoControle.getByteArray(), blocosArray);
 	}
 }

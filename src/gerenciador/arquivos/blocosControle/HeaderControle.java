@@ -21,6 +21,26 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 //		headerValues = ArrayTools.subArray(bytearray, BlocoControle.MIN_ARRAY_SIZE);
 	}
 	
+	public byte getContainerId() {
+		return containerId;
+	}
+
+	public int getSizeBloco() {
+		return sizeBloco;
+	}
+
+	public byte getStatusContainer() {
+		return statusContainer;
+	}
+
+	public int getProxBlocoLivre() {
+		return proxBlocoLivre;
+	}
+
+	public short getSizeDescritor() {
+		return SizeDescritor;
+	}
+
 	@Override
 	public byte[] getByteArray() {
 		byte []byteArray = new byte[BlocoControle.HEADER_CONTROLE_SIZE];
