@@ -9,9 +9,7 @@ import gerenciador.arquivos.interfaces.IBinarizable;
 import gerenciador.utils.ByteArrayTools;
 
 public class Arquivo implements IBinarizable<Arquivo>{
-	@SuppressWarnings("unused")
 	private BlocoControle blocoControle;
-	@SuppressWarnings("unused")
 	private ArrayList<Bloco> blocos;
 	
 	private Arquivo(byte[] bytes)throws ByteArrayIncorrectFormatException{
@@ -37,12 +35,12 @@ public class Arquivo implements IBinarizable<Arquivo>{
 	
 	@Override
 	public byte[] getByteArray() {
-		byte[] blocosArray = new byte[0];
+		byte[] blocosArray = blocoControle.getByteArray();
 		
 		for(Bloco bloco : blocos){
 			blocosArray = ByteArrayTools.concatArrays(blocosArray, bloco.getByteArray());
 		}
 		
-		return ByteArrayTools.concatArrays(blocoControle.getByteArray(), blocosArray);
+		return blocosArray;
 	}
 }

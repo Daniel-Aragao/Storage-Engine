@@ -24,8 +24,10 @@ public class Tupla implements IBinarizable<Tupla>{
 	
 	@Override
 	public byte[] getByteArray() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		
+		
+		throw new RuntimeException("Não implementado");
 	}
 
 	public int getSize() {

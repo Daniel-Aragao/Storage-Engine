@@ -1,6 +1,8 @@
 package gerenciador.arquivos.blocos.components;
 
-public class Coluna {
+import gerenciador.arquivos.interfaces.IBinarizable;
+
+public class Coluna implements IBinarizable<Coluna> {
 	
 	private short columnSize;
 	private byte[] dados;
@@ -24,5 +26,10 @@ public class Coluna {
 	
 	public byte[] getDado(){
 		return dados;
+	}
+
+	@Override
+	public byte[] getByteArray() {
+		throw new RuntimeException("Não implementado");
 	}
 }
