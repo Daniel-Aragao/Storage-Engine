@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import gerenciador.arquivos.exceptions.ByteArrayIncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
+import gerenciador.utils.ByteArrayTools;
 
 public class Tupla implements IBinarizable<Tupla>{
 
@@ -24,10 +25,13 @@ public class Tupla implements IBinarizable<Tupla>{
 	
 	@Override
 	public byte[] getByteArray() {
+		byte[] retorno = ByteArrayTools.intToByteArray(size);
 		
+		for(Coluna c : colunas){
+			retorno = ByteArrayTools.concatArrays(retorno, c.getByteArray());
+		}
 		
-		
-		throw new RuntimeException("Não implementado");
+		return retorno;
 	}
 
 	public int getSize() {
