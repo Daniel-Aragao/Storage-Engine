@@ -1,7 +1,9 @@
 package gerenciador.arquivos;
 
+import gerenciador.GerenciadorArquivos;
+
 public enum ETipoColuna {
-	string(0), inteiro(1);
+	string(GerenciadorArquivos.CARACTERE_STRING), inteiro(GerenciadorArquivos.CARACTERE_INTEIRO);
 	
 	public int valor;
 	
@@ -11,6 +13,15 @@ public enum ETipoColuna {
 	
 	public byte getValor(){
 		return (byte)valor;
+	}
+	
+	public static ETipoColuna getByValue(int value){
+		for(ETipoColuna e : ETipoColuna.values()){
+			if(e.valor == value){
+				return e;
+			}
+		}
+		return null;
 	}
 	
 }

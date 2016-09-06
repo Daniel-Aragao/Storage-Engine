@@ -1,6 +1,5 @@
 package gerenciador.arquivos.blocosControle;
 
-import gerenciador.arquivos.exceptions.ByteArrayIncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
 import gerenciador.utils.ByteArrayTools;
 
@@ -19,8 +18,12 @@ public class BlocoControle implements IBinarizable<BlocoControle> {
 // deve validade se a linha inserida está seguindo os conformes do descritor, 
 	//como tipo e tamanho, por exemplo se a coluna id é do tipo int e não string
 	
-	public BlocoControle(byte[] bytes)throws ByteArrayIncorrectFormatException {
-		header = new HeaderControle(bytes);
+	public BlocoControle(String[] propriedades){
+//		header = new HeaderControle();
+		
+		descritor = new Descritor(propriedades);
+		
+//		header = new HeaderControle(bytes);
 //		descritor = new HeaderControle(ArrayTools.subArray(bytes,, BlocoControle.MIN_ARRAY_SIZE));
 	}
 	

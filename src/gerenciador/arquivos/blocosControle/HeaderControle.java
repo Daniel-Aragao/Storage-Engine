@@ -1,6 +1,5 @@
 package gerenciador.arquivos.blocosControle;
 
-import gerenciador.arquivos.exceptions.ByteArrayIncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
 import gerenciador.utils.ByteArrayTools;
 
@@ -17,7 +16,13 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 ////		headerValues = ArrayTools.subArray(bytearray, BlocoControle.MIN_ARRAY_SIZE);
 //	}
 	
-	public HeaderControle(byte[] bytearray) throws ByteArrayIncorrectFormatException{
+	public HeaderControle(String[] array) {
+//		this.containerId = 0;
+//		this.sizeBloco = 0;
+//		this.statusContainer = 0;
+//		this.proxBlocoLivre = 0;
+//		this.SizeDescritor = 0;
+		
 //		headerValues = ArrayTools.subArray(bytearray, BlocoControle.MIN_ARRAY_SIZE);
 	}
 	

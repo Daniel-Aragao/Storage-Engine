@@ -13,9 +13,17 @@ public class UnidadeDescricao implements IBinarizable<Descritor>{
 	private ETipoColuna tipo; // 1 byte
 	private byte tamanho; // 1 byte
 
-	public UnidadeDescricao() throws ByteArrayIncorrectFormatException{
-		// TODO Auto-generated constructor stub
+	public UnidadeDescricao(String nome, ETipoColuna tipo, byte tamanho){
+		this.nome = nome;
+		this.tipo = tipo;
+		this.tamanho = tamanho;
 	}
+	
+//	public UnidadeDescricao(String nome, String tipo, String tamanho){
+//		this.nome = nome;
+//		this.tamanho = Byte.parseByte(tamanho);
+//		this.tipo = ETipoColuna.valueOf(tipo); //tipo.charAt(0)
+//	}
 
 	public String getNome() {
 		return nome;
@@ -47,8 +55,8 @@ public class UnidadeDescricao implements IBinarizable<Descritor>{
 	@Override
 	public byte[] getByteArray() {
 		byte[] retorno = new byte[UnidadeDescricao.UNIDADE_DESCRICAO_SIZE];
-		ByteArrayTools.appendArrays(retorno, getNome().getBytes());
 				
+		ByteArrayTools.appendArrays(retorno, getNome().getBytes());
 		retorno[20] = this.tipo.getValor();
 		retorno[21] = this.tamanho;
 				

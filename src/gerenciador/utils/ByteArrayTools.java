@@ -3,7 +3,7 @@ package gerenciador.utils;
 public class ByteArrayTools {
 	
 	private ByteArrayTools() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public static byte[] subArray(byte[] objarray, int size) {
