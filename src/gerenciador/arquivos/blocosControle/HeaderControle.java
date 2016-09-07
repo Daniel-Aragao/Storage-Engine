@@ -1,6 +1,8 @@
 package gerenciador.arquivos.blocosControle;
 
+import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
+import gerenciador.loger.Log;
 import gerenciador.utils.ByteArrayTools;
 
 public class HeaderControle implements IBinarizable<HeaderControle>{
@@ -11,19 +13,14 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 	private byte statusContainer;
 	private int proxBlocoLivre;
 	private short SizeDescritor;
+
 	
-//	public HeaderControle(byte containerId, byte[] bytearray) throws ByteArrayIncorrectFormatException{
-////		headerValues = ArrayTools.subArray(bytearray, BlocoControle.MIN_ARRAY_SIZE);
-//	}
-	
-	public HeaderControle(String[] array) {
-//		this.containerId = 0;
-//		this.sizeBloco = 0;
-//		this.statusContainer = 0;
-//		this.proxBlocoLivre = 0;
-//		this.SizeDescritor = 0;
-		
-//		headerValues = ArrayTools.subArray(bytearray, BlocoControle.MIN_ARRAY_SIZE);
+	public HeaderControle(byte containerId, short descSize) throws IncorrectFormatException {
+		setContainerId(containerId);
+		setSizeBloco(BlocoControle.TAMANHO_BLOCO);
+//		setStatusContainer(0);
+		setProxBlocoLivre(1);
+		setSizeDescritor(descSize);
 	}
 	
 	public byte getContainerId() {
@@ -75,6 +72,32 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 		byteArray[10] = sizeDesc[1];
 		
 		return byteArray;
+	}
+
+	private void setContainerId(byte containerId) {
+		this.containerId = containerId;
+	}
+
+	private void setSizeBloco(int sizeBloco) throws IncorrectFormatException {
+		if(sizeBloco > BlocoControle.TRES_BYTES){
+			Log.Erro("Tamanho do bloco não pode exceder "
+					+ "3 bytes("+BlocoControle.TRES_BYTES+")");
+			throw new IncorrectFormatException("Tamanho do bloco não pode exceder "
+					+ "3 bytes("+BlocoControle.TRES_BYTES+")");	
+		}
+		this.sizeBloco = sizeBloco;			
+	}
+
+	public void setStatusContainer(byte statusContainer) {
+		this.statusContainer = statusContainer;
+	}
+
+	public void setProxBlocoLivre(int proxBlocoLivre) {
+		this.proxBlocoLivre = proxBlocoLivre;
+	}
+
+	public void setSizeDescritor(short sizeDescritor) {
+		SizeDescritor = sizeDescritor;
 	}
 
 }

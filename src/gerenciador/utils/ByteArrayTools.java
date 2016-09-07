@@ -48,5 +48,22 @@ public class ByteArrayTools {
 		
 		System.arraycopy(newData, 0, target, targetlen, newDatalen);
 	}
+	
+	public static byte[] stringToByteArray(String string, int length){
+		byte[] retorno = new byte[length];
+		byte[] sba = string.getBytes();
+		
+		int offset = length - sba.length;
+		int copylength = sba.length; 
+		
+		if(offset < 0){
+			offset = 0;
+			copylength = length;
+		}
+		
+		System.arraycopy(sba, 0, retorno, offset, copylength);		
+		
+		return retorno;
+	}
 
 }

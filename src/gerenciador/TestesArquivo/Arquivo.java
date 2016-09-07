@@ -1,14 +1,13 @@
 package gerenciador.TestesArquivo;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.File;
+import java.io.IOException;
 
 import gerenciador.GerenciadorArquivos;
-import gerenciador.arquivos.ETipoColuna;
 
 public class Arquivo {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 //		byte[] t = "oi ana".getBytes();
 //		byte[] t2 = "37".getBytes();
 //		// System.out.println("byte: " + (t[5]== t2[3]) +" "+t[5]+" "+t2[3]);
@@ -39,25 +38,28 @@ public class Arquivo {
 //		System.out.println("- |"++"| -");
 		
 		
-		String INPUT = "COD_AUTHOR[I(5000)]a";//"This order was placed for QT3000! OK?";//"COD_AUTHOR[I(5)]|NAME_AUTHOR[A(100)]|";
-		String REGEX = "([^\\[]+)\\[(.*)\\((.*)\\)\\]";//"([^\\[]+)\\[([^]]+)\\]";
+//		String INPUT = "NAME_AUTHOR[A(100)]|";//"This order was placed for QT3000! OK?";//"COD_AUTHOR[I(5)]|NAME_AUTHOR[A(100)]|";
+//		String REGEX = "([^\\[]+)\\[(.*)\\((.*)\\)\\]";//"([^\\[]+)\\[([^]]+)\\]";
+//		
+//		Pattern p = Pattern.compile(REGEX);
+//		Matcher m = p.matcher(INPUT);
+//		
+//		if (m.find( )) {
+//			System.out.println(m.groupCount());
+//	        System.out.println("Found value: " + m.group(0) );
+//	        System.out.println("Found value: " + m.group(1) );
+//	        System.out.println("Found value: " + ETipoColuna.getByValue(m.group(2).charAt(0)) );
+//	        System.out.println("Found value: " + Byte.parseByte(m.group(3)) );
+//	    } else {
+//	    	System.out.println("NO MATCH");
+//	    }
+//		
+//		
+//		
+//		System.out.println(ETipoColuna.getByValue('I'));
 		
-		Pattern p = Pattern.compile(REGEX);
-		Matcher m = p.matcher(INPUT);
-		
-		if (m.find( )) {
-			System.out.println(m.groupCount());
-	        System.out.println("Found value: " + m.group(0) );
-	        System.out.println("Found value: " + m.group(1) );
-	        System.out.println("Found value: " + m.group(2) );
-	        System.out.println("Found value: " + m.group(3) );
-	    } else {
-	    	System.out.println("NO MATCH");
-	    }
-		
-		
-		
-		System.out.println(ETipoColuna.getByValue('I'));
+		System.out.println(new File(GerenciadorArquivos.DISC_PATH.getAbsolutePath() + "\\teste.txt").createNewFile());
+		System.out.println(GerenciadorArquivos.DISC_PATH.getPath());
 	}
 
 }

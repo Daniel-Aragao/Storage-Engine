@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import gerenciador.arquivos.blocos.Bloco;
 import gerenciador.arquivos.blocosControle.BlocoControle;
-import gerenciador.arquivos.exceptions.ByteArrayIncorrectFormatException;
+import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
 import gerenciador.utils.ByteArrayTools;
 

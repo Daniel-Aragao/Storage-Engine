@@ -3,7 +3,7 @@ package gerenciador.arquivos.blocos;
 import gerenciador.arquivos.Arquivo;
 import gerenciador.arquivos.blocos.components.DadosBloco;
 import gerenciador.arquivos.blocos.components.HeaderBloco;
-import gerenciador.arquivos.exceptions.ByteArrayIncorrectFormatException;
+import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
 import gerenciador.utils.ByteArrayTools;
 
@@ -24,7 +24,7 @@ public class Bloco implements IBinarizable<Arquivo> {
 	private HeaderBloco header;
 	private DadosBloco dados;
 
-	public Bloco(byte[] Headerbytes) throws ByteArrayIncorrectFormatException {
+	public Bloco(byte[] Headerbytes) throws IncorrectFormatException {
 		Size = new byte[3];
 	}
 

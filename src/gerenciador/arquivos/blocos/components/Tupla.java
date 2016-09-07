@@ -2,7 +2,7 @@ package gerenciador.arquivos.blocos.components;
 
 import java.util.ArrayList;
 
-import gerenciador.arquivos.exceptions.ByteArrayIncorrectFormatException;
+import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
 import gerenciador.utils.ByteArrayTools;
 
@@ -12,7 +12,7 @@ public class Tupla implements IBinarizable<Tupla>{
 	
 	private ArrayList<Coluna> colunas;
 	
-	public Tupla(byte[] bytes)throws ByteArrayIncorrectFormatException{
+	public Tupla(byte[] bytes)throws IncorrectFormatException{
 		setSize(bytes.length);
 		
 		setColunas(new ArrayList<>());
