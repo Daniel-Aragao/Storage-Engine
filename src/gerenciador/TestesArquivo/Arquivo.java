@@ -1,6 +1,5 @@
 package gerenciador.TestesArquivo;
 
-import java.io.File;
 import java.io.IOException;
 
 import gerenciador.GerenciadorArquivos;
@@ -58,8 +57,12 @@ public class Arquivo {
 //		
 //		System.out.println(ETipoColuna.getByValue('I'));
 		
-		System.out.println(new File(GerenciadorArquivos.DISC_PATH.getAbsolutePath() + "\\teste.txt").createNewFile());
-		System.out.println(GerenciadorArquivos.DISC_PATH.getPath());
+//		System.out.println(new File(GerenciadorArquivos.DISC_PATH.getAbsolutePath() + "\\teste.txt").createNewFile());
+//		System.out.println(GerenciadorArquivos.DISC_PATH.getPath());
+		
+		
+		new GerenciadorArquivos().CriarArquivo("COD_AUTHOR[I(5)]|NAME_AUTHOR[A(100)]|");
+		
 	}
 
 }

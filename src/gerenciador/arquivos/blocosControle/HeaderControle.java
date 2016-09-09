@@ -68,8 +68,8 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 		
 		// byte 9, 10 - tamanho do header do container (body do bloco de controle)
 		byte[] sizeDesc = ByteArrayTools.intToByteArray(SizeDescritor);
-		byteArray[9] = sizeDesc[0];
-		byteArray[10] = sizeDesc[1];
+		byteArray[9] = sizeDesc[2];
+		byteArray[10] = sizeDesc[3];
 		
 		return byteArray;
 	}

@@ -1,5 +1,7 @@
 package gerenciador.utils;
 
+import java.nio.charset.StandardCharsets;
+
 public class ByteArrayTools {
 	
 	private ByteArrayTools() {
@@ -42,16 +44,16 @@ public class ByteArrayTools {
 		return novoArray;		
 	}
 	
-	public static void appendArrays(byte[] target, byte[] newData){
-		int targetlen = target.length;
+	public static void appendArrays(byte[] target, byte[] newData, int offset){
+//		int targetlen = target.length;
 		int newDatalen = newData.length;
 		
-		System.arraycopy(newData, 0, target, targetlen, newDatalen);
+		System.arraycopy(newData, 0, target, offset, newDatalen);
 	}
 	
 	public static byte[] stringToByteArray(String string, int length){
 		byte[] retorno = new byte[length];
-		byte[] sba = string.getBytes();
+		byte[] sba = string.getBytes(StandardCharsets.UTF_16LE);
 		
 		int offset = length - sba.length;
 		int copylength = sba.length; 

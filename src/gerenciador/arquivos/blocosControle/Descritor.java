@@ -41,9 +41,10 @@ public class Descritor implements IBinarizable<Descritor>{
 	@Override
 	public byte[] getByteArray() {
 		byte[] retorno = new byte[getDescritorSize()];
-		
-		for(UnidadeDescricao desc : descs){
-			ByteArrayTools.appendArrays(retorno, desc.getByteArray());
+		short index = 0;
+		for(UnidadeDescricao desc : descs){			
+			ByteArrayTools.appendArrays(retorno, desc.getByteArray(), index*UnidadeDescricao.UNIDADE_DESCRICAO_SIZE);
+			index++;
 		}
 		
 		return retorno;

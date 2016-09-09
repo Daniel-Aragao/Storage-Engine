@@ -16,7 +16,7 @@ public class Arquivo implements IBinarizable<Arquivo>{
 		
 		this.blocoControle = blocoControle;
 		
-//		blocos = new ArrayList<Bloco>();
+		blocos = new ArrayList<Bloco>();
 		
 	}
 	

@@ -1,7 +1,9 @@
 package gerenciador;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 
 import gerenciador.arquivos.Arquivo;
 import gerenciador.arquivos.blocosControle.BlocoControle;
@@ -9,11 +11,12 @@ import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.loger.Log;
 
 public class GerenciadorArquivos {
-	public static final char CARACTERE_SEPARADOR = '|',
-							CARACTERE_STRING = 'A',
+	public static final char CARACTERE_STRING = 'A',
 							CARACTERE_INTEIRO = 'I';
+	public static final String CARACTERE_SEPARADOR = "\\|";
 	
-	public static final String REGEX_COLUMN = "([^\\[]+)\\[(.*)\\((.*)\\)\\]";
+	public static final String 
+							REGEX_COLUMN = "([^\\[]+)\\[(.*)\\((.*)\\)\\]";
 //							CARACTERE_TIPO[]= {'[',']'},
 //							CARACTERE_TAMANHO[]= {'(',')'},
 	
@@ -27,24 +30,73 @@ public class GerenciadorArquivos {
 		return null;
 	}
 	
-	public void CriarArquivo(String propriedades){
-		String [] props = propriedades.split(CARACTERE_SEPARADOR+"");
+	public GerenciadorArquivos() {
+		Log.Write("GerenciadorArquivos");
+	}
+	
+	public void CriarArquivo(String propriedades)	{
+		Log.Write("Iniciar criação de arquivo");
+		
+		String [] props = propriedades.split(CARACTERE_SEPARADOR);
+		
+		Log.Write("Criar diretório");
 		
 		criarDiretório();
 		
+		Log.Write("Pegar container id");
+		
+		byte containerId =  getNextContainerId();
+		
+		Log.Write("Containerid: "+containerId);
+		
+		File file = null;
+		
 		try{
-			
-			BlocoControle blocoControle = new BlocoControle(props, getNextContainerId());
-			Arquivo arquivo = new Arquivo(blocoControle);			
-		}catch(IncorrectFormatException e){
-			
+			file = generateNewFile(containerId);
+			// certificar que o arquivo vai ser criado
+			if(file.createNewFile()){
+				Log.Write("Criar bloco de controle");
+				BlocoControle blocoControle = new BlocoControle(props, containerId);
+				
+				Log.Write("Criar Arquivo");
+				Arquivo arquivo = new Arquivo(blocoControle);	
+				
+				Log.Write("Gravar Arquivo");
+				gravarArquivo(file, arquivo.getByteArray());			
+			}
+		}catch(IncorrectFormatException e){		
+			//Erros internos a geração dos blocos
 			Log.Erro(e.getMessage());
+			Log.Erro("Erro ao gerar o arquivo");
+			
 			Log.Write("O arquivo não foi criado");
+			//Garantir que o arquivo será deletado após algum erro na criação			
+			for(int j = 0; j < 10 && !file.delete();j++);
+			
+		} catch (IOException e) {
+			//Erro na criação do arquivo
+			Log.Erro("Erro ao criar o arquivo");
+			e.printStackTrace();
 		}
-		
-		
 	}
 	
+	private void gravarArquivo(File file, byte[] byteArray) {
+		try {
+			RandomAccessFile raf = new RandomAccessFile(file, "rw");
+			
+			Log.Write("Escrever: "+ byteArray);
+			raf.write(byteArray, 0, byteArray.length);
+			
+		} catch (FileNotFoundException e) {
+			Log.Erro("Falha ao encontrar o arquivo");
+			e.printStackTrace();
+		} catch (IOException e) {
+			Log.Erro("Falha ao escrever stream de bytes");
+			e.printStackTrace();
+		}
+		
+	}
+
 	private void criarDiretório() {
 		if(!DISC_PATH.exists()){
 			Log.Write("Diretório inexistente");
@@ -56,20 +108,17 @@ public class GerenciadorArquivos {
 		}		
 	}
 
+	private File generateNewFile(byte i){
+		return new File(GerenciadorArquivos.DISC_PATH.getAbsolutePath()+"\\tabela-"+i+".txt");
+	}		
+	
 	private byte getNextContainerId(){
-		byte newContainerId = 1;
 		File f = null;
 		
-		for(byte i = 0; i <= 255 ;){
-			f = new File(GerenciadorArquivos.DISC_PATH.getAbsolutePath()+"\\tabela-"+i+".txt");
+		for(byte i = 0; i <= 255 ;i++){
+			f = generateNewFile(i);
 			if(!f.exists()){
-				try {
-					f.createNewFile();
-					return i;
-				} catch (IOException e) {
-					Log.Erro("IOException");
-					e.printStackTrace();
-				}
+				return i;
 			}
 		}
 		Log.Erro("DISC_PATH atingiu o máximo de arquivos");

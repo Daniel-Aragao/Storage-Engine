@@ -7,10 +7,10 @@ import gerenciador.utils.ByteArrayTools;
 
 public class UnidadeDescricao implements IBinarizable<Descritor>{
 //	descritor bloco de controle é representado por nome, tipo e tamanho de cada coluna
-	public static final int UNIDADE_DESCRICAO_SIZE = 22,
-			NOME_SIZE = 20,
+	public static final int NOME_SIZE = 30,
 			TIPO_SIZE = 1,
-			TAMANHO_SIZE = 1;
+			TAMANHO_SIZE = 1,
+			UNIDADE_DESCRICAO_SIZE = NOME_SIZE + TIPO_SIZE + TAMANHO_SIZE;
 	
 	
 	private String nome; // 20 bytes
@@ -28,8 +28,8 @@ public class UnidadeDescricao implements IBinarizable<Descritor>{
 	}
 
 	private void setNome(String nome) throws IncorrectFormatException {
-		if(nome.length() > NOME_SIZE) 
-			throw new IncorrectFormatException("Nome não deve ultrapassar 10 caractéres");
+		if(nome.length() > NOME_SIZE/2) 
+			throw new IncorrectFormatException("Nome não deve ultrapassar "+NOME_SIZE/2+" caractéres");
 		
 		this.nome = nome;
 	}
@@ -55,9 +55,9 @@ public class UnidadeDescricao implements IBinarizable<Descritor>{
 		byte[] retorno = new byte[UnidadeDescricao.UNIDADE_DESCRICAO_SIZE];
 		
 		byte[] nomeBA = ByteArrayTools.stringToByteArray(getNome(), NOME_SIZE);
-		ByteArrayTools.appendArrays(retorno, nomeBA);
-		retorno[20] = this.tipo.getValor();
-		retorno[21] = this.tamanho;
+		ByteArrayTools.appendArrays(retorno, nomeBA, 0);
+		retorno[NOME_SIZE] = this.tipo.getValor();
+		retorno[NOME_SIZE+1] = this.tamanho;
 				
 		return retorno;
 	}
