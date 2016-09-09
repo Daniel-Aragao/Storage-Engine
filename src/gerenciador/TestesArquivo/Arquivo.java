@@ -60,8 +60,11 @@ public class Arquivo {
 //		System.out.println(new File(GerenciadorArquivos.DISC_PATH.getAbsolutePath() + "\\teste.txt").createNewFile());
 //		System.out.println(GerenciadorArquivos.DISC_PATH.getPath());
 		
+		GerenciadorArquivos gerenciadorArquivo = new GerenciadorArquivos();
+		byte containerId = gerenciadorArquivo.CriarArquivo("COD_AUTHOR[I(5)]|NAME_AUTHOR[A(100)]|");
 		
-		new GerenciadorArquivos().CriarArquivo("COD_AUTHOR[I(5)]|NAME_AUTHOR[A(100)]|");
+		gerenciadorArquivo.AdicionarLinha(containerId, "101|LUIZ RUFFATO|");
+		gerenciadorArquivo.AdicionarLinha(containerId, "20|JORGE AMADO|");
 		
 	}
 

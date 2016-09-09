@@ -34,7 +34,7 @@ public class GerenciadorArquivos {
 		Log.Write("GerenciadorArquivos");
 	}
 	
-	public void CriarArquivo(String propriedades)	{
+	public byte CriarArquivo(String propriedades)	{
 		Log.Write("Iniciar criação de arquivo");
 		
 		String [] props = propriedades.split(CARACTERE_SEPARADOR);
@@ -52,7 +52,7 @@ public class GerenciadorArquivos {
 		File file = null;
 		
 		try{
-			file = generateNewFile(containerId);
+			file = generateFile(containerId);
 			// certificar que o arquivo vai ser criado
 			if(file.createNewFile()){
 				Log.Write("Criar bloco de controle");
@@ -62,7 +62,9 @@ public class GerenciadorArquivos {
 				Arquivo arquivo = new Arquivo(blocoControle);	
 				
 				Log.Write("Gravar Arquivo");
-				gravarArquivo(file, arquivo.getByteArray());			
+				gravarArquivo(file, arquivo.getByteArray());
+				
+				return containerId;
 			}
 		}catch(IncorrectFormatException e){		
 			//Erros internos a geração dos blocos
@@ -73,11 +75,15 @@ public class GerenciadorArquivos {
 			//Garantir que o arquivo será deletado após algum erro na criação			
 			for(int j = 0; j < 10 && !file.delete();j++);
 			
+			file = null;			
+			
 		} catch (IOException e) {
 			//Erro na criação do arquivo
 			Log.Erro("Erro ao criar o arquivo");
 			e.printStackTrace();
+			file = null;
 		}
+		return -1;
 	}
 	
 	private void gravarArquivo(File file, byte[] byteArray) {
@@ -108,7 +114,7 @@ public class GerenciadorArquivos {
 		}		
 	}
 
-	private File generateNewFile(byte i){
+	private File generateFile(byte i){
 		return new File(GerenciadorArquivos.DISC_PATH.getAbsolutePath()+"\\tabela-"+i+".txt");
 	}		
 	
@@ -116,7 +122,7 @@ public class GerenciadorArquivos {
 		File f = null;
 		
 		for(byte i = 0; i <= 255 ;i++){
-			f = generateNewFile(i);
+			f = generateFile(i);
 			if(!f.exists()){
 				return i;
 			}
@@ -125,7 +131,17 @@ public class GerenciadorArquivos {
 		throw new RuntimeException("DISC_PATH atingiu o máximo de arquivos");		
 	}
 	
-	public void AdicionarLinha(String tupla){
+	public void AdicionarLinha(byte containerId, String tupla){
+		File file = generateFile(containerId);
+		
+		if(file.exists()){
+			Log.Erro("Arquivo inexistente");
+			throw new RuntimeException("Arquivo inexistente");
+		}
+		
+//		RandomAccessFile raf = new RandomAccessFile(file, "r");
+		
+		
 		
 	}
 	
