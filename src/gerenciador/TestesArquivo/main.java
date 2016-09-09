@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import gerenciador.GerenciadorArquivos;
 
-public class Arquivo {
+public class main {
 
 	public static void main(String[] args) throws IOException {
 //		byte[] t = "oi ana".getBytes();

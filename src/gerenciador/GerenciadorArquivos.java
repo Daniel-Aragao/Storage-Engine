@@ -134,14 +134,14 @@ public class GerenciadorArquivos {
 	public void AdicionarLinha(byte containerId, String tupla){
 		File file = generateFile(containerId);
 		
-		if(file.exists()){
+		if(!file.exists()){
 			Log.Erro("Arquivo inexistente");
 			throw new RuntimeException("Arquivo inexistente");
 		}
 		
 //		RandomAccessFile raf = new RandomAccessFile(file, "r");
 		
-		
+		// ler bloco de controle do arquivo informado e ver qual o próximo bloco
 		
 	}
 	

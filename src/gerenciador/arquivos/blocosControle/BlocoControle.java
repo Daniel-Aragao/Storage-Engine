@@ -34,8 +34,14 @@ public class BlocoControle implements IBinarizable<BlocoControle> {
 
 	@Override
 	public byte[] getByteArray() {
-		return ByteArrayTools.concatArrays(
+		byte[]retorno = new byte[TAMANHO_BLOCO];
+		
+		byte[] content = ByteArrayTools.concatArrays(
 					header.getByteArray(), 
 					descritor.getByteArray());
+		
+		ByteArrayTools.appendArrays(retorno, content, 0);		
+		
+		return retorno;
 	}
 }
