@@ -65,6 +65,9 @@ public class GerenciadorArquivos {
 				gravarArquivo(file, arquivo.getByteArray());
 				
 				return containerId;
+			}else{
+				Log.Write("Erro ao criar o arquivo");
+				throw new RuntimeException("Erro ao criar o arquivo");
 			}
 		}catch(IncorrectFormatException e){		
 			//Erros internos a geração dos blocos

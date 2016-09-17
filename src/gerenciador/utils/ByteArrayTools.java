@@ -16,7 +16,7 @@ public class ByteArrayTools {
 		byte[] array = new byte[size];
 		
 		for(int i = 0, j = startIndex; i < size; j++, i++){
-			array[j] = objarray[j];
+			array[i] = objarray[j];
 		}
 		
 		return array;

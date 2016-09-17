@@ -13,7 +13,7 @@ public class UnidadeDescricao implements IBinarizable<Descritor>{
 			UNIDADE_DESCRICAO_SIZE = NOME_SIZE + TIPO_SIZE + TAMANHO_SIZE;
 	
 	
-	private String nome; // 20 bytes
+	private String nome; // 30 bytes
 	private ETipoColuna tipo; // 1 byte
 	private byte tamanho; // 1 byte
 
