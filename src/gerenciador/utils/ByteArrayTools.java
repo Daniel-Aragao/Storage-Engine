@@ -32,6 +32,13 @@ public class ByteArrayTools {
 		
 		return retorno;
 	}
+	
+	public static int byteArrayToInt(byte[] bytes){
+			// move os 24 bytes mais singificativos para a esquerda.
+			//depois compara o signed byte com os bytes 255 para que remover o 
+			//sinal e depois move os bits 16 bits para esquerda
+		return bytes[0] << 24 | (bytes[1] & 0xFF) << 16 | (bytes[2] & 0xFF) << 8 | (bytes[3] & 0xFF);
+	}
 
 	public static byte[] concatArrays(byte[] a, byte[] b) {
 		int alen = a.length;
@@ -53,7 +60,7 @@ public class ByteArrayTools {
 	
 	public static byte[] stringToByteArray(String string, int length){
 		byte[] retorno = new byte[length];
-		byte[] sba = string.getBytes(StandardCharsets.UTF_16LE);
+		byte[] sba = stringToByteArray(string);
 		
 		int offset = length - sba.length;
 		int copylength = sba.length; 
@@ -64,6 +71,22 @@ public class ByteArrayTools {
 		}
 		
 		System.arraycopy(sba, 0, retorno, offset, copylength);		
+		
+		return retorno;
+	}
+	
+	public static byte[] stringToByteArray(String string){
+		return string.getBytes(StandardCharsets.UTF_16BE);
+	}
+	
+	public static String byteArrayToString(byte[] array){
+		String retorno = "";
+		
+		for(int i = 0; i < array.length - 1; i+=2){
+			if(array[i] != 0 || array[i+1] != 0){
+				retorno += (char)(array[i] + array[i+1]);
+			}
+		}
 		
 		return retorno;
 	}

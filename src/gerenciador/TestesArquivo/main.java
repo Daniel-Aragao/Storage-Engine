@@ -1,6 +1,7 @@
 package gerenciador.TestesArquivo;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import gerenciador.GerenciadorArquivos;
 
@@ -60,12 +61,14 @@ public class main {
 //		System.out.println(new File(GerenciadorArquivos.DISC_PATH.getAbsolutePath() + "\\teste.txt").createNewFile());
 //		System.out.println(GerenciadorArquivos.DISC_PATH.getPath());
 		
-		GerenciadorArquivos gerenciadorArquivo = new GerenciadorArquivos();
-		byte containerId = gerenciadorArquivo.CriarArquivo("COD_AUTHOR[I(5)]|NAME_AUTHOR[A(100)]|");
-		
-		gerenciadorArquivo.AdicionarLinha(containerId, "101|LUIZ RUFFATO|");
-		gerenciadorArquivo.AdicionarLinha(containerId, "20|JORGE AMADO|");
-		
+//		GerenciadorArquivos gerenciadorArquivo = new GerenciadorArquivos();
+//		byte containerId = gerenciadorArquivo.CriarArquivo("COD_AUTHOR[I(5)]|NAME_AUTHOR[A(100)]|");
+//		
+//		gerenciadorArquivo.AdicionarLinha(containerId, "101|LUIZ RUFFATO|");
+//		gerenciadorArquivo.AdicionarLinha(containerId, "20|JORGE AMADO|");
+		byte a = 0x00;
+		byte b = 0x6F;
+		System.out.println((char)(a + b));
 	}
 
 }

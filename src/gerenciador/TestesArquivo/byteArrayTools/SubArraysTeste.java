@@ -46,4 +46,14 @@ public class SubArraysTeste {
 		
 		Assert.assertArrayEquals(asert, r);
 	}
+	
+	@Test
+	public void DeveReceberArray12345ERetornar234(){
+		byte[] t = {1,2,3,4,5};
+		byte[] r = ByteArrayTools.subArray(t, 1, 3);
+		
+		byte[] asert = {2,3,4}; 
+		
+		Assert.assertArrayEquals(asert, r);
+	}
 }
