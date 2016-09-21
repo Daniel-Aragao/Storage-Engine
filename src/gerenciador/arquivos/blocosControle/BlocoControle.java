@@ -23,7 +23,9 @@ public class BlocoControle implements IBinarizable<BlocoControle> {
 		descritor = new Descritor(propriedades);
 		header = new HeaderControle(containerId, descritor.getDescritorSize());		
 	}
-	
+	public BlocoControle(byte[] dados){
+		fromByteArray(dados);
+	}
 	public HeaderControle getHeader() {
 		return header;
 	}
@@ -43,5 +45,11 @@ public class BlocoControle implements IBinarizable<BlocoControle> {
 		ByteArrayTools.appendArrays(retorno, content, 0);		
 		
 		return retorno;
+	}
+
+	@Override
+	public void fromByteArray(byte[] dados) {
+		this.header = new HeaderControle(ByteArrayTools.subArray(dados, 0, HEADER_CONTROLE_SIZE));
+		this.descritor = new Descritor(ByteArrayTools.subArray(dados, HEADER_CONTROLE_SIZE, dados.length-11));		
 	}
 }

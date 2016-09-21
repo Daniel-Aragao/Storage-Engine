@@ -7,7 +7,7 @@ import gerenciador.utils.ByteArrayTools;
 
 public class UnidadeDescricao implements IBinarizable<Descritor>{
 //	descritor bloco de controle é representado por nome, tipo e tamanho de cada coluna
-	public static final int NOME_SIZE = 30,
+	public static final int NOME_SIZE = 30, // a mudança refletirá no resultado dos testes com NOME_SIZE = 30
 			TIPO_SIZE = 1,
 			TAMANHO_SIZE = 1,
 			UNIDADE_DESCRICAO_SIZE = NOME_SIZE + TIPO_SIZE + TAMANHO_SIZE;

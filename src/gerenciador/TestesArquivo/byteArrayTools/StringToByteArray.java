@@ -59,4 +59,16 @@ public class StringToByteArray {
 		
 		Assert.assertEquals(b, result);
 	}
+	
+	@Test
+	public void passarStringCumpridaEReceberElaTruncada(){
+//		004C 0055 0049 / 005A = LUI/Z
+		
+		String a = "LUIZ";
+		byte[] b = {0, 0x4C, 0, 0x55, 0, 0x49};
+		
+		byte[] result = ByteArrayTools.stringToByteArray(a, 6);
+		
+		Assert.assertArrayEquals(b, result);
+	}
 }

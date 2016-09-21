@@ -109,4 +109,34 @@ public class IntNByteConversions {
 		
 		Assert.assertEquals(b, result);
 	}
+	
+	@Test
+	public void passar888ERetornar526344(){
+		byte[] a = {8,8,8};
+		int b = 526344;
+		
+		int result = ByteArrayTools.byteArrayToInt(a);
+		
+		Assert.assertEquals(b, result);
+	}
+	
+	@Test
+	public void passar88ERetornar2056(){
+		byte[] a = {8,8};
+		int b = 2056;
+		
+		int result = ByteArrayTools.byteArrayToInt(a);
+		
+		Assert.assertEquals(b, result);
+	}
+	
+	@Test
+	public void passar200ERetornar200(){
+		byte[] a = {(byte) 200};
+		int b = 200;
+		
+		int result = ByteArrayTools.byteArrayToInt(a);
+		
+		Assert.assertEquals(b, result);
+	}
 }

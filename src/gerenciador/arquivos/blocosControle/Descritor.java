@@ -1,9 +1,9 @@
 package gerenciador.arquivos.blocosControle;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import gerenciador.GerenciadorArquivos;
 import gerenciador.arquivos.ETipoColuna;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
@@ -34,6 +34,10 @@ public class Descritor implements IBinarizable<Descritor>{
 		}
 	}
 	
+	public Descritor(byte[] dados) {
+		fromByteArray(dados);
+	}
+
 	public short getDescritorSize(){
 		return (short) (descs.size()*UnidadeDescricao.UNIDADE_DESCRICAO_SIZE);		
 	}

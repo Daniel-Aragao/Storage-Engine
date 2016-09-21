@@ -66,9 +66,9 @@ public class main {
 //		
 //		gerenciadorArquivo.AdicionarLinha(containerId, "101|LUIZ RUFFATO|");
 //		gerenciadorArquivo.AdicionarLinha(containerId, "20|JORGE AMADO|");
-		byte a = 0x00;
-		byte b = 0x6F;
-		System.out.println((char)(a + b));
+//		byte a = 0x00;
+//		byte b = 0x6F;
+//		System.out.println((char)(a + b));
 	}
 
 }

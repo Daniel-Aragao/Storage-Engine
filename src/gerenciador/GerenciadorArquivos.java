@@ -9,6 +9,7 @@ import gerenciador.arquivos.Arquivo;
 import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.loger.Log;
+import gerenciador.utils.IO_Operations;
 
 public class GerenciadorArquivos {
 	public static final char CARACTERE_STRING = 'A',
@@ -31,7 +32,7 @@ public class GerenciadorArquivos {
 	}
 	
 	public GerenciadorArquivos() {
-		Log.Write("GerenciadorArquivos");
+		Log.Write("GerenciadorArquivos iniciado..");
 	}
 	
 	public byte CriarArquivo(String propriedades)	{
@@ -62,7 +63,7 @@ public class GerenciadorArquivos {
 				Arquivo arquivo = new Arquivo(blocoControle);	
 				
 				Log.Write("Gravar Arquivo");
-				gravarArquivo(file, arquivo.getByteArray());
+				IO_Operations.writeFile(file, arquivo.getByteArray(), 0);
 				
 				return containerId;
 			}else{
@@ -87,23 +88,6 @@ public class GerenciadorArquivos {
 			file = null;
 		}
 		return -1;
-	}
-	
-	private void gravarArquivo(File file, byte[] byteArray) {
-		try {
-			RandomAccessFile raf = new RandomAccessFile(file, "rw");
-			
-			Log.Write("Escrever: "+ byteArray);
-			raf.write(byteArray, 0, byteArray.length);
-			
-		} catch (FileNotFoundException e) {
-			Log.Erro("Falha ao encontrar o arquivo");
-			e.printStackTrace();
-		} catch (IOException e) {
-			Log.Erro("Falha ao escrever stream de bytes");
-			e.printStackTrace();
-		}
-		
 	}
 
 	private void criarDiretório() {
@@ -142,11 +126,40 @@ public class GerenciadorArquivos {
 			throw new RuntimeException("Arquivo inexistente");
 		}
 		
-//		RandomAccessFile raf = new RandomAccessFile(file, "r");
+		String [] props = tupla.split(CARACTERE_SEPARADOR);
 		
-		// ler bloco de controle do arquivo informado e ver qual o próximo bloco
 		
 	}
 	
-//	public int CreateFile()
+	private BlocoControle getBlocoControle(File file){
+//		RandomAccessFile raf = new RandomAccessFile(file, "r");
+		
+		
+		return null;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

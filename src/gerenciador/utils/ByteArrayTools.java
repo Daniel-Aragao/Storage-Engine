@@ -37,7 +37,15 @@ public class ByteArrayTools {
 			// move os 24 bytes mais singificativos para a esquerda.
 			//depois compara o signed byte com os bytes 255 para que remover o 
 			//sinal e depois move os bits 16 bits para esquerda
-		return bytes[0] << 24 | (bytes[1] & 0xFF) << 16 | (bytes[2] & 0xFF) << 8 | (bytes[3] & 0xFF);
+		if(bytes.length == 4){
+			return bytes[0] << 24 | (bytes[1] & 0xFF) << 16 | (bytes[2] & 0xFF) << 8 | (bytes[3] & 0xFF);			
+		}else if(bytes.length == 3){
+			return bytes[0] << 16 | (bytes[1] & 0xFF) << 8 | (bytes[2] & 0xFF);
+		}else if(bytes.length == 2){
+			return bytes[0] << 8 | (bytes[1] & 0xFF) ;
+		}else{
+			return bytes[0] & 0xFF;
+		}
 	}
 
 	public static byte[] concatArrays(byte[] a, byte[] b) {

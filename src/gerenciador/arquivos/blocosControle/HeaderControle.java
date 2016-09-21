@@ -18,9 +18,13 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 	public HeaderControle(byte containerId, short descSize) throws IncorrectFormatException {
 		setContainerId(containerId);
 		setSizeBloco(BlocoControle.TAMANHO_BLOCO);
-//		setStatusContainer(0);
+		setStatusContainer((byte) 0);
 		setProxBlocoLivre(1);
 		setSizeDescritor(descSize);
+	}
+	
+	public HeaderControle(byte[] dados){
+		fromByteArray(dados);
 	}
 	
 	public byte getContainerId() {
@@ -52,9 +56,9 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 		
 		// byte 123 - size dos blocos = 4096b
 		byte[] size = ByteArrayTools.intToByteArray(sizeBloco);
-		byteArray[1] = size[0];
-		byteArray[2] = size[1];
-		byteArray[3] = size[2];
+		byteArray[1] = size[1];
+		byteArray[2] = size[2];
+		byteArray[3] = size[3];
 		
 		// byte 4 - status do container
 		byteArray[4] = statusContainer;
@@ -98,6 +102,21 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 
 	public void setSizeDescritor(short sizeDescritor) {
 		SizeDescritor = sizeDescritor;
+	}
+
+	@Override
+	public void fromByteArray(byte[] dados) {
+		setContainerId(dados[0]);
+		try {
+			setSizeBloco(ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 1, 3)));
+		} catch (IncorrectFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		setStatusContainer(dados[4]);
+		setProxBlocoLivre(ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 5, 4)));
+		setSizeDescritor((short) ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 9, 2)));
+		
 	}
 
 }
