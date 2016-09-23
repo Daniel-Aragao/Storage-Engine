@@ -163,4 +163,25 @@ public class DescritorUnidadeDescricaoTeste {
 		Assert.assertArrayEquals(b, result);
 	}
 	
+	@Test
+	public void DescritorDeveByteArrayEGerarCOD_AuthorI5ENAME_AUTHORA100frombytearray() 
+			throws IncorrectFormatException{
+		byte[] b = {0,0,0,0,0,0,0,0,0,0,00,0x43, 00,0x4F, 00,0x44, 00,0x5F, 00,0x41, 00,0x55,
+				00,0x54, 00,0x48, 00,0x4F, 00,0x52, GerenciadorArquivos.CARACTERE_INTEIRO,5,
+				0,0,0,0,0,0,0,0,00,0x4E, 00,0x41, 00,0x4D, 00,0x45, 00,0x5F, 00,0x41, 00,0x55, 00,
+				0x54, 00,0x48, 00,0x4F, 00,0x52, GerenciadorArquivos.CARACTERE_STRING,100};
+		Descritor d = new Descritor(b);
+		
+		//String[] props = {"COD_AUTHOR[I(5)]","NAME_AUTHOR[A(100)]"};
+		
+		Assert.assertEquals("COD_AUTHOR", d.getUnidadeDescricao(0).getNome());
+		Assert.assertEquals("NAME_AUTHOR", d.getUnidadeDescricao(1).getNome());
+		
+		Assert.assertEquals(5, d.getUnidadeDescricao(0).getTamanho());
+		Assert.assertEquals(100, d.getUnidadeDescricao(1).getTamanho());
+		
+		Assert.assertEquals(ETipoColuna.inteiro, d.getUnidadeDescricao(0).getTipo());
+		Assert.assertEquals(ETipoColuna.string, d.getUnidadeDescricao(1).getTipo());
+	}
+	
 }

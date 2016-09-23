@@ -15,7 +15,7 @@ public class Descritor implements IBinarizable<Descritor>{
 	private ArrayList<UnidadeDescricao> descs;
 	
 	public Descritor(String[] descs) throws IncorrectFormatException{
-		this.descs = new ArrayList<>();
+		this.descs = new ArrayList<UnidadeDescricao>();
 		
 		Pattern p = Pattern.compile(GerenciadorArquivos.REGEX_COLUMN);
 		
@@ -35,6 +35,7 @@ public class Descritor implements IBinarizable<Descritor>{
 	}
 	
 	public Descritor(byte[] dados) {
+		descs = new ArrayList<UnidadeDescricao>();
 		fromByteArray(dados);
 	}
 
@@ -56,5 +57,20 @@ public class Descritor implements IBinarizable<Descritor>{
 		}
 		
 		return retorno;
+	}
+
+	@Override
+	public void fromByteArray(byte[] dados) {
+		int qtde = dados.length / UnidadeDescricao.UNIDADE_DESCRICAO_SIZE;
+		
+		for(int i = 0; i < qtde; i++){
+			
+			descs.add(new UnidadeDescricao(
+					ByteArrayTools.subArray(dados, 
+							UnidadeDescricao.UNIDADE_DESCRICAO_SIZE*i, 
+							UnidadeDescricao.UNIDADE_DESCRICAO_SIZE)
+			));
+		}
+		
 	}
 }

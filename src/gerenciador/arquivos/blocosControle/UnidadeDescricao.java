@@ -22,6 +22,10 @@ public class UnidadeDescricao implements IBinarizable<Descritor>{
 		setTipo(tipo);
 		setTamanho(tamanho);
 	}
+	
+	public UnidadeDescricao(byte[]dados){
+		fromByteArray(dados);
+	}
 
 	public String getNome() {
 		return nome;
@@ -60,6 +64,16 @@ public class UnidadeDescricao implements IBinarizable<Descritor>{
 		retorno[NOME_SIZE+1] = this.tamanho;
 				
 		return retorno;
+	}
+
+	@Override
+	public void fromByteArray(byte[] dados) {
+		this.nome = ByteArrayTools.byteArrayToString(ByteArrayTools.subArray(dados, NOME_SIZE));
+		
+		this.tipo = ETipoColuna.getByValue(dados[NOME_SIZE]);
+		this.tamanho = dados[NOME_SIZE+1];
+		
+		
 	}
 	
 	
