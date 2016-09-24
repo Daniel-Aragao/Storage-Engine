@@ -24,7 +24,23 @@ public class HeaderBloco implements IBinarizable<HeaderBloco>{
 	
 	@Override
 	public byte[] getByteArray() {
-		throw new RuntimeException("Não implementado");
+		byte[] retorno = new byte[8];
+		
+		retorno[0] = containerId;
+		
+		byte[] blocoid = ByteArrayTools.intToByteArray(this.blocoId);
+		retorno[1] = blocoid[1];
+		retorno[2] = blocoid[2];
+		retorno[3] = blocoid[3];
+		
+		retorno[4] = this.tipo.getValor();
+		
+		byte[] bytesUsados = ByteArrayTools.intToByteArray(this.bytesUsados);
+		retorno[5] = bytesUsados[1];
+		retorno[6] = bytesUsados[2];
+		retorno[7] = bytesUsados[3];
+		
+		return retorno;
 	}
 
 	public int getBytesUsados() {
@@ -33,6 +49,10 @@ public class HeaderBloco implements IBinarizable<HeaderBloco>{
 
 	public void setBytesUsados(int bytesUsados) {
 		this.bytesUsados = bytesUsados;
+	}
+	
+	public void addBytes(int bytes){
+		this.bytesUsados += bytes;
 	}
 
 	public byte getContainerId() {

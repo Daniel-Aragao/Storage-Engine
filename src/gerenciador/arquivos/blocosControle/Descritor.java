@@ -43,6 +43,10 @@ public class Descritor implements IBinarizable<Descritor>{
 		return (short) (descs.size()*UnidadeDescricao.UNIDADE_DESCRICAO_SIZE);		
 	}
 	
+	public int getNumberOfColumns(){
+		return descs.size();
+	}
+	
 	public UnidadeDescricao getUnidadeDescricao(int index){
 		return descs.get(index);
 	}

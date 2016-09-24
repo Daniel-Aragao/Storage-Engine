@@ -3,9 +3,7 @@ package gerenciador.arquivos.blocos;
 import gerenciador.arquivos.Arquivo;
 import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
-import gerenciador.arquivos.blocosControle.HeaderControle;
 import gerenciador.arquivos.enums.ETipoBloco;
-import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
 import gerenciador.utils.ByteArrayTools;
 
@@ -14,14 +12,16 @@ public class Bloco implements IBinarizable<Arquivo> {
 
 	private HeaderBloco header;
 	private DadosBloco dados;
+	private Descritor descritor;
 
-	public Bloco(byte containerId, int BlockId, ETipoBloco tipoBloco){
+	public Bloco(byte containerId, int BlockId, ETipoBloco tipoBloco, Descritor descritor){
 		header = new HeaderBloco(containerId, BlockId, tipoBloco);
 		dados = new DadosBloco();
+		this.descritor = descritor;
 	}
 	
 	
-	public Bloco(byte[] dados) {
+	public Bloco(byte[] dados, Descritor descritor) {
 		fromByteArray(dados);
 	}
 
@@ -42,6 +42,7 @@ public class Bloco implements IBinarizable<Arquivo> {
 		this.header = new HeaderBloco(ByteArrayTools
 				.subArray(dados, 0, HEADER_BLOCO_SIZE));
 		this.dados = new DadosBloco(ByteArrayTools
-				.subArray(dados, HEADER_BLOCO_SIZE, dados.length - HEADER_BLOCO_SIZE));
+				.subArray(dados, HEADER_BLOCO_SIZE, dados.length - HEADER_BLOCO_SIZE)
+				, descritor);
 	}
 }

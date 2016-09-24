@@ -35,6 +35,9 @@ public class ByteArrayTools {
 	}
 	
 	public static int byteArrayToInt(byte[] bytes){
+		if(bytes.length > 4) 
+			throw new RuntimeException("O tamanho do byte array é inválido: "+bytes.length);
+		
 			// move os 24 bytes mais singificativos para a esquerda.
 			//depois compara o signed byte com os bytes 255 para que remover o 
 			//sinal e depois move os bits 16 bits para esquerda
