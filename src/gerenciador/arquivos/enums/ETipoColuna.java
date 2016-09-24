@@ -1,4 +1,4 @@
-package gerenciador.arquivos;
+package gerenciador.arquivos.enums;
 
 import gerenciador.GerenciadorArquivos;
 

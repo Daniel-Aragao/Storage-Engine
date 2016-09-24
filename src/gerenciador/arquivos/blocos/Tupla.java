@@ -1,4 +1,4 @@
-package gerenciador.arquivos.blocos.components;
+package gerenciador.arquivos.blocos;
 
 import java.util.ArrayList;
 

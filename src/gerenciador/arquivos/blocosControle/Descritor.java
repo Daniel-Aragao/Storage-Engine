@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import gerenciador.GerenciadorArquivos;
-import gerenciador.arquivos.ETipoColuna;
+import gerenciador.arquivos.enums.ETipoColuna;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
 import gerenciador.utils.ByteArrayTools;

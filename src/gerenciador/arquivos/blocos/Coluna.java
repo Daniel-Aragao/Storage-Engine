@@ -1,4 +1,4 @@
-package gerenciador.arquivos.blocos.components;
+package gerenciador.arquivos.blocos;
 
 import gerenciador.arquivos.interfaces.IBinarizable;
 import gerenciador.utils.ByteArrayTools;

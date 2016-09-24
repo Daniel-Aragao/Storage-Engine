@@ -1,5 +1,6 @@
 package gerenciador.utils;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 public class ByteArrayTools {
@@ -89,10 +90,15 @@ public class ByteArrayTools {
 	
 	public static String byteArrayToString(byte[] array){
 		String retorno = "";
+		/*
+		0xFF =	0000 0000 - 0000 0000 - 0000 0000 - 1111 1111 AND
+		-25 = 	1111 1111 - 1111 1111 - 1111 1111 - 1110 0111 RESULTA EM
+		231 = 	0000 0000 - 0000 0000 - 0000 0000 - 1110 0111
+		 */
 		
 		for(int i = 0; i < array.length - 1; i+=2){
 			if(array[i] != 0 || array[i+1] != 0){
-				retorno += (char)(array[i] + array[i+1]);
+				retorno += (char)( ((array[i] & 0xFF) << 8 | array[i+1]) & 0xFF);
 			}
 		}
 		

@@ -1,6 +1,6 @@
 package gerenciador.arquivos.blocosControle;
 
-import gerenciador.arquivos.ETipoColuna;
+import gerenciador.arquivos.enums.ETipoColuna;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
 import gerenciador.utils.ByteArrayTools;

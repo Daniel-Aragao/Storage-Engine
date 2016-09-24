@@ -4,9 +4,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import gerenciador.GerenciadorArquivos;
-import gerenciador.arquivos.ETipoColuna;
 import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.blocosControle.UnidadeDescricao;
+import gerenciador.arquivos.enums.ETipoColuna;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 
 public class DescritorUnidadeDescricaoTeste {

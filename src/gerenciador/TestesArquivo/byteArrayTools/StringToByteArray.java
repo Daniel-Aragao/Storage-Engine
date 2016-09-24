@@ -71,4 +71,14 @@ public class StringToByteArray {
 		
 		Assert.assertArrayEquals(b, result);
 	}
+	
+	@Test
+	public void converterEDesconverterStringComCCedilha(){
+		String alcapao = "Alçapão";
+		
+		byte[] bytes = ByteArrayTools.stringToByteArray(alcapao);
+		String resultado = ByteArrayTools.byteArrayToString(bytes);
+		
+		Assert.assertEquals(alcapao,resultado);
+	}
 }

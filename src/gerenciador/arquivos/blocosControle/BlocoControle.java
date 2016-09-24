@@ -49,7 +49,11 @@ public class BlocoControle implements IBinarizable<BlocoControle> {
 
 	@Override
 	public void fromByteArray(byte[] dados) {
-		this.header = new HeaderControle(ByteArrayTools.subArray(dados, 0, HEADER_CONTROLE_SIZE));
-		this.descritor = new Descritor(ByteArrayTools.subArray(dados, HEADER_CONTROLE_SIZE, dados.length-11));		
+		this.header = new HeaderControle(ByteArrayTools
+				.subArray(dados, 0, HEADER_CONTROLE_SIZE));
+		
+		this.descritor = new Descritor(ByteArrayTools
+				.subArray(dados, HEADER_CONTROLE_SIZE, 
+						dados.length - HEADER_CONTROLE_SIZE));		
 	}
 }

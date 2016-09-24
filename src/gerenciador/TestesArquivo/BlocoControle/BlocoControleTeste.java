@@ -4,8 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import gerenciador.GerenciadorArquivos;
-import gerenciador.arquivos.ETipoColuna;
 import gerenciador.arquivos.blocosControle.BlocoControle;
+import gerenciador.arquivos.enums.ETipoColuna;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.utils.ByteArrayTools;
 
