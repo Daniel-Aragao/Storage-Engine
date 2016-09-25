@@ -40,7 +40,7 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 	@Override
 	public void fromByteArray(byte[] dados) {
 		// TODO Auto-generated method stub
-		
+		aqui
 	}
 	
 }

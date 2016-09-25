@@ -1,6 +1,5 @@
 package gerenciador.utils;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 public class ByteArrayTools {
@@ -96,7 +95,7 @@ public class ByteArrayTools {
 		/*
 		0xFF =	0000 0000 - 0000 0000 - 0000 0000 - 1111 1111 AND
 		-25 = 	1111 1111 - 1111 1111 - 1111 1111 - 1110 0111 RESULTA EM
-		231 = 	0000 0000 - 0000 0000 - 0000 0000 - 1110 0111
+		231 = 	0000 0000 - 0000 0000 - 0000 0000 - 1110 0111 (Charactere em valor numérico)
 		 */
 		
 		for(int i = 0; i < array.length - 1; i+=2){

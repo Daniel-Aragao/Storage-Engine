@@ -16,6 +16,7 @@ public class Tupla implements IBinarizable<Tupla>{
 	
 	public Tupla(String[] props, Descritor descritor)throws IncorrectFormatException{
 		setColunas(new ArrayList<>());
+		this.size = 0;
 		
 		if (props.length != descritor.getNumberOfColumns()){
 			throw new IncorrectFormatException("Número de colunas inseridas é diferente"
@@ -31,7 +32,12 @@ public class Tupla implements IBinarizable<Tupla>{
 			this.size += coluna.getColumnSize();
 		}		
 		
-		
+		this.size += 4;
+	}
+	
+	public Tupla(byte[] dados){
+		this.size = ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 4));
+		fromByteArray(dados);
 	}
 	
 	@Override
@@ -74,7 +80,11 @@ public class Tupla implements IBinarizable<Tupla>{
 
 	@Override
 	public void fromByteArray(byte[] dados) {
-		// TODO Auto-generated method stub
+		int pointer = 4;
+		aqui
+		while(pointer != -1){
+			
+		}
 		
 	}
 

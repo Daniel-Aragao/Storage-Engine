@@ -15,4 +15,5 @@ public abstract class Coluna implements IBinarizable<Coluna> {
 		return columnSize;
 	}
 	
+	public abstract Object getDado();
 }

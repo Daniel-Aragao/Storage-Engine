@@ -68,6 +68,16 @@ public class IntNByteConversions {
 		Assert.assertArrayEquals(b, result);				
 	}
 	
+	@Test
+	public void passar6ERetornar0006(){
+		int a = 6;
+		byte[] b = {0,0,0,6};
+		
+		byte[] result = ByteArrayTools.intToByteArray(a);
+		
+		Assert.assertArrayEquals(b, result);				
+	}
+	
 	//byte array to int
 	
 	@Test

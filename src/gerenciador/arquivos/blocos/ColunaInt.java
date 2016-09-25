@@ -10,7 +10,7 @@ public class ColunaInt extends Coluna{
 	private int dado;
 
 	public ColunaInt(String prop, UnidadeDescricao descricao) throws IncorrectFormatException{
-		super((short) 4);
+		super((short) (4 + 2));
 		if (descricao.getTipo() != ETipoColuna.inteiro){
 			throw new IncorrectFormatException("Descritor não possui o tipo inteiro");
 		}
@@ -23,8 +23,12 @@ public class ColunaInt extends Coluna{
 	}
 	
 	public ColunaInt(byte[] dados) {
-		super((short) 4);
+		super((short) (4 + 2));
 		fromByteArray(dados);
+	}
+	
+	public Integer getDado(){
+		return dado;
 	}
 
 	@Override
@@ -33,7 +37,7 @@ public class ColunaInt extends Coluna{
 		byte[] retorno = new byte[2 + 4];
 		
 		ByteArrayTools.appendArrays(retorno,
-				ByteArrayTools.intToByteArray(this.getColumnSize()), 
+				ByteArrayTools.subArray(ByteArrayTools.intToByteArray(this.getColumnSize()),2,2), 
 				0
 		);
 		ByteArrayTools.appendArrays(retorno,
@@ -46,7 +50,7 @@ public class ColunaInt extends Coluna{
 
 	@Override
 	public void fromByteArray(byte[] dados) {
-		ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 2, 4));
+		this.dado = ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 2, 4));
 		
 	}
 

@@ -10,9 +10,14 @@ public class ColunaString extends Coluna{
 	private String dado;
 	
 	public ColunaString(String prop, UnidadeDescricao descricao) throws IncorrectFormatException{
-		super((short) (prop.length()*2));
+		super((short) (prop.length()*2 + 2));
 		if (descricao.getTipo() != ETipoColuna.string){
 			throw new IncorrectFormatException("Descritor não possui o tipo String");
+		}
+		
+		if((prop.length()) > descricao.getTamanho()){
+			throw new IncorrectFormatException("Tipo esperado para "
+					+prop+" é String( "+descricao.getTamanho()+" )");			
 		}
 		
 		dado = prop;
@@ -26,10 +31,10 @@ public class ColunaString extends Coluna{
 
 	@Override
 	public byte[] getByteArray() {
-		byte[] retorno = new byte[2 + this.getColumnSize()];
+		byte[] retorno = new byte[this.getColumnSize()];
 		
 		ByteArrayTools.appendArrays(retorno,
-				ByteArrayTools.intToByteArray(this.getColumnSize()), 
+				ByteArrayTools.subArray(ByteArrayTools.intToByteArray(this.getColumnSize()),2,2), 
 				0
 		);
 		ByteArrayTools.appendArrays(retorno,
@@ -48,6 +53,11 @@ public class ColunaString extends Coluna{
 						ByteArrayTools.subArray(dados, 2, dados.length - 2)
 				);
 		
+	}
+
+	@Override
+	public String getDado() {
+		return dado;
 	}
 
 }

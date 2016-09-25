@@ -53,4 +53,18 @@ public class ConcatArraysTeste {
 		
 		Assert.assertArrayEquals(c, a);
 	}
+	
+	@Test
+	public void append00_06_to000000(){
+		byte[] a = {0,0,0,0,0,0};
+		byte[] b = {0,0,0,6};
+		
+		byte[] c = {0,6,0,0,0,0};
+		
+		ByteArrayTools.appendArrays(a, 
+				ByteArrayTools.subArray(b, 2, 2),
+				0);
+		
+		Assert.assertArrayEquals(c, a);
+	}
 }
