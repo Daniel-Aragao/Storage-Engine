@@ -13,7 +13,7 @@ public class HeaderBlocoTeste {
 		
 		Assert.assertEquals(1, hb.getBlocoId());
 		Assert.assertEquals(1, hb.getContainerId());
-		Assert.assertEquals(0, hb.getBytesUsados());
+		Assert.assertEquals(8, hb.getBytesUsados());
 		Assert.assertEquals(ETipoBloco.dados, hb.getTipo());
 	}
 	
@@ -24,7 +24,7 @@ public class HeaderBlocoTeste {
 		byte[] ba = {1,
 				0,0,1,
 				ETipoBloco.dados.getValor(),
-				0,0,0
+				0,0,8
 		};
 		
 		Assert.assertArrayEquals(ba, hb.getByteArray());
@@ -37,7 +37,7 @@ public class HeaderBlocoTeste {
 		byte[] ba = {15,
 				0,13,(byte) 229,
 				ETipoBloco.dados.getValor(),
-				0,0,0
+				0,0,8
 		};
 		
 		Assert.assertArrayEquals(ba, hb.getByteArray());

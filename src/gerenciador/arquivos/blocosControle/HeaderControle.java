@@ -99,6 +99,14 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 	public void setProxBlocoLivre(int proxBlocoLivre) {
 		this.proxBlocoLivre = proxBlocoLivre;
 	}
+	
+	public void incProxBlocoLivre() {
+		this.proxBlocoLivre++;
+	}
+	
+	public void decProxBlocoLivre() {
+		this.proxBlocoLivre--;
+	}
 
 	public void setSizeDescritor(short sizeDescritor) {
 		SizeDescritor = sizeDescritor;

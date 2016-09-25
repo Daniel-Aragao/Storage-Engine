@@ -41,17 +41,18 @@ public class BlocoTeste {
 		
 		Assert.assertEquals(1, bloco.getHeader().getBlocoId());
 		Assert.assertEquals(1, bloco.getHeader().getContainerId());
-		Assert.assertEquals(0, bloco.getHeader().getBytesUsados());
+		Assert.assertEquals(8, bloco.getHeader().getBytesUsados());
 		Assert.assertEquals(ETipoBloco.dados, bloco.getHeader().getTipo());		
 	}
 	
 	@Test
 	public void DeveReceber1_1_dado_descEFormarDadosCorretamenteByteArray() throws IncorrectFormatException{
 		Bloco bloco = new Bloco((byte) 1,1,ETipoBloco.dados, getDescritor());
-		byte[] ba = {1,
+		byte[] ba = {
+				1,
 				0,0,1,
 				ETipoBloco.dados.getValor(),
-				0,0,0
+				0,0,8
 				,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 		};
 		
@@ -69,7 +70,7 @@ public class BlocoTeste {
 				1,
 				0,0,1,
 				ETipoBloco.dados.getValor(),
-				0,0,0,				
+				0,0,44,				
 				// inicio da tupla
 				0,0,0,36,
 				// 101
@@ -96,7 +97,7 @@ public class BlocoTeste {
 				1,
 				0,0,1,
 				ETipoBloco.dados.getValor(),
-				0,0,0,				
+				0,0,78,				
 				// inicio da tupla
 				0,0,0,36,
 				// 101
@@ -134,7 +135,7 @@ public class BlocoTeste {
 				1,
 				0,0,1,
 				ETipoBloco.dados.getValor(),
-				0,0,0,				
+				0,0,78,				
 				// inicio da tupla
 				0,0,0,36,
 				// 101
@@ -169,7 +170,7 @@ public class BlocoTeste {
 				1,
 				0,0,1,
 				ETipoBloco.dados.getValor(),
-				0,0,0,				
+				0,0,78,				
 				// inicio da tupla
 				0,0,0,36,
 				// 101
@@ -198,7 +199,7 @@ public class BlocoTeste {
 		//Testar construção do header
 		Assert.assertEquals(1, bloco.getHeader().getBlocoId());
 		Assert.assertEquals(1, bloco.getHeader().getContainerId());
-		Assert.assertEquals(0, bloco.getHeader().getBytesUsados());
+		Assert.assertEquals(78, bloco.getHeader().getBytesUsados());
 		Assert.assertEquals(ETipoBloco.dados, bloco.getHeader().getTipo());
 		
 		
@@ -210,7 +211,7 @@ public class BlocoTeste {
 				1,
 				0,0,1,
 				ETipoBloco.dados.getValor(),
-				0,0,0,				
+				0,0,78,				
 				// inicio da tupla
 				0,0,0,36,
 				// 101
@@ -252,7 +253,7 @@ public class BlocoTeste {
 				1,
 				0,0,1,
 				ETipoBloco.dados.getValor(),
-				0,0,0,				
+				0,0,78,				
 				// inicio da tupla
 				0,0,0,36,
 				// 101
@@ -291,6 +292,25 @@ public class BlocoTeste {
 		Assert.assertEquals("JORGE_AMADO",bloco.getDados().getTupla(1).getColuna(1).getDado());
 		
 	}
+	
+	@Test
+	public void DeveConterOtamanhoCertoDoDescritorAoAdicionarLinha() throws IncorrectFormatException{
+		Bloco bloco = new Bloco((byte) 1,1,ETipoBloco.dados, getDescritor());
+		
+		Assert.assertEquals(1, bloco.getHeader().getBlocoId());
+		Assert.assertEquals(1, bloco.getHeader().getContainerId());
+		Assert.assertEquals(8, bloco.getHeader().getBytesUsados());
+		Assert.assertEquals(ETipoBloco.dados, bloco.getHeader().getTipo());	
+		
+		bloco.addTupla(getTupla(2));
+		
+		Assert.assertEquals(1, bloco.getHeader().getBlocoId());
+		Assert.assertEquals(1, bloco.getHeader().getContainerId());
+		Assert.assertEquals(getTupla(2).getSize() + 8, bloco.getHeader().getBytesUsados());
+		Assert.assertEquals(50, bloco.getHeader().getBytesUsados());
+		Assert.assertEquals(ETipoBloco.dados, bloco.getHeader().getTipo());
+	}
+	
 }
 
 

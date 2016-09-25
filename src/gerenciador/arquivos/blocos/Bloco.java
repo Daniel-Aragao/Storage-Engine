@@ -38,6 +38,7 @@ public class Bloco implements IBinarizable<Arquivo> {
 	
 	public void addTupla(Tupla tupla){
 		dados.addTupla(tupla);
+		this.getHeader().setBytesUsados(tupla.getSize() + this.getHeader().getBytesUsados());
 	}
 	
 	public void addTupla(byte[] tupla) throws IncorrectFormatException{

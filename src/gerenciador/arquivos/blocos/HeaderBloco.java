@@ -15,7 +15,7 @@ public class HeaderBloco implements IBinarizable<HeaderBloco>{
 		this.blocoId = BlockId;
 		this.containerId = containerId;
 		this.tipo = tipoBloco;
-		bytesUsados = 0;
+		bytesUsados = 8;
 	}
 	
 	public HeaderBloco(byte[] dados) {
