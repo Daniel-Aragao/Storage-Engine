@@ -12,6 +12,7 @@ public class Tupla implements IBinarizable<Tupla>{
 
 	private int size;	
 	private ArrayList<Coluna> colunas;
+	private Descritor descritor;
 	
 	
 	public Tupla(String[] props, Descritor descritor)throws IncorrectFormatException{
@@ -35,8 +36,9 @@ public class Tupla implements IBinarizable<Tupla>{
 		this.size += 4;
 	}
 	
-	public Tupla(byte[] dados){
-		this.size = ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 4));
+	public Tupla(byte[] dados, Descritor descritor){		
+		this.descritor = descritor;
+		setColunas(new ArrayList<>());
 		fromByteArray(dados);
 	}
 	
@@ -63,7 +65,11 @@ public class Tupla implements IBinarizable<Tupla>{
 		this.colunas = colunas;
 	}
 	
-	private Coluna createColuna(String prop, UnidadeDescricao descricao) throws IncorrectFormatException{
+	public Coluna getColuna(int index){
+		return this.colunas.get(index);
+	}
+	
+	public Coluna createColuna(String prop, UnidadeDescricao descricao) throws IncorrectFormatException{
 		Coluna coluna = null;
 		
 		switch (descricao.getTipo()) {
@@ -77,15 +83,68 @@ public class Tupla implements IBinarizable<Tupla>{
 		
 		return coluna;
 	}
+	
+	public Coluna createColuna(byte[] ba, UnidadeDescricao descricao) throws IncorrectFormatException{
+		Coluna coluna = null;
+		
+		switch (descricao.getTipo()) {
+			case inteiro:
+				coluna = new ColunaInt(ba);
+				break;
+			case string:
+				coluna = new ColunaString(ba);
+				break;
+		}
+		
+		return coluna;
+	}
 
 	@Override
 	public void fromByteArray(byte[] dados) {
-		int pointer = 4;
-		aqui
+		this.size = ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 4));
+		
+		int pointer = 4, cont = 0;;
 		while(pointer != -1){
 			
+			short colSize = (short) ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, pointer, 2));
+			byte[] colBA = ByteArrayTools.subArray(dados, pointer, colSize);
+			
+			Coluna col = null;
+			try {
+				col = createColuna(colBA, this.descritor.getUnidadeDescricao(cont));
+			} catch (IncorrectFormatException e) {
+				e.printStackTrace();
+			}
+			
+			this.colunas.add(col);
+			
+			cont++;
+			pointer += colSize;
+			if(pointer >= dados.length)
+				pointer = -1;
 		}
 		
 	}
-
+//BA =  Byte Array
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
