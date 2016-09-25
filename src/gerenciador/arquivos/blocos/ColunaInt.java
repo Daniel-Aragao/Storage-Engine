@@ -22,7 +22,7 @@ public class ColunaInt extends Coluna{
 		}
 	}
 	
-	public ColunaInt(byte[] dados) {
+	public ColunaInt(byte[] dados) throws IncorrectFormatException {
 		super((short) (4 + 2));
 		fromByteArray(dados);
 	}
@@ -49,9 +49,12 @@ public class ColunaInt extends Coluna{
 	}
 
 	@Override
-	public void fromByteArray(byte[] dados) {
-		this.dado = ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 2, 4));
+	public void fromByteArray(byte[] dados) throws IncorrectFormatException {
+		if(dados.length > getColumnSize()) 
+			throw new IncorrectFormatException("dados de uma coluna do tipo inteiro "
+					+ "devem ter 6 bytes");
 		
+		this.dado = ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 2, 4));		
 	}
 
 }

@@ -134,12 +134,11 @@ public class TuplaTeste {
 		
 		Tupla tupla = new Tupla(correto, getDescritor());
 		
-		Assert.assertEquals(26, tupla.getColuna(1).getColumnSize());
-		Assert.assertEquals("LUIZ_RUFFATO",tupla.getColuna(1).getDado());
-		
-		
 		Assert.assertEquals(6,tupla.getColuna(0).getColumnSize());
 		Assert.assertEquals(101,(int)tupla.getColuna(0).getDado());	
+		
+		Assert.assertEquals(26, tupla.getColuna(1).getColumnSize());
+		Assert.assertEquals("LUIZ_RUFFATO",tupla.getColuna(1).getDado());		
 	}
 	
 	@Test
@@ -161,6 +160,25 @@ public class TuplaTeste {
 		Tupla tupla = new Tupla(correto, getDescritor());
 		
 		Assert.assertArrayEquals(correto, tupla.getByteArray());
+	}
+	
+	@Test(expected=IncorrectFormatException.class)
+	public void TuplaRecebeByteArray_TrocadoELancarExcecao() throws IncorrectFormatException{
+		byte[] incorreto = {
+					// inicio da tupla
+					0,0,0,36,
+					// LUIZ_RUFFATO
+					0,26,
+					00,0x4C, 00,0x55, 00,0x49,
+					00,0x5A, 00,0x5F, 00,0x52, 
+					00,0x55, 00,0x46, 00,0x46, 
+					00,0x41, 00,0x54, 00,0x4F,
+					// 101
+					0,6,
+					0,0,0,(byte) 101
+				};
+		
+		Tupla tupla = new Tupla(incorreto, getDescritor());
 	}
 }
 

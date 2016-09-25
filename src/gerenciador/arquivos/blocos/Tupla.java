@@ -36,7 +36,7 @@ public class Tupla implements IBinarizable<Tupla>{
 		this.size += 4;
 	}
 	
-	public Tupla(byte[] dados, Descritor descritor){		
+	public Tupla(byte[] dados, Descritor descritor) throws IncorrectFormatException{		
 		this.descritor = descritor;
 		setColunas(new ArrayList<>());
 		fromByteArray(dados);
@@ -100,7 +100,10 @@ public class Tupla implements IBinarizable<Tupla>{
 	}
 
 	@Override
-	public void fromByteArray(byte[] dados) {
+	public void fromByteArray(byte[] dados) throws IncorrectFormatException {
+		if(dados.length < (4 + 6 + 4)) 
+				throw new IncorrectFormatException("Tupla não tem o mínimo de "+14+" bytes exigido");
+		
 		this.size = ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 4));
 		
 		int pointer = 4, cont = 0;;
@@ -109,13 +112,8 @@ public class Tupla implements IBinarizable<Tupla>{
 			short colSize = (short) ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, pointer, 2));
 			byte[] colBA = ByteArrayTools.subArray(dados, pointer, colSize);
 			
-			Coluna col = null;
-			try {
-				col = createColuna(colBA, this.descritor.getUnidadeDescricao(cont));
-			} catch (IncorrectFormatException e) {
-				e.printStackTrace();
-			}
-			
+			Coluna col =  createColuna(colBA, this.descritor.getUnidadeDescricao(cont));
+						
 			this.colunas.add(col);
 			
 			cont++;
