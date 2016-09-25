@@ -59,7 +59,7 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 		int pointer = 0;
 		while(pointer != -1){
 			
-			short tuplaSize = (short) ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, pointer, 4));
+			int tuplaSize = ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, pointer, 4));
 			byte[] tuplaBA = ByteArrayTools.subArray(dados, pointer, tuplaSize);
 			
 			Tupla tupla = new Tupla(tuplaBA, this.descritor);
@@ -67,7 +67,8 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 			this.tuplas.add(tupla);
 			
 			pointer += tuplaSize;
-			if(pointer >= dados.length)
+			if(pointer >= dados.length || 
+					ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, pointer, 4)) == 0)
 				pointer = -1;
 		}
 	}
