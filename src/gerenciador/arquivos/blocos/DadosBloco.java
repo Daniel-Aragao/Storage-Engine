@@ -24,7 +24,7 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 	}
 	
 	@Override
-	public byte[] getByteArray() {
+	public byte[] getByteArray() throws IncorrectFormatException {
 		byte[] retorno = new byte[0];
 		
 		for(Tupla t : tuplas){
@@ -34,7 +34,7 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 		return retorno;
 	}
 
-	public ArrayList<Tupla> getTuplas() {
+	private ArrayList<Tupla> getTuplas() {
 		return tuplas;
 	}
 	
@@ -42,15 +42,32 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 		return tuplas.get(index);
 	}
 	
-	public void addTupla(byte[] dados) throws IncorrectFormatException{
-		tuplas.add(new Tupla(dados, descritor));
+	public boolean contains(Tupla tupla){
+		return tuplas.contains(tupla);
+	}
+	
+	public boolean contains(int index){
+		return tuplas.contains(index);
+	}
+	
+	public void RemoveTupla(Tupla tupla){
+		tuplas.remove(tupla);
+	}
+	
+	public int RemoveTupla(int index){
+		Tupla tupla = tuplas.remove(index);
+		return tupla.getSize();
+	}
+	
+	public boolean isEmpty(){
+		return tuplas.isEmpty();
 	}
 	
 	public void addTupla(Tupla tupla){
 		tuplas.add(tupla);
 	}
 
-	public void setTuplas(ArrayList<Tupla> tuplas) {
+	private void setTuplas(ArrayList<Tupla> tuplas) {
 		this.tuplas = tuplas;
 	}
 

@@ -46,21 +46,11 @@ public class DadosBlocoTeste {
 	}
 	
 	@Test
-	public void DeveReceberUmaTuplaByteArrayEForma_laCorretamente() throws IncorrectFormatException{
-		
-		DadosBloco db = new DadosBloco(getDescritor());
-		db.addTupla(getTupla(0).getByteArray());
-		
-		
-		Assert.assertEquals(4 + 6 + 26,db.getTupla(0).getSize());
-		Assert.assertEquals(2,db.getTupla(0).getColunas().size());
-	}
-	@Test
-	public void DeveReceberDuasTuplaByteArrayEForma_laCorretamente() throws IncorrectFormatException{
+	public void DeveReceberDuasTuplaEForma_laCorretamente() throws IncorrectFormatException{
 				
 		DadosBloco db = new DadosBloco(getDescritor());
-		db.addTupla(getTupla(0).getByteArray());
-		db.addTupla(getTupla(1).getByteArray());
+		db.addTupla(getTupla(0));
+		db.addTupla(getTupla(1));
 		
 		Assert.assertEquals(4 + 6 + 26,db.getTupla(0).getSize());
 		Assert.assertEquals(2,db.getTupla(0).getColunas().size());
@@ -70,10 +60,10 @@ public class DadosBlocoTeste {
 	}
 	
 	@Test
-	public void DeveReceberUmaTuplaByteArrayERetornarByteArrayCorreto() throws IncorrectFormatException{
+	public void DeveReceberUmaTuplaERetornarByteArrayCorreto() throws IncorrectFormatException{
 		
 		DadosBloco db = new DadosBloco(getDescritor());
-		db.addTupla(getTupla(0).getByteArray());
+		db.addTupla(getTupla(0));
 		
 		byte[] correto = {
 				// inicio da tupla

@@ -29,6 +29,9 @@ public class BlocoControle implements IBinarizable<BlocoControle> {
 	public HeaderControle getHeader() {
 		return header;
 	}
+	public int getProxBlocoLivre(){
+		return header.getProxBlocoLivre();
+	}
 
 	public Descritor getDescritor() {
 		return descritor;

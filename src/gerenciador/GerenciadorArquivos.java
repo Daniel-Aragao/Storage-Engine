@@ -5,9 +5,10 @@ import java.io.IOException;
 
 import gerenciador.arquivos.Arquivo;
 import gerenciador.arquivos.blocos.Bloco;
+import gerenciador.arquivos.blocos.Tupla;
 import gerenciador.arquivos.blocosControle.BlocoControle;
-import gerenciador.arquivos.enums.ETipoBloco;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
+import gerenciador.arquivos.interfaces.IArquivoEvents;
 import gerenciador.loger.Log;
 import gerenciador.utils.IO_Operations;
 
@@ -25,14 +26,39 @@ public class GerenciadorArquivos {
 	public static final File DISC_PATH = 
 			new File("C:\\Users\\danda_000\\git\\Storage-Engine\\res\\Disco");
 	
-	
-	public byte[] getBloco(String rowId){
-		
-		return null;
-	}
+	private IArquivoEvents ArquivoEvents;
 	
 	public GerenciadorArquivos() {
 		Log.Write("GerenciadorArquivos iniciado..");
+		createArquivoEvents();
+	}
+	
+	private void createArquivoEvents(){
+		this.ArquivoEvents = new IArquivoEvents() {
+			
+			@Override
+			public void BlocoRemovido(Arquivo a, Bloco b) {
+				throw new RuntimeException("Não implementado");
+				
+			}
+			
+			@Override
+			public void BlocoAdicionado(Arquivo a, Bloco b) {
+				throw new RuntimeException("Não implementado");
+				
+			}
+
+			@Override
+			public Bloco RequisitarBloco(Arquivo a, int blocoId) {
+				throw new RuntimeException("Não implementado");
+			}
+
+			@Override
+			public void BlocoAlterado(Arquivo a, Bloco b) {
+				throw new RuntimeException("Não implementado");
+				
+			}
+		};
 	}
 	
 	public byte CriarArquivo(String propriedades)	{
@@ -60,7 +86,8 @@ public class GerenciadorArquivos {
 				BlocoControle blocoControle = new BlocoControle(props, containerId);
 				
 				Log.Write("Criar Arquivo");
-				Arquivo arquivo = new Arquivo(blocoControle);	
+				Arquivo arquivo = new Arquivo(blocoControle, file);
+				arquivo.setArquivoEvent(ArquivoEvents);
 				
 				Log.Write("Gravar Arquivo");
 				IO_Operations.writeFile(file, arquivo.getByteArray(), 0);
@@ -118,7 +145,9 @@ public class GerenciadorArquivos {
 		throw new RuntimeException("DISC_PATH atingiu o máximo de arquivos");		
 	}
 	
-	public void AdicionarLinha(byte containerId, String tupla){
+	public void AdicionarLinha(byte containerId, String props){
+		Log.Write("Iniciar adição de linha");
+		Log.Write("Verificando existência do container/arquivo");
 		File file = generateFile(containerId);
 		
 		if(!file.exists()){
@@ -127,44 +156,27 @@ public class GerenciadorArquivos {
 		}
 		// não esquecer o rowId
 		//
+		Log.Write("Inicializando o arquivo encontrado");
+		Arquivo arquivo = new Arquivo(getBlocoControle(file), file);
+		arquivo.setArquivoEvent(ArquivoEvents);
 		
-		/* uma instancia de Arquivo deve ser gerada com parametro do tipo File
-		 * o arquivo deve localizar seu BlocoControle no file injetado
-				BlocoControle blocoControle = getBlocoControle(file);
-		 * arquivo.adicionarLinha(props) deve ser chamado
-				String [] props = tupla.split(CARACTERE_SEPARADOR);				
-		 * deve ser localizado o próximo bloco de inserção
-		 * tentativa de inserir no bloco a linha
-		 * se possível adicionar atualizar header do bloco
-		 * se o bloco não for encontrado ou não tem mais espaço
-		 * instanciar novo bloco e atualizar header do bloco de controle  
-				
-		 * */
+		Tupla tupla = null;
+		try {
+			Log.Write("Montando tupla...");
+			tupla = new Tupla(props.split(CARACTERE_SEPARADOR), arquivo.getDescritor());
+			
+			Log.Write("Adicionando linha");
+			arquivo.AdicionarLinha(tupla);
+			
+		} catch (IncorrectFormatException e) {
+			Log.Erro(e.getMessage());
+			e.printStackTrace();
+		}
 		
-		/* pegar bloco de controle
-		 * checar qual próximo bloco livre
-		 * se prox != 1 então pegar prox-1
-		 * pegando o bloco da memória e tentar adicionar tupla nele
-		 * montar tupla para se calcular seu tamanho, como indicado nos 4 primeiros bytes da tupla
-		 * verificar se a linha montada cabe no bloco e se não couber 
-		 * então deve lançar BlockOverFlowException(mensagem, id do bloco que lançou)
-		 * caso caiba a tupla será adicionada e o header do bloco atualizado
-		 * o bloco será reescrito por cima de seus dados anteriores
-		 * caso o bloco não possa conter os dados ou prox == 1
-		 * então será criado um bloco novo
-		 * adicionar tupla ao bloco novo
-		 * atualizar header do bloco novo
-		 * atualizar header do bloco de controle
-		 * regravar bloco de controle
-		 * gravar bloco novo
-		 * */
-		
-		
-//		Bloco bloco = getBloco(file, blocoControle);
-		
-		
-		
-		
+	}
+	
+	public void gravarBloco(Bloco bloco){
+		Log.Write("Gravando bloco");
 	}
 	
 	private BlocoControle getBlocoControle(File file){

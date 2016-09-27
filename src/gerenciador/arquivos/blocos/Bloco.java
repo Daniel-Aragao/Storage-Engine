@@ -6,6 +6,7 @@ import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.enums.ETipoBloco;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
+import gerenciador.arquivos.interfaces.IBlocoEvents;
 import gerenciador.utils.ByteArrayTools;
 
 public class Bloco implements IBinarizable<Arquivo> {
@@ -15,6 +16,7 @@ public class Bloco implements IBinarizable<Arquivo> {
 	private DadosBloco dados;
 	
 	private Descritor descritor;
+	private IBlocoEvents events;
 
 	public Bloco(byte containerId, int BlockId, ETipoBloco tipoBloco, Descritor descritor){
 		this.descritor = descritor;
@@ -27,9 +29,17 @@ public class Bloco implements IBinarizable<Arquivo> {
 		this.descritor = descritor;
 		fromByteArray(dados);
 	}
+	
+	public void setEvents(IBlocoEvents events){
+		this.events = events;
+	}
 
 	public HeaderBloco getHeader() {
 		return header;
+	}
+	
+	public int getBlocoId(){
+		return header.getBlocoId();
 	}
 	
 	public DadosBloco getDados() {
@@ -37,16 +47,43 @@ public class Bloco implements IBinarizable<Arquivo> {
 	}
 	
 	public void addTupla(Tupla tupla){
-		dados.addTupla(tupla);
-		this.getHeader().setBytesUsados(tupla.getSize() + this.getHeader().getBytesUsados());
+		if(this.getHeader().isFull(tupla.getSize())){
+			if(events != null){
+				events.blocoCheio(tupla);
+			}
+		}else{
+			dados.addTupla(tupla);
+			this.getHeader().incBytes(tupla.getSize());			
+		}
 	}
 	
-	public void addTupla(byte[] tupla) throws IncorrectFormatException{
-		dados.addTupla(tupla);
+	public void addTupla(byte[] tuplaBytes) throws IncorrectFormatException{
+		Tupla tupla = new Tupla(tuplaBytes, this.descritor);
+		
+		addTupla(tupla);
+	}
+	
+	public void removeTupla(Tupla tupla){
+		dados.RemoveTupla(tupla);
+		this.getHeader().decBytes(tupla.getSize());
+		
+		if(dados.isEmpty() && events != null){
+			events.blocoVazio(this);
+		}
+	
+	}
+	
+	public void removeTupla(int index){
+		int tuplaSize = dados.RemoveTupla(index);
+		this.getHeader().decBytes(tuplaSize);
+		
+		if(dados.isEmpty() && events != null){
+			events.blocoVazio(this);
+		}
 	}
 
 	@Override
-	public byte[] getByteArray() {
+	public byte[] getByteArray() throws IncorrectFormatException {
 		byte[] retorno = new byte[BlocoControle.TAMANHO_BLOCO];
 		
 		byte[] content =  ByteArrayTools

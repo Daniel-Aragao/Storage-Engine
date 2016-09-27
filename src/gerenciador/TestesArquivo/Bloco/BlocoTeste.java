@@ -303,11 +303,12 @@ public class BlocoTeste {
 		Assert.assertEquals(ETipoBloco.dados, bloco.getHeader().getTipo());	
 		
 		bloco.addTupla(getTupla(2));
+		bloco.addTupla(getTupla(2).getByteArray());
 		
 		Assert.assertEquals(1, bloco.getHeader().getBlocoId());
 		Assert.assertEquals(1, bloco.getHeader().getContainerId());
-		Assert.assertEquals(getTupla(2).getSize() + 8, bloco.getHeader().getBytesUsados());
-		Assert.assertEquals(50, bloco.getHeader().getBytesUsados());
+		Assert.assertEquals(getTupla(2).getSize()*2 + 8, bloco.getHeader().getBytesUsados());
+		Assert.assertEquals(92, bloco.getHeader().getBytesUsados());
 		Assert.assertEquals(ETipoBloco.dados, bloco.getHeader().getTipo());
 	}
 	

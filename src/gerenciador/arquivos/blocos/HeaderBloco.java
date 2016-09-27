@@ -22,6 +22,10 @@ public class HeaderBloco implements IBinarizable<HeaderBloco>{
 		fromByteArray(dados);
 	}
 	
+	public boolean isFull(int size){
+		return this.bytesUsados + size > 4096;
+	}
+	
 	@Override
 	public byte[] getByteArray() {
 		byte[] retorno = new byte[8];
@@ -51,8 +55,12 @@ public class HeaderBloco implements IBinarizable<HeaderBloco>{
 		this.bytesUsados = bytesUsados;
 	}
 	
-	public void addBytes(int bytes){
+	public void incBytes(int bytes){
 		this.bytesUsados += bytes;
+	}
+	
+	public void decBytes(int bytes){
+		this.bytesUsados -= bytes;
 	}
 
 	public byte getContainerId() {

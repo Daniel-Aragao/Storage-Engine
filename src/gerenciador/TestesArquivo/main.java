@@ -4,10 +4,14 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import gerenciador.GerenciadorArquivos;
+import gerenciador.arquivos.blocos.Coluna;
+import gerenciador.arquivos.blocos.Tupla;
+import gerenciador.arquivos.blocosControle.Descritor;
+import gerenciador.arquivos.exceptions.IncorrectFormatException;
 
 public class main {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, IncorrectFormatException {
 //		byte[] t = "oi ana".getBytes();
 //		byte[] t2 = "37".getBytes();
 //		// System.out.println("byte: " + (t[5]== t2[3]) +" "+t[5]+" "+t2[3]);
@@ -69,6 +73,29 @@ public class main {
 //		byte a = 0x00;
 //		byte b = 0x6F;
 //		System.out.println((char)(a + b));
+		
+		Tupla tp = getTupla();
+		if(tp.getColunas().stream().findAny().filter(t -> ((Integer)t.getDado()).intValue() == 102).isPresent()){
+			Coluna col = tp.getColunas().stream().findAny().filter(t -> ((Integer)t.getDado()).intValue() == 102).get();
+			
+			System.out.println(col.getColumnSize());
+			System.out.println(col.getDado());			
+		}else{
+			System.out.println("is not present");
+		}
+	}
+	
+	private static Tupla getTupla() throws IncorrectFormatException{
+		Descritor d = getDescritor();
+		
+		String props[] = {"101", "LUIZ_RUFFATO"};
+		
+		return new Tupla(props, d);
+	}
+	
+	private static Descritor getDescritor() throws IncorrectFormatException{
+		String descs[] = {"COD_AUTHOR[I(5)]","NAME_AUTHOR[A(100)]"};
+		return new Descritor(descs); 
 	}
 
 }

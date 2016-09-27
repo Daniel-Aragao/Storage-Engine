@@ -43,7 +43,7 @@ public class Tupla implements IBinarizable<Tupla>{
 	}
 	
 	@Override
-	public byte[] getByteArray() {
+	public byte[] getByteArray() throws IncorrectFormatException {
 		byte[] retorno = ByteArrayTools.intToByteArray(size);
 		
 		for(Coluna c : colunas){
