@@ -1,2 +1,29 @@
 C:\Users\danda_000\git\Storage-Engine\res\file_sample.txt
 C:\Users\danda_000\git\Storage-Engine\res\file_sample2.txt
+C:\Users\danda_000\git\Storage-Engine\res\cli-tpch.txt
+C:\Users\danda_000\git\Storage-Engine\res\forn-tpch.txt
+
+ultima inserção de cli-tpch (tabela-06) 11640blocos
+-Iniciar adição de linha
+Verificando existência do container/arquivo
+Inicializando o arquivo encontrado
+get bloco de controle
+Montando tupla...9|Customer#000000009|xKiAFTjUsCuxfeleNqefumTrjS|8|18-338-906-3675|FURNITURE|r theodolites according to the requests wake thinly excuses: pending requests haggle furiousl|
+Adicionar linha
+Requisitar bloco...11639
+Requisitar bloco ao disco
+Bloco alterado
+
+
+-Iniciar adição de linha (tabela-08) 658 blocos
+Verificando existência do container/arquivo
+Arquivo em cache
+Montando tupla...2136|Supplier#000002136|JlqwzADX kuO2KNMHn9wxRGJX7aSY71ZWv6|4|14-235-236-4239|ges x-ray furiously even platelets. bo|
+Adicionar linha
+Requisitar bloco...671
+Requisitar bloco ao disco
+Bloco cheio
+Criar bloco
+Adicionar bloco
+Bloco adicionado
+Bloco alterado

@@ -29,6 +29,7 @@ public class GerenciadorArquivos {
 	
 	
 	private IArquivoEvents ArquivoEvents;
+	private Arquivo arquivoCached;
 	
 	public GerenciadorArquivos() {
 		Log.Write("GerenciadorArquivos iniciado..");
@@ -95,6 +96,8 @@ public class GerenciadorArquivos {
 				
 				Log.Write("Gravar Arquivo");
 				IO_Operations.writeFile(file, arquivo.getByteArray(), 0);
+				
+				arquivoCached = arquivo;
 				
 				System.out.println();
 				return arquivo;
@@ -165,9 +168,17 @@ public class GerenciadorArquivos {
 		}
 		// não esquecer o rowId
 		//
-		Log.Write("Inicializando o arquivo encontrado");
-		Arquivo arquivo = new Arquivo(getBlocoControle(file), file);
-		arquivo.setArquivoEvent(ArquivoEvents);
+		Arquivo arquivo = null;
+		if(arquivoCached != null && arquivoCached.getId() == containerId){
+			Log.Write("Arquivo em cache");
+			arquivo = arquivoCached;
+		}else{
+			Log.Write("Inicializando o arquivo encontrado");
+			arquivo = new Arquivo(getBlocoControle(file), file);
+			arquivo.setArquivoEvent(ArquivoEvents);
+			arquivoCached = arquivo;
+		}
+		 
 		
 		Tupla tupla = null;
 		try {

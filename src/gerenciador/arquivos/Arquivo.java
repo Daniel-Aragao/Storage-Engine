@@ -151,6 +151,10 @@ public class Arquivo implements IBinarizable<Arquivo>{
 	public BlocoControle getBlocoControle() {
 		return blocoControle;
 	}
+	
+	public byte getId(){
+		return blocoControle.getHeader().getContainerId();
+	}
 
 
 	@Override

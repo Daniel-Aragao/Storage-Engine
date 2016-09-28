@@ -84,7 +84,7 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 			this.tuplas.add(tupla);
 			
 			pointer += tuplaSize;
-			if(pointer >= dados.length || 
+			if(pointer + 4 >= dados.length || 
 					ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, pointer, 4)) == 0)
 				pointer = -1;
 		}
