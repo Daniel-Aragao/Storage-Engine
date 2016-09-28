@@ -131,9 +131,9 @@ public class Arquivo implements IBinarizable<Arquivo>{
 	}
 	
 	private Bloco requisitarBloco(){
-		Log.Write("Requisitar bloco");
 		
 		int requisitoId = this.blocoControle.getHeader().getProxBlocoLivre() - 1;
+		Log.Write("Requisitar bloco..."+requisitoId);
 		
 		if(requisitoId == 0) return criarBloco();
 		
@@ -175,5 +175,20 @@ public class Arquivo implements IBinarizable<Arquivo>{
 	public void fromByteArray(byte[] dados) throws IncorrectFormatException {
 		throw new RuntimeException("Não implementado");
 		
+	}
+	
+	@Override
+	public String toString() {
+		String retorno = "";
+		
+		for(int i = 1; i < getBlocoControle().getProxBlocoLivre(); i++){
+			
+		}
+		
+		for(int i = 0 ; i < blocos.size(); i++){
+			retorno += blocos.get(i).toString() + "\n";
+		}
+//		return retorno;
+		throw new RuntimeException("Não implementado");// sugestão, requisitar vai receber id
 	}
 }

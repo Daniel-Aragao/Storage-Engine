@@ -89,5 +89,25 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 				pointer = -1;
 		}
 	}
-	
+
+	public int getOffset(Tupla tupla) {
+		
+//		for(int i = 0; i < tuplas.size(); i++){
+//			if(tuplas.get(i)ge)
+//		}
+		
+		throw new RuntimeException("Não implementado");
+	}
+	@Override
+	public String toString() {
+		String retorno = "";
+		for(int i = 0;i < tuplas.size(); i++){
+			retorno += "" + tuplas.toString() +"\n";			
+		}
+		return super.toString();
+	}
+
+	public int size() {
+		return tuplas.size();
+	}
 }

@@ -16,4 +16,9 @@ public abstract class Coluna implements IBinarizable<Coluna> {
 	}
 	
 	public abstract Object getDado();
+	
+	@Override
+	public String toString() {
+		return getDado().toString();
+	}
 }

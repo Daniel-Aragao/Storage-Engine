@@ -123,6 +123,15 @@ public class Tupla implements IBinarizable<Tupla>{
 		}
 		
 	}
+	
+	@Override
+	public String toString() {
+		String retorno = "";
+		for(Coluna c : colunas){
+			retorno += c.toString() + " ";
+		}
+		return retorno;
+	}
 //BA =  Byte Array
 }
 

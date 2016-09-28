@@ -73,16 +73,7 @@ public class main {
 //		byte a = 0x00;
 //		byte b = 0x6F;
 //		System.out.println((char)(a + b));
-		
-		Tupla tp = getTupla();
-		if(tp.getColunas().stream().findAny().filter(t -> ((Integer)t.getDado()).intValue() == 102).isPresent()){
-			Coluna col = tp.getColunas().stream().findAny().filter(t -> ((Integer)t.getDado()).intValue() == 102).get();
-			
-			System.out.println(col.getColumnSize());
-			System.out.println(col.getDado());			
-		}else{
-			System.out.println("is not present");
-		}
+		System.out.println(new Integer(2).toString());
 	}
 	
 	private static Tupla getTupla() throws IncorrectFormatException{

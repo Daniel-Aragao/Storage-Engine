@@ -27,6 +27,7 @@ public class GerenciadorArquivos {
 	public static final File DISC_PATH = 
 			new File("C:\\Users\\danda_000\\git\\Storage-Engine\\res\\Disco");
 	
+	
 	private IArquivoEvents ArquivoEvents;
 	
 	public GerenciadorArquivos() {
@@ -193,6 +194,14 @@ public class GerenciadorArquivos {
 	public BlocoControle getBlocoControle(byte containerId){
 		return getBlocoControle(generateFile(containerId));
 	}
+	public Arquivo getArquivo(byte containerId){
+		File file = generateFile(containerId);
+		
+		Arquivo arquivo = new Arquivo(getBlocoControle(file), file);
+		arquivo.setArquivoEvent(ArquivoEvents);
+		
+		return arquivo;
+	}
 	public Bloco getBloco(byte containerId, int blocoId, Descritor descritor){
 		return getBloco(generateFile(containerId), blocoId, descritor);
 	}
@@ -225,6 +234,12 @@ public class GerenciadorArquivos {
 	private int startBloco(int blocoId){
 		return BlocoControle.TAMANHO_BLOCO * blocoId;
 	}
+
+	public String getArquivoString(Arquivo a) {
+		throw new RuntimeException("Não implementado");
+		
+	}
+	
 }
 
 

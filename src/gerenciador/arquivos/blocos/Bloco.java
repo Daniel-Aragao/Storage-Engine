@@ -111,4 +111,21 @@ public class Bloco implements IBinarizable<Arquivo> {
 				.subArray(dados, HEADER_BLOCO_SIZE, dados.length - HEADER_BLOCO_SIZE)
 				, descritor);
 	}
+	
+	public int getOffset(Tupla tupla){
+//		dados.getOffset(tupla);
+		throw new RuntimeException("Não implementado"); 
+	}
+	
+	@Override
+	public String toString() {
+		String retorno = "";
+		byte cId = header.getContainerId();
+		int bId = header.getBlocoId();
+		
+		for(int i = 0; i < dados.size(); i++){
+			retorno += cId + " " + bId + " " + i + " " + dados.getTupla(i).toString() + "\n";
+		}
+		return retorno;
+	}
 }
