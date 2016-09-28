@@ -13,6 +13,7 @@ import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IArquivoEvents;
 import gerenciador.arquivos.interfaces.IBinarizable;
 import gerenciador.arquivos.interfaces.IBlocoEvents;
+import gerenciador.arquivos.interfaces.ILog;
 import gerenciador.loger.Log;
 import gerenciador.utils.ByteArrayTools;
 
@@ -113,7 +114,7 @@ public class Arquivo implements IBinarizable<Arquivo>{
 	public void AdicionarLinha(Tupla tupla){
 		Log.Write("Adicionar linha");
 		
-		Bloco bloco = requisitarBloco();
+		Bloco bloco = requisitarBloco(getBlocoControle().getProxBlocoLivre() - 1);
 		
 		bloco.addTupla(tupla);		
 	}
@@ -125,18 +126,42 @@ public class Arquivo implements IBinarizable<Arquivo>{
 			throw new RuntimeException("Não existem blocos para efetur a remoção");			
 		}
 		
-		Bloco bloco = requisitarBloco();
+		Bloco bloco = requisitarBloco(getBlocoControle().getProxBlocoLivre() - 1);
 		bloco.removeTupla(tupla);
 //		throw new RuntimeException("Não implementado");
 	}
 	
-	private Bloco requisitarBloco(){
-		
-		int requisitoId = this.blocoControle.getHeader().getProxBlocoLivre() - 1;
-		Log.Write("Requisitar bloco..."+requisitoId);
-		
+//	private Bloco requisitarBloco(){
+//		
+//		int requisitoId = this.blocoControle.getHeader().getProxBlocoLivre() - 1;
+//		Log.Write("Requisitar bloco..."+requisitoId);
+//		
+//		if(requisitoId == 0) return criarBloco();
+//		
+//		Optional<Bloco> opt = blocos.stream().findAny().filter(b -> b.getBlocoId() == requisitoId);
+//		
+//		if(opt.isPresent()) return opt.get();
+//		
+//		Bloco retorno = this.events.RequisitarBloco(this, requisitoId);
+//		retorno.setEvents(blocoEvents);
+//		blocos.add(retorno);
+//		
+//		return  retorno;
+//	}
+	
+	private ILog Log;
+	private Bloco requisitarBloco(int requisitoId){
+		this.Log = new Log();
+
 		if(requisitoId == 0) return criarBloco();
 		
+		if(requisitoId > this.blocoControle.getHeader().getProxBlocoLivre() - 1){
+			throw new RuntimeException("requisitoId deve ser "
+					+ "igual ou menor que o proximo bloco id");
+		}
+		
+		Log.Write("Requisitar bloco..."+requisitoId);
+				
 		Optional<Bloco> opt = blocos.stream().findAny().filter(b -> b.getBlocoId() == requisitoId);
 		
 		if(opt.isPresent()) return opt.get();
@@ -186,13 +211,13 @@ public class Arquivo implements IBinarizable<Arquivo>{
 		String retorno = "";
 		
 		for(int i = 1; i < getBlocoControle().getProxBlocoLivre(); i++){
-			
+			requisitarBloco(i);
 		}
 		
 		for(int i = 0 ; i < blocos.size(); i++){
 			retorno += blocos.get(i).toString() + "\n";
 		}
-//		return retorno;
-		throw new RuntimeException("Não implementado");// sugestão, requisitar vai receber id
+		return retorno;
+//		throw new RuntimeException("Não implementado");// sugestão, requisitar vai receber id
 	}
 }

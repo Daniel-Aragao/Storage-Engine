@@ -3,7 +3,7 @@ C:\Users\danda_000\git\Storage-Engine\res\file_sample2.txt
 C:\Users\danda_000\git\Storage-Engine\res\cli-tpch.txt
 C:\Users\danda_000\git\Storage-Engine\res\forn-tpch.txt
 
-ultima inserção de cli-tpch (tabela-06) 11640blocos
+ultima inserção de cli-tpch (tabela-06) 11639blocos
 -Iniciar adição de linha
 Verificando existência do container/arquivo
 Inicializando o arquivo encontrado
@@ -15,7 +15,7 @@ Requisitar bloco ao disco
 Bloco alterado
 
 
--Iniciar adição de linha (tabela-08) 658 blocos
+-Iniciar adição de linha (tabela-08) 671 blocos
 Verificando existência do container/arquivo
 Arquivo em cache
 Montando tupla...2136|Supplier#000002136|JlqwzADX kuO2KNMHn9wxRGJX7aSY71ZWv6|4|14-235-236-4239|ges x-ray furiously even platelets. bo|

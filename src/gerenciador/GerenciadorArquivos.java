@@ -10,6 +10,7 @@ import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IArquivoEvents;
+import gerenciador.arquivos.interfaces.ILog;
 import gerenciador.loger.Log;
 import gerenciador.utils.IO_Operations;
 
@@ -27,11 +28,12 @@ public class GerenciadorArquivos {
 	public static final File DISC_PATH = 
 			new File("C:\\Users\\danda_000\\git\\Storage-Engine\\res\\Disco");
 	
-	
+	private ILog Log;
 	private IArquivoEvents ArquivoEvents;
 	private Arquivo arquivoCached;
 	
 	public GerenciadorArquivos() {
+		this.Log = new Log();
 		Log.Write("GerenciadorArquivos iniciado..");
 		createArquivoEvents();
 	}
@@ -168,16 +170,7 @@ public class GerenciadorArquivos {
 		}
 		// não esquecer o rowId
 		//
-		Arquivo arquivo = null;
-		if(arquivoCached != null && arquivoCached.getId() == containerId){
-			Log.Write("Arquivo em cache");
-			arquivo = arquivoCached;
-		}else{
-			Log.Write("Inicializando o arquivo encontrado");
-			arquivo = new Arquivo(getBlocoControle(file), file);
-			arquivo.setArquivoEvent(ArquivoEvents);
-			arquivoCached = arquivo;
-		}
+		Arquivo arquivo = loadFromCache(containerId);
 		 
 		
 		Tupla tupla = null;
@@ -208,11 +201,33 @@ public class GerenciadorArquivos {
 	public Arquivo getArquivo(byte containerId){
 		File file = generateFile(containerId);
 		
-		Arquivo arquivo = new Arquivo(getBlocoControle(file), file);
-		arquivo.setArquivoEvent(ArquivoEvents);
+		Arquivo arquivo = loadFromCache(containerId);
 		
 		return arquivo;
 	}
+	public Bloco getBloco(byte containerId, int blocoId){
+		Arquivo arquivo = loadFromCache(containerId);
+		
+		return getBloco(arquivo.getFile(), blocoId, arquivo.getDescritor());
+	}
+	
+	private Arquivo loadFromCache(byte containerId){
+		Arquivo arquivo = null;
+		if(arquivoCached != null && arquivoCached.getId() == containerId){
+			Log.Write("Arquivo em cache");
+			arquivo = arquivoCached;
+		}else{
+			Log.Write("Inicializando o arquivo encontrado");
+			File file = generateFile(containerId);
+			
+			arquivo = new Arquivo(getBlocoControle(file), file);
+			arquivo.setArquivoEvent(ArquivoEvents);
+			
+			arquivoCached = arquivo;
+		} 
+		return arquivo;
+	}
+	
 	public Bloco getBloco(byte containerId, int blocoId, Descritor descritor){
 		return getBloco(generateFile(containerId), blocoId, descritor);
 	}
@@ -247,7 +262,8 @@ public class GerenciadorArquivos {
 	}
 
 	public String getArquivoString(Arquivo a) {
-		throw new RuntimeException("Não implementado");
+		return a.toString();
+				
 		
 	}
 	

@@ -2,6 +2,7 @@ package gerenciador.arquivos.blocosControle;
 
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
+import gerenciador.arquivos.interfaces.ILog;
 import gerenciador.loger.Log;
 import gerenciador.utils.ByteArrayTools;
 
@@ -14,8 +15,10 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 	private int proxBlocoLivre;
 	private short SizeDescritor;
 
-	
+	private ILog Log;
+
 	public HeaderControle(byte containerId, short descSize) throws IncorrectFormatException {
+		this.Log = new Log();
 		setContainerId(containerId);
 		setSizeBloco(BlocoControle.TAMANHO_BLOCO);
 		setStatusContainer((byte) 0);
