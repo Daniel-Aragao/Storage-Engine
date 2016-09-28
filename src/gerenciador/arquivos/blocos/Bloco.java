@@ -53,7 +53,11 @@ public class Bloco implements IBinarizable<Arquivo> {
 			}
 		}else{
 			dados.addTupla(tupla);
-			this.getHeader().incBytes(tupla.getSize());			
+			this.getHeader().incBytes(tupla.getSize());
+			
+			if(events != null){
+				events.blocoAlterado(this);
+			}
 		}
 	}
 	
@@ -69,6 +73,8 @@ public class Bloco implements IBinarizable<Arquivo> {
 		
 		if(dados.isEmpty() && events != null){
 			events.blocoVazio(this);
+		}else if(events != null){
+			events.blocoAlterado(this);
 		}
 	
 	}
@@ -79,6 +85,8 @@ public class Bloco implements IBinarizable<Arquivo> {
 		
 		if(dados.isEmpty() && events != null){
 			events.blocoVazio(this);
+		}else if(events != null){
+			events.blocoAlterado(this);
 		}
 	}
 

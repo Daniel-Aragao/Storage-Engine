@@ -7,6 +7,7 @@ import gerenciador.arquivos.Arquivo;
 import gerenciador.arquivos.blocos.Bloco;
 import gerenciador.arquivos.blocos.Tupla;
 import gerenciador.arquivos.blocosControle.BlocoControle;
+import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IArquivoEvents;
 import gerenciador.loger.Log;
@@ -38,30 +39,32 @@ public class GerenciadorArquivos {
 			
 			@Override
 			public void BlocoRemovido(Arquivo a, Bloco b) {
-				throw new RuntimeException("Não implementado");
-				
+				Log.Write("Bloco removido");
+				atualziarBlocoControle(a.getFile(),a.getBlocoControle());				
 			}
 			
 			@Override
 			public void BlocoAdicionado(Arquivo a, Bloco b) {
-				throw new RuntimeException("Não implementado");
-				
+				Log.Write("Bloco adicionado");
+				atualziarBlocoControle(a.getFile(), a.getBlocoControle());
+				EscreverBloco(a.getFile(), b);				
 			}
 
 			@Override
 			public Bloco RequisitarBloco(Arquivo a, int blocoId) {
-				throw new RuntimeException("Não implementado");
+				Log.Write("Requisitar bloco");
+				return getBloco(a.getFile(), blocoId, a.getDescritor());
 			}
 
 			@Override
 			public void BlocoAlterado(Arquivo a, Bloco b) {
-				throw new RuntimeException("Não implementado");
-				
+				Log.Write("Bloco alterado");
+				EscreverBloco(a.getFile(), b);				
 			}
 		};
 	}
-	
-	public byte CriarArquivo(String propriedades)	{
+
+	public Arquivo CriarArquivo(String propriedades)	{
 		Log.Write("Iniciar criação de arquivo");
 		
 		String [] props = propriedades.split(CARACTERE_SEPARADOR);
@@ -92,7 +95,7 @@ public class GerenciadorArquivos {
 				Log.Write("Gravar Arquivo");
 				IO_Operations.writeFile(file, arquivo.getByteArray(), 0);
 				
-				return containerId;
+				return arquivo;
 			}else{
 				Log.Write("Erro ao criar o arquivo");
 				throw new RuntimeException("Erro ao criar o arquivo");
@@ -114,7 +117,7 @@ public class GerenciadorArquivos {
 			e.printStackTrace();
 			file = null;
 		}
-		return -1;
+		return null;
 	}
 
 	private void criarDiretório() {
@@ -128,7 +131,7 @@ public class GerenciadorArquivos {
 		}		
 	}
 
-	private File generateFile(byte i){
+	public File generateFile(byte i){
 		return new File(GerenciadorArquivos.DISC_PATH.getAbsolutePath()+"\\tabela-"+i+".txt");
 	}		
 	
@@ -175,32 +178,48 @@ public class GerenciadorArquivos {
 		
 	}
 	
-	public void gravarBloco(Bloco bloco){
-		Log.Write("Gravando bloco");
-	}
-	
 	private BlocoControle getBlocoControle(File file){
+		Log.Write("get bloco de controle");
 		byte[] bloco = IO_Operations
 				.readFromFile(file, 0, BlocoControle.TAMANHO_BLOCO);
 			
 		BlocoControle blocoControle = new BlocoControle(bloco);
 		return blocoControle;
 	}
-	
-	private Bloco getBloco(File file, BlocoControle blocoControle){
-		Bloco retorno = null;
+	public BlocoControle getBlocoControle(byte containerId){
+		return getBlocoControle(generateFile(containerId));
+	}
+	public Bloco getBloco(byte containerId, int blocoId, Descritor descritor){
+		return getBloco(generateFile(containerId), blocoId, descritor);
+	}
+	private Bloco getBloco(File file, int blocoId, Descritor descritor){
 		
-		int prox = blocoControle.getHeader().getProxBlocoLivre();
-		if (prox != 1 ){
-			prox--;
+		byte[] bloco = IO_Operations
+				.readFromFile(file, startBloco(blocoId), BlocoControle.TAMANHO_BLOCO);
+		
+		try {
+			return new Bloco(bloco, descritor);
+		} catch (IncorrectFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		
-//		if(blockId == 1){
-//			return new Bloco(containerId, blockId, ETipoBloco.dados);
-//		}
-		
-		return retorno;
+		return null;
+	}
+	
+	private void atualziarBlocoControle(File file, BlocoControle b){
+		IO_Operations.writeFile(file, b.getByteArray(), 0);
+	}
+	
+	protected void EscreverBloco(File file, Bloco b) {
+		try {
+			IO_Operations.writeFile(file, b.getByteArray(), startBloco(b.getBlocoId()));
+		} catch (IncorrectFormatException e) {
+			e.printStackTrace();
+		}		
+	}
+	
+	private int startBloco(int blocoId){
+		return BlocoControle.TAMANHO_BLOCO * blocoId;
 	}
 }
 

@@ -1,4 +1,4 @@
-package gerenciador.TestesArquivo;
+package gerenciador.programas;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

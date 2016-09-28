@@ -13,6 +13,7 @@ import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IArquivoEvents;
 import gerenciador.arquivos.interfaces.IBinarizable;
 import gerenciador.arquivos.interfaces.IBlocoEvents;
+import gerenciador.loger.Log;
 import gerenciador.utils.ByteArrayTools;
 
 public class Arquivo implements IBinarizable<Arquivo>{
@@ -50,22 +51,34 @@ public class Arquivo implements IBinarizable<Arquivo>{
 	}
 	
 	private void createEvents(){
+		Arquivo a = this;
 		blocoEvents = new IBlocoEvents() {
 			
 			@Override
 			public void blocoVazio(Bloco bloco) {
+				Log.Write("Bloco vazio");
 				removerBloco(bloco);				
 			}
 			
 			@Override
 			public void blocoCheio(Tupla tupla) {
+				Log.Write("Bloco cheio");
 				Bloco novo = criarBloco();
 				novo.addTupla(tupla);				
+			}
+
+			@Override
+			public void blocoAlterado(Bloco bloco) {
+				Log.Write("Bloco alterado");
+				if(events != null){
+					events.BlocoAlterado(a, bloco);
+				}				
 			}
 		};
 	}
 	
 	private Bloco criarBloco(){
+		Log.Write("Criar bloco");
 		Bloco novo = new Bloco(blocoControle.getHeader().getContainerId(), 
 				blocoControle.getHeader().getProxBlocoLivre(), 
 				ETipoBloco.dados, 
@@ -76,6 +89,7 @@ public class Arquivo implements IBinarizable<Arquivo>{
 	}
 	
 	public void addBloco(Bloco bloco){
+		Log.Write("Adicionar bloco");
 		bloco.setEvents(blocoEvents);
 		this.blocos.add(bloco);
 		this.blocoControle.getHeader().incProxBlocoLivre();
@@ -86,6 +100,7 @@ public class Arquivo implements IBinarizable<Arquivo>{
 	}
 	
 	public void removerBloco(Bloco bloco){
+		Log.Write("Remover bloco");
 		this.blocoControle.getHeader().decProxBlocoLivre();
 		this.blocos.remove(bloco);
 		
@@ -95,16 +110,14 @@ public class Arquivo implements IBinarizable<Arquivo>{
 	}
 	
 	public void AdicionarLinha(Tupla tupla){
+		Log.Write("Adicionar linha");
 		Bloco bloco = requisitarBloco();
 		
-		bloco.addTupla(tupla);
-		
-		if(events != null){
-			events.BlocoAlterado(this, bloco);
-		}
+		bloco.addTupla(tupla);		
 	}
 	
 	public void RemoverLinha(Tupla tupla){
+		Log.Write("Remover linha");
 		if(this.blocoControle.getProxBlocoLivre() == 1){
 			throw new RuntimeException("Não existem blocos para efetur a remoção");			
 		}
@@ -114,6 +127,7 @@ public class Arquivo implements IBinarizable<Arquivo>{
 	}
 	
 	private Bloco requisitarBloco(){
+		Log.Write("Requisitar bloco");
 		int requisitoId = this.blocoControle.getHeader().getProxBlocoLivre() - 1;
 		
 		if(requisitoId == 0) return criarBloco();
@@ -129,6 +143,11 @@ public class Arquivo implements IBinarizable<Arquivo>{
 		return  retorno;
 	}
 	
+	public BlocoControle getBlocoControle() {
+		return blocoControle;
+	}
+
+
 	@Override
 	public byte[] getByteArray() throws IncorrectFormatException {
 		if(blocos.size() != blocoControle.getHeader().getProxBlocoLivre() - 1){
