@@ -126,7 +126,8 @@ public class Arquivo implements IBinarizable<Arquivo>{
 		}
 		
 		Bloco bloco = requisitarBloco();
-		throw new RuntimeException("Não implementado");
+		bloco.removeTupla(tupla);
+//		throw new RuntimeException("Não implementado");
 	}
 	
 	private Bloco requisitarBloco(){
