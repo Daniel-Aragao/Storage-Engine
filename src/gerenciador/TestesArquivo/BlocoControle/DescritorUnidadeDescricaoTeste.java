@@ -170,7 +170,7 @@ public class DescritorUnidadeDescricaoTeste {
 				00,0x54, 00,0x48, 00,0x4F, 00,0x52, GerenciadorArquivos.CARACTERE_INTEIRO,5,
 				0,0,0,0,0,0,0,0,00,0x4E, 00,0x41, 00,0x4D, 00,0x45, 00,0x5F, 00,0x41, 00,0x55, 00,
 				0x54, 00,0x48, 00,0x4F, 00,0x52, GerenciadorArquivos.CARACTERE_STRING,100};
-		Descritor d = new Descritor(b);
+		Descritor d = new Descritor(b, (short) 64);
 		
 		//String[] props = {"COD_AUTHOR[I(5)]","NAME_AUTHOR[A(100)]"};
 		

@@ -69,7 +69,6 @@ public class Arquivo implements IBinarizable<Arquivo>{
 
 			@Override
 			public void blocoAlterado(Bloco bloco) {
-				Log.Write("Bloco alterado");
 				if(events != null){
 					events.BlocoAlterado(a, bloco);
 				}				
@@ -90,6 +89,7 @@ public class Arquivo implements IBinarizable<Arquivo>{
 	
 	public void addBloco(Bloco bloco){
 		Log.Write("Adicionar bloco");
+		
 		bloco.setEvents(blocoEvents);
 		this.blocos.add(bloco);
 		this.blocoControle.getHeader().incProxBlocoLivre();
@@ -101,6 +101,7 @@ public class Arquivo implements IBinarizable<Arquivo>{
 	
 	public void removerBloco(Bloco bloco){
 		Log.Write("Remover bloco");
+		
 		this.blocoControle.getHeader().decProxBlocoLivre();
 		this.blocos.remove(bloco);
 		
@@ -111,6 +112,7 @@ public class Arquivo implements IBinarizable<Arquivo>{
 	
 	public void AdicionarLinha(Tupla tupla){
 		Log.Write("Adicionar linha");
+		
 		Bloco bloco = requisitarBloco();
 		
 		bloco.addTupla(tupla);		
@@ -118,6 +120,7 @@ public class Arquivo implements IBinarizable<Arquivo>{
 	
 	public void RemoverLinha(Tupla tupla){
 		Log.Write("Remover linha");
+		
 		if(this.blocoControle.getProxBlocoLivre() == 1){
 			throw new RuntimeException("Não existem blocos para efetur a remoção");			
 		}
@@ -128,6 +131,7 @@ public class Arquivo implements IBinarizable<Arquivo>{
 	
 	private Bloco requisitarBloco(){
 		Log.Write("Requisitar bloco");
+		
 		int requisitoId = this.blocoControle.getHeader().getProxBlocoLivre() - 1;
 		
 		if(requisitoId == 0) return criarBloco();

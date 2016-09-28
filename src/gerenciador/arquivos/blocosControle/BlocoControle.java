@@ -57,6 +57,6 @@ public class BlocoControle implements IBinarizable<BlocoControle> {
 		
 		this.descritor = new Descritor(ByteArrayTools
 				.subArray(dados, HEADER_CONTROLE_SIZE, 
-						dados.length - HEADER_CONTROLE_SIZE));		
+						dados.length - HEADER_CONTROLE_SIZE), header.getSizeDescritor());		
 	}
 }

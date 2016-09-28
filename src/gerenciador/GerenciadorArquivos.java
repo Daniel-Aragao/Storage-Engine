@@ -52,7 +52,7 @@ public class GerenciadorArquivos {
 
 			@Override
 			public Bloco RequisitarBloco(Arquivo a, int blocoId) {
-				Log.Write("Requisitar bloco");
+				Log.Write("Requisitar bloco ao disco");
 				return getBloco(a.getFile(), blocoId, a.getDescritor());
 			}
 
@@ -65,7 +65,7 @@ public class GerenciadorArquivos {
 	}
 
 	public Arquivo CriarArquivo(String propriedades)	{
-		Log.Write("Iniciar criação de arquivo");
+		Log.Write("-Iniciar criação de arquivo");
 		
 		String [] props = propriedades.split(CARACTERE_SEPARADOR);
 		
@@ -95,6 +95,7 @@ public class GerenciadorArquivos {
 				Log.Write("Gravar Arquivo");
 				IO_Operations.writeFile(file, arquivo.getByteArray(), 0);
 				
+				System.out.println();
 				return arquivo;
 			}else{
 				Log.Write("Erro ao criar o arquivo");
@@ -149,7 +150,11 @@ public class GerenciadorArquivos {
 	}
 	
 	public void AdicionarLinha(byte containerId, String props){
-		Log.Write("Iniciar adição de linha");
+		Log.Write("-Iniciar adição de linha");
+		if(props.isEmpty()){
+			Log.Write("Impossível inserir linha sem propriedades");
+			return;
+		}
 		Log.Write("Verificando existência do container/arquivo");
 		File file = generateFile(containerId);
 		
@@ -165,12 +170,11 @@ public class GerenciadorArquivos {
 		
 		Tupla tupla = null;
 		try {
-			Log.Write("Montando tupla...");
+			Log.Write("Montando tupla..."+props);
 			tupla = new Tupla(props.split(CARACTERE_SEPARADOR), arquivo.getDescritor());
 			
-			Log.Write("Adicionando linha");
 			arquivo.AdicionarLinha(tupla);
-			
+			System.out.println();
 		} catch (IncorrectFormatException e) {
 			Log.Erro(e.getMessage());
 			e.printStackTrace();
