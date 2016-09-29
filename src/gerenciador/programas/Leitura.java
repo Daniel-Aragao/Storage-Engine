@@ -24,8 +24,8 @@ public class Leitura {
 			GerenciadorArquivos ga = new GerenciadorArquivos();
 			Arquivo a = ga.getArquivo(Byte.parseByte(containerId));
 			
-			Log = new LogLeituraTabela(a.getFile());
-//			Log = new Log();
+//			Log = new LogLeituraTabela(a.getFile());
+			Log = new Log();
 			
 			for(int i = 1; i < a.getBlocoControle().getProxBlocoLivre(); i++){
 				Log.Write(ga.getBloco(a.getId(), i).toString());				

@@ -113,7 +113,6 @@ public class Bloco implements IBinarizable<Arquivo> {
 	}
 	
 	
-	
 	@Override
 	public String toString() {
 		String retorno = "";
@@ -121,8 +120,10 @@ public class Bloco implements IBinarizable<Arquivo> {
 		int bId = header.getBlocoId();
 		
 		for(int i = 0; i < dados.size(); i++){
-			retorno += "("+cId + " " + bId + " " + i + ") " + dados.getTupla(i).toString() + "\n";
+			retorno += "("+cId + " " + bId + " " + dados.getOffSet(i) + ") " 
+					+ dados.getTupla(i).toString() + "\n";
 		}
+		
 		return retorno;
 	}
 }

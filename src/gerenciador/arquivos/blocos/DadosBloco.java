@@ -42,6 +42,20 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 		return tuplas.get(index);
 	}
 	
+	public int getOffSet(int i){
+		int retorno = 0;
+		Tupla tuple = tuplas.get(i);
+		
+		for(Tupla t : tuplas){
+			if(tuple == t){
+				return retorno;
+			}
+			retorno += t.getSize();
+		}
+		
+		return -1;
+	}
+	
 	public boolean contains(Tupla tupla){
 		return tuplas.contains(tupla);
 	}
