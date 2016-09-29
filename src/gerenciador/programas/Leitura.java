@@ -13,16 +13,19 @@ public class Leitura {
 	private static ILog Log;
 	public static void main(String[] args) {
 		String containerId ;
-//		Log = new LogArquivo();
-		Log = new Log();
 
 		do{
 			containerId = JOptionPane.showInputDialog("Id da tabela");
-		}while(containerId == null || containerId.isEmpty());
-
+			if(containerId == null) return;
+		}while(containerId.isEmpty());
+		
+		
 		try{
 			GerenciadorArquivos ga = new GerenciadorArquivos();
 			Arquivo a = ga.getArquivo(Byte.parseByte(containerId));
+			
+			Log = new LogArquivo(a.getFile());
+			//	Log = new Log();
 			
 			for(int i = 1; i < a.getBlocoControle().getProxBlocoLivre(); i++){
 				Log.Write(ga.getBloco(a.getId(), i).toString());				
