@@ -1,5 +1,6 @@
 package gerenciador.buffer;
 
+import gerenciador.TupleId;
 import gerenciador.arquivos.blocos.Bloco;
 
 public class Memoria {
@@ -11,13 +12,13 @@ public class Memoria {
 	}
 	
 	public boolean contains(Bloco bloco){
-		return contains(bloco.getBlocoId());
+		throw new RuntimeException("Não implementado");
 	}
 	
-	public boolean contains(int blocoId){
+	public boolean contains(TupleId tid){
 		
 		for(Bloco b : blocos){
-			if(blocoId == b.getBlocoId()){
+			if(tid.isSameBloco(b.getBlocoTupleId())){
 				return true;
 			}
 		}

@@ -33,17 +33,13 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 		
 		return retorno;
 	}
-
-	private ArrayList<Tupla> getTuplas() {
-		return tuplas;
-	}
 	
 	public Tupla getTupla(int index){
 		return tuplas.get(index);
 	}
 	
 	public int getOffSet(int i){
-		int retorno = 0;
+		int retorno = Bloco.HEADER_BLOCO_SIZE;
 		Tupla tuple = tuplas.get(i);
 		
 		for(Tupla t : tuplas){

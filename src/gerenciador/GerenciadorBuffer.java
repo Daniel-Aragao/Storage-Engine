@@ -13,7 +13,7 @@ public class GerenciadorBuffer {
 	}
 	
 	public int getBloco(TupleId tid){
-		if(memoria.contains(tid.getBlocoId())){
+		if(memoria.contains(tid)){
 			memoria.getBloco(tid.getBlocoId());
 			return memoria.getBloco(tid.getBlocoId()).getBlocoId();
 		}

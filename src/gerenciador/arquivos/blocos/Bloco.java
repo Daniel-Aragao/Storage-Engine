@@ -1,5 +1,6 @@
 package gerenciador.arquivos.blocos;
 
+import gerenciador.TupleId;
 import gerenciador.arquivos.Arquivo;
 import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
@@ -125,5 +126,9 @@ public class Bloco implements IBinarizable<Arquivo> {
 		}
 		
 		return retorno;
+	}
+	
+	public TupleId getBlocoTupleId(){
+		return new TupleId(this.header.getContainerId(), this.getBlocoId(), 0);
 	}
 }
