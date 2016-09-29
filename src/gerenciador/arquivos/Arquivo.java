@@ -24,7 +24,10 @@ public class Arquivo implements IBinarizable<Arquivo>{
 	private IArquivoEvents events;
 	private File file;
 	
+	private ILog Log;
+	
 	public Arquivo(BlocoControle blocoControle, File file){		
+		this.Log = new Log();
 		this.blocoControle = blocoControle;
 		this.file = file;
 		blocos = new ArrayList<Bloco>();		
@@ -33,6 +36,7 @@ public class Arquivo implements IBinarizable<Arquivo>{
 	
 	
 	public Arquivo(byte[] dados, File file) throws IncorrectFormatException {
+		this.Log = new Log();
 		this.file = file;
 		blocos = new ArrayList<Bloco>();
 		createEvents();
@@ -149,9 +153,7 @@ public class Arquivo implements IBinarizable<Arquivo>{
 //		return  retorno;
 //	}
 	
-	private ILog Log;
 	private Bloco requisitarBloco(int requisitoId){
-		this.Log = new Log();
 
 		if(requisitoId == 0) return criarBloco();
 		
@@ -181,7 +183,8 @@ public class Arquivo implements IBinarizable<Arquivo>{
 		return blocoControle.getHeader().getContainerId();
 	}
 
-
+	
+	
 	@Override
 	public byte[] getByteArray() throws IncorrectFormatException {
 		if(blocos.size() != blocoControle.getHeader().getProxBlocoLivre() - 1){

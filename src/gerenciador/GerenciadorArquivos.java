@@ -205,11 +205,6 @@ public class GerenciadorArquivos {
 		
 		return arquivo;
 	}
-	public Bloco getBloco(byte containerId, int blocoId){
-		Arquivo arquivo = loadFromCache(containerId);
-		
-		return getBloco(arquivo.getFile(), blocoId, arquivo.getDescritor());
-	}
 	
 	private Arquivo loadFromCache(byte containerId){
 		Arquivo arquivo = null;
@@ -228,6 +223,11 @@ public class GerenciadorArquivos {
 		return arquivo;
 	}
 	
+	public Bloco getBloco(byte containerId, int blocoId){
+		Arquivo arquivo = loadFromCache(containerId);
+		
+		return getBloco(arquivo.getFile(), blocoId, arquivo.getDescritor());
+	}	
 	public Bloco getBloco(byte containerId, int blocoId, Descritor descritor){
 		return getBloco(generateFile(containerId), blocoId, descritor);
 	}
@@ -263,8 +263,6 @@ public class GerenciadorArquivos {
 
 	public String getArquivoString(Arquivo a) {
 		return a.toString();
-				
-		
 	}
 	
 }

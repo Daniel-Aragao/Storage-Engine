@@ -20,7 +20,8 @@ public class Escrita {
 		
 		do{
 			path = JOptionPane.showInputDialog("Diretório do arquivo");
-		}while(path == null || path.isEmpty());
+			if(path == null) return;
+		}while(path.isEmpty());
 		
 		FileReader reader = null;
 		try {

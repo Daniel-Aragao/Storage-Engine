@@ -112,10 +112,7 @@ public class Bloco implements IBinarizable<Arquivo> {
 				, descritor);
 	}
 	
-	public int getOffset(Tupla tupla){
-//		dados.getOffset(tupla);
-		throw new RuntimeException("Não implementado"); 
-	}
+	
 	
 	@Override
 	public String toString() {
