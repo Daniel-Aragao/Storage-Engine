@@ -1,31 +1,111 @@
 package gerenciador;
 
+import gerenciador.arquivos.blocos.Bloco;
 import gerenciador.buffer.Memoria;
 
 public class GerenciadorBuffer {
 	
 	private Memoria memoria;
 	private int[] controle;
+	private int contador;
+	private int hit;
+	private int nhit;
+	
+	private GerenciadorArquivos ga;//cache
 	
 	public GerenciadorBuffer(){
 		this.memoria = new Memoria();
 		controle = new int[Memoria.MEMORY_SIZE];
+		startControlador();
+		hit = 0;
+		nhit = 0;
 	}
 	
-	public int getBloco(TupleId tid){
-		if(memoria.contains(tid)){
-			memoria.getBloco(tid.getBlocoId());
-			return memoria.getBloco(tid.getBlocoId()).getBlocoId();
+	/* pedir bloco
+	 * verificar se está na memória
+	 * 	caso esteja
+	 * 		incrementar hit
+	 * 		atualizar controle pondo posMem no inicio do controle
+	 * 		retornar bloco na posMem
+	 * 	caso não esteja
+	 * 		incrementar nhit
+	 * 		pegar novo bloco no disco
+	 * 		verificar se tem espaço na memória
+	 * 		 caso tenha
+	 * 			incluir onde está vazio
+	 * 			atualizar controle pondo a nova posMem no inicio do controle
+	 * 		 caso não tenha
+	 * 			substituir o bloco usado mais atigamente, na PosMem mais antiga, pelo novo
+	 * 			atualizar controle ponto a posMem do novo bloco no inicio
+	 * 
+	 * */
+	
+	public int getBloco(RowId tid){
+		int posMem = memoria.getPosition(tid);
+		
+		if(posMem >= 0){
+			hit++;
+			AtualizarControle(posMem);
+			return memoria.getBloco(posMem).getBlocoId();
+		}
+		nhit++;
+		Bloco novoBloco = getFromDisk(tid);
+				
+		posMem = memoria.getPosVazia();
+		if(posMem >= 0){
+			
+			memoria.putBloco(novoBloco, posMem);
+			AtualizarControle(posMem);
+			
+			return novoBloco.getBlocoId();
 		}
 		
+		posMem = controle[Memoria.MEMORY_SIZE - 1];
+		memoria.putBloco(novoBloco, posMem);
+		AtualizarControle(posMem);
 		
 		
-		
-		return 0;
+		return novoBloco.getBlocoId();
+	}
+	public Bloco getFromDisk(RowId tid){
+		GerenciadorArquivos ga = getGAFromCache();
+		return ga.getBloco(tid);
 	}
 	
-	private void hit(int posMemoria){
-		
+	public GerenciadorArquivos getGAFromCache(){
+		if(ga == null){
+			ga = new GerenciadorArquivos();
+		}
+			
+		return ga;
 	}
 	
+	private void startControlador(){
+		throw new RuntimeException("Não implementado");
+	}
+	
+	
+	private void AtualizarControle(int posMem) {
+		int index = -1;
+		for(int i = 0; i < controle.length; i++){
+			if(controle[i] == posMem){
+				index = i;
+			}
+		}
+		if(index == -1) index = Memoria.MEMORY_SIZE - 1;
+		
+		for(int j = index; j > 0; j-- ){
+			controle[j] = controle[j-1];
+		}
+		controle[0] = posMem;
+		
+	}
+
+	private void remover(RowId tupleId){
+		throw new RuntimeException("Não implementado");
+	}
+	public void resetHitNhit(){
+		hit = 0;
+		nhit = 0;
+	}
 }

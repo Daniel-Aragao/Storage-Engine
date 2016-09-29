@@ -2,6 +2,7 @@ package gerenciador.arquivos.blocos;
 
 import java.util.ArrayList;
 
+import gerenciador.RowId;
 import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
@@ -11,14 +12,16 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 	
 	private ArrayList<Tupla> tuplas;
 	private Descritor descritor;
+	private RowId tupleBlocoId ;
 	
 	public DadosBloco(Descritor descritor) {
 		this.descritor = descritor;
 		setTuplas(new ArrayList<Tupla>());
 	}
 
-	public DadosBloco(byte[] dados, Descritor descritor) throws IncorrectFormatException{
+	public DadosBloco(byte[] dados,RowId tupleBlocoId, Descritor descritor) throws IncorrectFormatException{
 		this.descritor = descritor;
+		this.tupleBlocoId = tupleBlocoId; 
 		setTuplas(new ArrayList<Tupla>());
 		fromByteArray(dados);
 	}
@@ -89,7 +92,10 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 			int tuplaSize = ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, pointer, 4));
 			byte[] tuplaBA = ByteArrayTools.subArray(dados, pointer, tuplaSize);
 			
-			Tupla tupla = new Tupla(tuplaBA, this.descritor);
+			RowId tupleId = new RowId(this.tupleBlocoId.getContainerId(), 
+					this.tupleBlocoId.getBlocoId(), 
+					pointer + Bloco.HEADER_BLOCO_SIZE);
+			Tupla tupla = new Tupla(tuplaBA, tupleId, this.descritor);
 						
 			this.tuplas.add(tupla);
 			
@@ -100,14 +106,7 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 		}
 	}
 
-	public int getOffset(Tupla tupla) {
-		
-//		for(int i = 0; i < tuplas.size(); i++){
-//			if(tuplas.get(i)ge)
-//		}
-		
-		throw new RuntimeException("Não implementado");
-	}
+	
 	@Override
 	public String toString() {
 		String retorno = "";

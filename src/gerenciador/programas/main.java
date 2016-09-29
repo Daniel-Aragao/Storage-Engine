@@ -1,10 +1,8 @@
 package gerenciador.programas;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
-import gerenciador.GerenciadorArquivos;
-import gerenciador.arquivos.blocos.Coluna;
+import gerenciador.RowId;
 import gerenciador.arquivos.blocos.Tupla;
 import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
@@ -80,8 +78,8 @@ public class main {
 		Descritor d = getDescritor();
 		
 		String props[] = {"101", "LUIZ_RUFFATO"};
-		
-		return new Tupla(props, d);
+		RowId t = new RowId((byte) 0, 0, 0); 
+		return new Tupla(props, t, d);
 	}
 	
 	private static Descritor getDescritor() throws IncorrectFormatException{

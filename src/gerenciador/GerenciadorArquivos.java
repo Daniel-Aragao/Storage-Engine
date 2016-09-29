@@ -182,7 +182,7 @@ public class GerenciadorArquivos {
 		Tupla tupla = null;
 		try {
 			Log.Write("Montando tupla..."+props);
-			tupla = new Tupla(props.split(CARACTERE_SEPARADOR), arquivo.getDescritor());
+			tupla = new Tupla(props.split(CARACTERE_SEPARADOR),null, arquivo.getDescritor());
 			
 			arquivo.AdicionarLinha(tupla);
 			System.out.println();
@@ -229,14 +229,20 @@ public class GerenciadorArquivos {
 		return arquivo;
 	}
 	
+	public Bloco getBloco(RowId tid) {
+		return getBloco(tid.getContainerId(), tid.getBlocoId());
+	}
+	
 	public Bloco getBloco(byte containerId, int blocoId){
 		Arquivo arquivo = loadFromCache(containerId);
 		
 		return getBloco(arquivo.getFile(), blocoId, arquivo.getDescritor());
 	}	
+	
 	public Bloco getBloco(byte containerId, int blocoId, Descritor descritor){
 		return getBloco(generateFile(containerId), blocoId, descritor);
 	}
+	
 	private Bloco getBloco(File file, int blocoId, Descritor descritor){
 		
 		byte[] bloco = IO_Operations

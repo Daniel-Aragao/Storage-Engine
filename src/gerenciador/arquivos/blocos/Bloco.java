@@ -1,6 +1,6 @@
 package gerenciador.arquivos.blocos;
 
-import gerenciador.TupleId;
+import gerenciador.RowId;
 import gerenciador.arquivos.Arquivo;
 import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
@@ -53,6 +53,7 @@ public class Bloco implements IBinarizable<Arquivo> {
 				events.blocoCheio(tupla);
 			}
 		}else{
+			tupla.setTupleId(getNextTupleId());
 			dados.addTupla(tupla);
 			this.getHeader().incBytes(tupla.getSize());
 			
@@ -61,9 +62,17 @@ public class Bloco implements IBinarizable<Arquivo> {
 			}
 		}
 	}
-	
+	public RowId getNextTupleId(){
+				
+		RowId tupleId = new RowId(this.header.getContainerId(), 
+				getBlocoId(), 
+				this.header.getBytesUsados());
+		
+		return tupleId;
+	}
 	public void addTupla(byte[] tuplaBytes) throws IncorrectFormatException{
-		Tupla tupla = new Tupla(tuplaBytes, this.descritor);
+		
+		Tupla tupla = new Tupla(tuplaBytes, getNextTupleId(), this.descritor);
 		
 		addTupla(tupla);
 	}
@@ -109,8 +118,9 @@ public class Bloco implements IBinarizable<Arquivo> {
 				.subArray(dados, 0, HEADER_BLOCO_SIZE));
 		
 		this.dados = new DadosBloco(ByteArrayTools
-				.subArray(dados, HEADER_BLOCO_SIZE, dados.length - HEADER_BLOCO_SIZE)
-				, descritor);
+				.subArray(dados, HEADER_BLOCO_SIZE, dados.length - HEADER_BLOCO_SIZE),
+				this.getBlocoTupleId(),
+				descritor);
 	}
 	
 	
@@ -121,14 +131,16 @@ public class Bloco implements IBinarizable<Arquivo> {
 		int bId = header.getBlocoId();
 		
 		for(int i = 0; i < dados.size(); i++){
-			retorno += "("+cId + " " + bId + " " + dados.getOffSet(i) + ") " 
-					+ dados.getTupla(i).toString() + "\n";
+			Tupla tupla = dados.getTupla(i);
+			retorno += "("+tupla.getTupleId().toString()+ ") " 
+//					retorno += "("+cId + " " + bId + " " + dados.getOffSet(i) + ") " 
+					+ tupla.toString() + "\n";
 		}
 		
 		return retorno;
 	}
 	
-	public TupleId getBlocoTupleId(){
-		return new TupleId(this.header.getContainerId(), this.getBlocoId(), 0);
+	public RowId getBlocoTupleId(){
+		return new RowId(this.header.getContainerId(), this.getBlocoId(), -1);
 	}
 }

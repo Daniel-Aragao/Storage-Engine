@@ -3,6 +3,7 @@ package gerenciador.TestesArquivo.Bloco;
 import org.junit.Assert;
 import org.junit.Test;
 
+import gerenciador.RowId;
 import gerenciador.arquivos.blocos.Coluna;
 import gerenciador.arquivos.blocos.ColunaInt;
 import gerenciador.arquivos.blocos.ColunaString;
@@ -24,7 +25,8 @@ public class TuplaTeste {
 		
 		String props[] = {"101", "LUIZ_RUFFATO"};
 		
-		return new Tupla(props, d);
+		RowId t = new RowId((byte) 0, 0, 0); 
+		return new Tupla(props, t, d);
 	}
 	
 	private Descritor getDescritor() throws IncorrectFormatException{
@@ -131,8 +133,8 @@ public class TuplaTeste {
 					00,0x55, 00,0x46, 00,0x46, 
 					00,0x41, 00,0x54, 00,0x4F
 				};
-		
-		Tupla tupla = new Tupla(correto, getDescritor());
+		RowId t = new RowId((byte) 0, 0, 0); 
+		Tupla tupla = new Tupla(correto, t, getDescritor());
 		
 		Assert.assertEquals(6,tupla.getColuna(0).getColumnSize());
 		Assert.assertEquals(101,(int)tupla.getColuna(0).getDado());	
@@ -156,8 +158,8 @@ public class TuplaTeste {
 					00,0x55, 00,0x46, 00,0x46, 
 					00,0x41, 00,0x54, 00,0x4F
 				};
-		
-		Tupla tupla = new Tupla(correto, getDescritor());
+		RowId t = new RowId((byte) 0, 0, 0); 
+		Tupla tupla = new Tupla(correto,t, getDescritor());
 		
 		Assert.assertArrayEquals(correto, tupla.getByteArray());
 	}
@@ -178,7 +180,8 @@ public class TuplaTeste {
 					0,0,0,(byte) 101
 				};
 		
-		Tupla tupla = new Tupla(incorreto, getDescritor());
+		RowId t = new RowId((byte) 0, 0, 0); 
+		Tupla tupla = new Tupla(incorreto,t, getDescritor());
 	}
 }
 

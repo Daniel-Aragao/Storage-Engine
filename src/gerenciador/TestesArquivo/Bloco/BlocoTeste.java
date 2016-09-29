@@ -3,6 +3,7 @@ package gerenciador.TestesArquivo.Bloco;
 import org.junit.Assert;
 import org.junit.Test;
 
+import gerenciador.RowId;
 import gerenciador.arquivos.blocos.Bloco;
 import gerenciador.arquivos.blocos.DadosBloco;
 import gerenciador.arquivos.blocos.Tupla;
@@ -27,7 +28,8 @@ public class BlocoTeste {
 					{"13", "CHARLES_DICKENS"}
 				};
 		
-		return new Tupla(props[index], d);
+		RowId t = new RowId((byte) 0, 0, 0); 
+		return new Tupla(props[index], t, d);
 	}
 	
 	private Descritor getDescritor() throws IncorrectFormatException{

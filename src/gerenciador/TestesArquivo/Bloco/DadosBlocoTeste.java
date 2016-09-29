@@ -3,6 +3,7 @@ package gerenciador.TestesArquivo.Bloco;
 import org.junit.Assert;
 import org.junit.Test;
 
+import gerenciador.RowId;
 import gerenciador.arquivos.blocos.DadosBloco;
 import gerenciador.arquivos.blocos.Tupla;
 import gerenciador.arquivos.blocosControle.Descritor;
@@ -24,7 +25,8 @@ public class DadosBlocoTeste {
 					{"13", "CHARLES_DICKENS"}
 				};
 		
-		return new Tupla(props[index], d);
+		RowId t = new RowId((byte) 0, 0, 0); 
+		return new Tupla(props[index], t, d);
 	}
 	
 	private Descritor getDescritor() throws IncorrectFormatException{
@@ -132,8 +134,8 @@ public class DadosBlocoTeste {
 				00,0x55, 00,0x46, 00,0x46, 
 				00,0x41, 00,0x54, 00,0x4F
 			};
-		
-		DadosBloco db = new DadosBloco(correto, getDescritor());
+		RowId tupleId = new RowId((byte) 0, 0, 0);
+		DadosBloco db = new DadosBloco(correto, tupleId, getDescritor());
 		
 		
 		Assert.assertEquals(4 + 6 + 26,db.getTupla(0).getSize());
@@ -166,7 +168,9 @@ public class DadosBlocoTeste {
 				00,0x41, 00,0x4D, 00,0x41, 
 				00,0x44, 00,0x4F};
 		
-		DadosBloco db = new DadosBloco(correto, getDescritor());
+
+		RowId tupleId = new RowId((byte) 0, 0, 0);
+		DadosBloco db = new DadosBloco(correto, tupleId, getDescritor());
 		
 		Assert.assertEquals(4 + 6 + 26,db.getTupla(0).getSize());
 		Assert.assertEquals(2,db.getTupla(0).getColunas().size());

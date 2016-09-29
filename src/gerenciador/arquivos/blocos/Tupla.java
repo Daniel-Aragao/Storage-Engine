@@ -2,6 +2,7 @@ package gerenciador.arquivos.blocos;
 
 import java.util.ArrayList;
 
+import gerenciador.RowId;
 import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.blocosControle.UnidadeDescricao;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
@@ -13,11 +14,13 @@ public class Tupla implements IBinarizable<Tupla>{
 	private int size;	
 	private ArrayList<Coluna> colunas;
 	private Descritor descritor;
+	private RowId tupleId;
 	
 	
-	public Tupla(String[] props, Descritor descritor)throws IncorrectFormatException{
+	public Tupla(String[] props, RowId tupleId, Descritor descritor)throws IncorrectFormatException{
 		setColunas(new ArrayList<>());
 		this.size = 0;
+		this.tupleId = tupleId;
 		
 		if (props.length != descritor.getNumberOfColumns()){
 			throw new IncorrectFormatException("Número de colunas inseridas é diferente"
@@ -36,12 +39,21 @@ public class Tupla implements IBinarizable<Tupla>{
 		this.size += 4;
 	}
 	
-	public Tupla(byte[] dados, Descritor descritor) throws IncorrectFormatException{		
+	public Tupla(byte[] dados, RowId tupleId, Descritor descritor) throws IncorrectFormatException{		
 		this.descritor = descritor;
+		this.tupleId = tupleId;
 		setColunas(new ArrayList<>());
 		fromByteArray(dados);
 	}
 	
+	public RowId getTupleId() {
+		return tupleId;
+	}
+
+	public void setTupleId(RowId tupleId) {
+		this.tupleId = tupleId;
+	}
+
 	@Override
 	public byte[] getByteArray() throws IncorrectFormatException {
 		byte[] retorno = ByteArrayTools.intToByteArray(size);

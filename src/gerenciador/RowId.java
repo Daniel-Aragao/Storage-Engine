@@ -1,17 +1,17 @@
 package gerenciador;
 
-public class TupleId {
-	private int containerId;
+public class RowId {
+	private byte containerId;
 	private int blocoId;
 	private int offSet;
 	
-	public TupleId(int cId, int bId, int off){
+	public RowId(byte cId, int bId, int off){
 		this.containerId = cId;
 		this.blocoId = bId;
 		this.offSet = off;
 	}
 
-	public int getContainerId(){
+	public byte getContainerId(){
 		return containerId;
 	}
 	public int getBlocoId(){
@@ -24,18 +24,23 @@ public class TupleId {
 	public boolean isBlocoEquals(int tuple){
 		return tuple == this.blocoId;
 	}
-	public boolean isBlocoEquals(TupleId tuple){
+	public boolean isBlocoEquals(RowId tuple){
 		return isBlocoEquals(tuple.getBlocoId());
 	}
 	
-	public boolean isContainerEquals(TupleId tuple){
+	public boolean isContainerEquals(RowId tuple){
 		return isBlocoEquals(tuple.getBlocoId());
 	}
 	public boolean isContainerEquals(int contId){
 		return this.containerId == contId;
 	}
 	
-	public boolean isSameBloco(TupleId tuple){
+	public boolean isSameBloco(RowId tuple){
 		return isContainerEquals(tuple) && isBlocoEquals(tuple);
+	}
+	
+	@Override
+	public String toString() {
+		return containerId + " " + blocoId + " " + offSet;
 	}
 }
