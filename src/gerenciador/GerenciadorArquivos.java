@@ -205,9 +205,7 @@ public class GerenciadorArquivos {
 	public BlocoControle getBlocoControle(byte containerId){
 		return getBlocoControle(generateFile(containerId));
 	}
-	public Arquivo getArquivo(byte containerId){
-		File file = generateFile(containerId);
-		
+	public Arquivo getArquivo(byte containerId){		
 		Arquivo arquivo = loadFromCache(containerId);
 		
 		return arquivo;

@@ -1,7 +1,9 @@
 package gerenciador;
 
 import gerenciador.arquivos.blocos.Bloco;
+import gerenciador.arquivos.interfaces.ILog;
 import gerenciador.buffer.Memoria;
+import gerenciador.loger.Log;
 
 public class GerenciadorBuffer {
 	
@@ -9,16 +11,25 @@ public class GerenciadorBuffer {
 	private int[] controle;
 	private int contador;
 	private int hit;
-	private int nhit;
-	
+	private int miss;
+	private ILog log;
 	private GerenciadorArquivos ga;//cache
 	
 	public GerenciadorBuffer(){
+		construtor();
+	}
+	
+	private void construtor(){
 		this.memoria = new Memoria();
 		controle = new int[Memoria.MEMORY_SIZE];
 		startControlador();
 		hit = 0;
-		nhit = 0;
+		miss = 0;
+		log = new Log();
+	}
+	public GerenciadorBuffer(ILog log){
+		construtor();
+		this.log = log;
 	}
 	
 	/* pedir bloco
@@ -48,7 +59,7 @@ public class GerenciadorBuffer {
 			AtualizarControle(posMem);
 			return memoria.getBloco(posMem).getBlocoId();
 		}
-		nhit++;
+		miss++;
 		Bloco novoBloco = getFromDisk(tid);
 				
 		posMem = memoria.getPosVazia();
@@ -108,6 +119,6 @@ public class GerenciadorBuffer {
 	}
 	public void resetHitNhit(){
 		hit = 0;
-		nhit = 0;
+		miss = 0;
 	}
 }

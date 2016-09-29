@@ -41,6 +41,6 @@ public class RowId {
 	
 	@Override
 	public String toString() {
-		return containerId + " " + blocoId + " " + offSet;
+		return containerId + "." + blocoId + "." + offSet;
 	}
 }

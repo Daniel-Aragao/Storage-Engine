@@ -8,7 +8,7 @@ import gerenciador.arquivos.Arquivo;
 import gerenciador.arquivos.interfaces.ILog;
 import gerenciador.loger.Log;
 
-public class Buffer {
+public class BufferRandomizer {
 	private static ILog Log;
 	public static void main(String[] args) {
 
