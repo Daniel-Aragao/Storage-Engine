@@ -33,11 +33,17 @@ public class GerenciadorArquivos {
 	private Arquivo arquivoCached;
 	
 	public GerenciadorArquivos() {
+		construct();
+	}
+	private void construct(){
 		this.Log = new Log();
 		Log.Write("GerenciadorArquivos iniciado..");
 		createArquivoEvents();
 	}
-	
+	public GerenciadorArquivos(ILog log) {
+		construct();
+		this.Log = log;
+	}
 	private void createArquivoEvents(){
 		this.ArquivoEvents = new IArquivoEvents() {
 			

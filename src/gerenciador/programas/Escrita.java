@@ -1,6 +1,7 @@
 package gerenciador.programas;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,13 +10,16 @@ import javax.swing.JOptionPane;
 
 import gerenciador.GerenciadorArquivos;
 import gerenciador.arquivos.Arquivo;
+import gerenciador.arquivos.interfaces.ILog;
+import gerenciador.loger.LogEscrita;
 
 public class Escrita {
 
 	public static void main(String[] args) {
 		
-		GerenciadorArquivos gerenciadorArquivo = new GerenciadorArquivos();
-		
+		ILog log = new LogEscrita(new File(ILog.LOG_PATH.getAbsolutePath() + "\\Log de escrita"));
+		GerenciadorArquivos gerenciadorArquivo = new GerenciadorArquivos(log);
+		log.Write("Início de escrita\n\n");
 		String path ;
 		
 		do{
@@ -41,7 +45,7 @@ public class Escrita {
 			}
 			
 			buffer.close();
-			
+			log.Write("Fim de escrita\n\n");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

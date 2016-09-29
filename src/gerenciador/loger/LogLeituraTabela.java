@@ -6,10 +6,10 @@ import java.io.IOException;
 
 import gerenciador.arquivos.interfaces.ILog;
 
-public class LogArquivo implements ILog {
+public class LogLeituraTabela implements ILog {
 	private FileWriter fw;
 	
-	public LogArquivo(File f) {
+	public LogLeituraTabela(File f) {
 		String path = Log.LOG_PATH.getAbsolutePath() +"\\" + f.getName();
 		try {
 			this.fw = new FileWriter(path, false);
