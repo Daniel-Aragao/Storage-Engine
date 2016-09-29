@@ -26,7 +26,8 @@ public class GerenciadorArquivos {
 	
 	
 	public static final File DISC_PATH = 
-			new File("C:\\Users\\danda_000\\git\\Storage-Engine\\res\\Disco");
+//			new File("C:\\Users\\danda_000\\git\\Storage-Engine\\res\\Disco");
+			new File("C:\\Users\\pedro\\Documents\\GitHub\\Storage-Engine\\res\\Disco");
 	
 	private ILog Log;
 	private IArquivoEvents ArquivoEvents;
@@ -107,7 +108,7 @@ public class GerenciadorArquivos {
 				
 				arquivoCached = arquivo;
 				
-				System.out.println();
+				Log.Write("\n");
 				return arquivo;
 			}else{
 				Log.Write("Erro ao criar o arquivo");
@@ -185,7 +186,7 @@ public class GerenciadorArquivos {
 			tupla = new Tupla(props.split(CARACTERE_SEPARADOR),null, arquivo.getDescritor());
 			
 			arquivo.AdicionarLinha(tupla);
-			System.out.println();
+			Log.Write("\n");
 		} catch (IncorrectFormatException e) {
 			Log.Erro(e.getMessage());
 			e.printStackTrace();

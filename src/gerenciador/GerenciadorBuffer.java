@@ -81,7 +81,9 @@ public class GerenciadorBuffer {
 	}
 	
 	private void startControlador(){
-		throw new RuntimeException("Não implementado");
+		for(int i = 0; i < controle.length; i++){
+			controle[i] = -1;
+		}
 	}
 	
 	

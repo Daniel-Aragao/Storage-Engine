@@ -3,6 +3,9 @@ C:\Users\danda_000\git\Storage-Engine\res\file_sample2.txt
 C:\Users\danda_000\git\Storage-Engine\res\cli-tpch.txt
 C:\Users\danda_000\git\Storage-Engine\res\forn-tpch.txt
 
+C:\Users\Pedro\Documents\GitHub\Storage-Engine\res\cli-tpch.txt
+C:\Users\Pedro\Documents\GitHub\Storage-Engine\res\forn-tpch.txt
+
 ultima inserção de cli-tpch (tabela-06) 11639blocos
 -Iniciar adição de linha
 Verificando existência do container/arquivo
