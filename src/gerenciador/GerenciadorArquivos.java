@@ -152,7 +152,7 @@ public class GerenciadorArquivos {
 	private byte getNextContainerId(){
 		File f = null;
 		
-		for(byte i = 0; i <= 255 ;i++){
+		for(byte i = 1; i <= 255 ;i++){
 			f = generateFile(i);
 			if(!f.exists()){
 				return i;
@@ -193,6 +193,7 @@ public class GerenciadorArquivos {
 		}
 		
 	}
+	
 	
 	private BlocoControle getBlocoControle(File file){
 		Log.Write("get bloco de controle");

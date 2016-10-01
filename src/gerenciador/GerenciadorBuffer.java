@@ -1,8 +1,11 @@
 package gerenciador;
 
 import gerenciador.arquivos.blocos.Bloco;
+import gerenciador.arquivos.blocosControle.BlocoControle;
+import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.interfaces.ILog;
 import gerenciador.buffer.Memoria;
+import gerenciador.buffer.interfaces.IMemoryEvents;
 import gerenciador.loger.Log;
 
 public class GerenciadorBuffer {
@@ -20,12 +23,24 @@ public class GerenciadorBuffer {
 	}
 	
 	private void construtor(){
-		this.memoria = new Memoria();
-		controle = new int[Memoria.MEMORY_SIZE];
+		this.memoria = new Memoria(getMemoryEvents());
+		controle = new int[Memoria.MEMORY_SIZE_IN_BLOCKS];
 		startControlador();
 		hit = 0;
 		miss = 0;
 		log = new Log();
+	}
+	private IMemoryEvents getMemoryEvents(){
+		return new IMemoryEvents() {
+			
+			@Override
+			public Descritor requisitarDescritor(int containerId) {
+				
+				GerenciadorArquivos ga = getGAFromCache();
+				return ga.getBlocoControle((byte) containerId)
+						.getDescritor();
+			}
+		};
 	}
 	public GerenciadorBuffer(ILog log){
 		construtor();
@@ -71,7 +86,7 @@ public class GerenciadorBuffer {
 			return novoBloco.getBlocoId();
 		}
 		
-		posMem = controle[Memoria.MEMORY_SIZE - 1];
+		posMem = controle[Memoria.MEMORY_SIZE_IN_BLOCKS - 1];
 		memoria.putBloco(novoBloco, posMem);
 		AtualizarControle(posMem);
 		
@@ -105,7 +120,7 @@ public class GerenciadorBuffer {
 				index = i;
 			}
 		}
-		if(index == -1) index = Memoria.MEMORY_SIZE - 1;
+		if(index == -1) index = Memoria.MEMORY_SIZE_IN_BLOCKS - 1;
 		
 		for(int j = index; j > 0; j-- ){
 			controle[j] = controle[j-1];
