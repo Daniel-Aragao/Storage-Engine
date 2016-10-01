@@ -1,6 +1,7 @@
 package gerenciador.programas;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,9 +10,11 @@ import gerenciador.GerenciadorBuffer;
 import gerenciador.RowId;
 
 public class ListaRowID {
+	public static final File path = new File(
+			"C:\\Users\\pedro\\Documents\\GitHub\\Storage-Engine\\res\\Disco\\listaID.txt");
 
 	public static void main(String[] args) {
-		final String arquivo = "listaID.txt";
+		// final String arquivo = "listaID.txt";
 		GerenciadorBuffer bm = new GerenciadorBuffer();
 
 		// public ArrayList<RowId> listar[] {
@@ -19,18 +22,17 @@ public class ListaRowID {
 
 		FileReader fr = null;
 		BufferedReader br = null;
-		
 
 		try {
-			fr = new FileReader(arquivo);
+			fr = new FileReader(path);
 			br = new BufferedReader(fr);
 
 			String linha;
 			while ((linha = br.readLine()) != null) {
 				String[] dados = linha.split(".");
-				RowId Ri = new RowId(Integer.parseInt(dados[0]), Integer.parseInt(dados[1]),
+				RowId Ri = new RowId(Byte.parseByte(dados[0]), Integer.parseInt(dados[1]),
 						Integer.parseInt(dados[2]));
-//				dado do container no rowid tipo byte
+				// dado do container no rowid tipo byte
 				listaID.add(Ri);
 			}
 
@@ -53,7 +55,7 @@ public class ListaRowID {
 		for (RowId id : listaID) {
 
 			bm.getBloco(id);
-//colocar os log.write no getbloco
+			// colocar os log.write no getbloco
 		}
 
 	}

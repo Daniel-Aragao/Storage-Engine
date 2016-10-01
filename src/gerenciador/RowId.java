@@ -11,12 +11,6 @@ public class RowId {
 		this.offSet = off;
 	}
 
-	public RowId(int cId, int bId, int off) {
-		this.containerId = Byte.parseByte(null, cId);
-		this.blocoId = bId;
-		this.offSet = off;
-	}
-
 	public byte getContainerId() {
 		return containerId;
 	}

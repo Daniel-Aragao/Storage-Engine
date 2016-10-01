@@ -1,5 +1,6 @@
 package gerenciador.programas;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.JOptionPane;
@@ -7,16 +8,20 @@ import gerenciador.GerenciadorArquivos;
 import gerenciador.RowId;
 import gerenciador.arquivos.Arquivo;
 import gerenciador.arquivos.interfaces.ILog;
-import gerenciador.loger.Log;
+import gerenciador.loger.*;
 
 public class BufferRandomizer {
 	private static ILog Log;
-
+	private static LogLeituraTabela Logl;
+	public static final File Disc =
+	new File("C:\\Users\\pedro\\Documents\\GitHub\\Storage-Engine\\res\\Disco\\listaID.txt");
+	
 	public static void main(String[] args) {
 
 		ArrayList<RowId> ids;
 		String containerId;
 		Log = new Log();
+		Logl = new LogLeituraTabela(Disc);
 		int forty;
 		float four;
 
@@ -34,12 +39,13 @@ public class BufferRandomizer {
 			// Log = new LogLeituraTabela(a.getFile());
 
 			Log.Write("Verificando número de blocos");
-			System.out.println(a.getBlocoControle().getProxBlocoLivre() - 1);
+			Log.Write("\n");
+			Log.Write(""+(a.getBlocoControle().getProxBlocoLivre() - 1));
 
 			Log.Write("Calculando 40% dos blocos");
 			four = 0.4f;
 			forty = (int) ((a.getBlocoControle().getProxBlocoLivre() - 1) * four);
-			System.out.println(forty);
+			Log.Write(""+forty);
 
 			Log.Write("Importando os blocos");
 			for (int i = 1; i < forty; i++) {
@@ -69,6 +75,9 @@ public class BufferRandomizer {
 			e.printStackTrace();
 		}
 		Collections.shuffle(ids);
+		for(RowId r: ids){
+			Logl.Write(r.toString());
+		}
 
 		}
 
