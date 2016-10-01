@@ -26,8 +26,8 @@ public class GerenciadorArquivos {
 	
 	
 	public static final File DISC_PATH = 
-//			new File("C:\\Users\\danda_000\\git\\Storage-Engine\\res\\Disco");
-			new File("C:\\Users\\pedro\\Documents\\GitHub\\Storage-Engine\\res\\Disco");
+			new File("C:\\Users\\danda_000\\git\\Storage-Engine\\res\\Disco");
+//			new File("C:\\Users\\pedro\\Documents\\GitHub\\Storage-Engine\\res\\Disco");
 	
 	private ILog Log;
 	private IArquivoEvents ArquivoEvents;

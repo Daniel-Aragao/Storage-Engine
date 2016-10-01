@@ -132,8 +132,18 @@ public class GerenciadorBuffer {
 	private void remover(RowId tupleId){
 		throw new RuntimeException("Não implementado");
 	}
+	
 	public void resetHitNhit(){
 		hit = 0;
 		miss = 0;
+	}
+	public int getHit(){
+		return hit;
+	}
+	public int getMiss(){
+		return miss;
+	}
+	public int getAcessos(){
+		return hit+miss;
 	}
 }
