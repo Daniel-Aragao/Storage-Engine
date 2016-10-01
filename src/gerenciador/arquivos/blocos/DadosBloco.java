@@ -40,6 +40,9 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 	public Tupla getTupla(int index){
 		return tuplas.get(index);
 	}
+	public int getSize(){
+		return tuplas.size();
+	}
 	
 	public int getOffSet(int i){
 		int retorno = Bloco.HEADER_BLOCO_SIZE;

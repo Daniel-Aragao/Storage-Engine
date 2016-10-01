@@ -19,6 +19,7 @@ public class ListaRowID {
 
 		FileReader fr = null;
 		BufferedReader br = null;
+		
 
 		try {
 			fr = new FileReader(arquivo);
