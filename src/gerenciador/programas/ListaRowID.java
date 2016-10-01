@@ -8,12 +8,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import gerenciador.GerenciadorBuffer;
 import gerenciador.RowId;
+import gerenciador.arquivos.interfaces.ILog;
+import gerenciador.loger.Log;
 
 public class ListaRowID {
+	private static ILog Log;
 	public static final File path = new File(
-			"C:\\Users\\pedro\\Documents\\GitHub\\Storage-Engine\\res\\Disco\\listaID.txt");
+			"C:\\Users\\Pedro\\Documents\\GitHub\\Storage-Engine\\res\\Log\\listaID.txt");
 
 	public static void main(String[] args) {
+		Log = new Log();
+		
 		// final String arquivo = "listaID.txt";
 		GerenciadorBuffer bm = new GerenciadorBuffer();
 
@@ -29,7 +34,11 @@ public class ListaRowID {
 
 			String linha;
 			while ((linha = br.readLine()) != null) {
-				String[] dados = linha.split(".");
+				Log.Write(linha);
+				Log.Write("Splitting a tupla");
+
+				String[] dados = linha.split("\\.");
+				
 				RowId Ri = new RowId(Byte.parseByte(dados[0]), Integer.parseInt(dados[1]),
 						Integer.parseInt(dados[2]));
 				// dado do container no rowid tipo byte
