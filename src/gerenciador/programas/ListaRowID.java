@@ -64,9 +64,13 @@ public class ListaRowID {
 		for (RowId id : listaID) {
 
 			bm.getBloco(id);
+			
 			// colocar os log.write no getbloco
 		}
-
+		Log.Write("Hit:"+bm.getHit());
+		Log.Write("Miss:"+bm.getMiss());
+		Log.Write("Acessos:"+bm.getAcessos());
+		bm.resetHitNhit();
 	}
 
 }

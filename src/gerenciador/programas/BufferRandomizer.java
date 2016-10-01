@@ -18,7 +18,7 @@ public class BufferRandomizer {
 	
 	public static void main(String[] args) {
 
-		ArrayList<RowId> ids;
+		ArrayList<RowId> ids = new ArrayList<RowId>();
 		String containerId;
 		Log = new Log();
 		Logl = new LogLeituraTabela(Disc);
@@ -64,6 +64,7 @@ public class BufferRandomizer {
 							+ "...Importado");
 					
 					ids.add(ga.getBloco(a.getId(), i).getDados().getTupla(j).getTupleId());
+					Log.Write("Tupla salva em lista");
 				}
 				// gb.getBloco(ga.getBloco(a.getId(), i).getBlocoTupleId());
 			}
@@ -77,6 +78,7 @@ public class BufferRandomizer {
 		Collections.shuffle(ids);
 		for(RowId r: ids){
 			Logl.Write(r.toString());
+			Logl.Write(System.lineSeparator());
 		}
 
 		}
