@@ -108,23 +108,4 @@ public class Memoria {
 		}
 		return -1;
 	}
-
-	public Bloco remover(RowId tid) {
-		int i = getPosition(tid);
-		if(i < 0) return null;
-		
-//		Bloco removido = blocos[i];
-		
-		for(; i < blocos.length - 1; i++){
-			blocos[i] = blocos[i+1];
-		}
-		throw new RuntimeException("Não implementado");
-//		contador--;
-//		return removido;
-	}
-
-	private void opa() {
-		throw new RuntimeException("Não implementado");
-		
-	}
 }
