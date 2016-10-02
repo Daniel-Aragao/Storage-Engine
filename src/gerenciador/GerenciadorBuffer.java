@@ -15,7 +15,7 @@ public class GerenciadorBuffer {
 	private int contador;
 	private int hit;
 	private int miss;
-	private ILog log;
+	private ILog Log;
 	private GerenciadorArquivos ga;//cache
 	
 	public GerenciadorBuffer(){
@@ -28,7 +28,7 @@ public class GerenciadorBuffer {
 		startControlador();
 		hit = 0;
 		miss = 0;
-		log = new Log();
+		Log = new Log();
 	}
 	private IMemoryEvents getMemoryEvents(){
 		return new IMemoryEvents() {
@@ -44,7 +44,7 @@ public class GerenciadorBuffer {
 	}
 	public GerenciadorBuffer(ILog log){
 		construtor();
-		this.log = log;
+		this.Log = log;
 	}
 	
 	/* pedir bloco
@@ -66,32 +66,45 @@ public class GerenciadorBuffer {
 	 * 
 	 * */
 	
-	public int getBloco(RowId tid){
+	public Bloco getBloco(RowId tid){
 		int posMem = memoria.getPosition(tid);
+		Log.Write("Buffer => Bloco: "+tid.getBlocoId());
 		
 		if(posMem >= 0){
+			
+			Log.Write("Buffer => em memória");
+			Log.Write(System.lineSeparator());
+			
 			hit++;
 			AtualizarControle(posMem);
-			return memoria.getBloco(posMem).getBlocoId();
+			return memoria.getBloco(posMem);
 		}
+		
+		Log.Write("Buffer => buscar no disco");
+		
 		miss++;
 		Bloco novoBloco = getFromDisk(tid);
 				
 		posMem = memoria.getPosVazia();
 		if(posMem >= 0){
 			
+			Log.Write("Buffer => adicionado em posição vazia");
+			Log.Write(System.lineSeparator());	
+			
 			memoria.putBloco(novoBloco, posMem);
 			AtualizarControle(posMem);
-			
-			return novoBloco.getBlocoId();
+			return novoBloco;
 		}
+		
+		Log.Write("Buffer => swap");
+		Log.Write(System.lineSeparator());
 		
 		posMem = controle[Memoria.MEMORY_SIZE_IN_BLOCKS - 1];
 		memoria.putBloco(novoBloco, posMem);
 		AtualizarControle(posMem);
 		
 		
-		return novoBloco.getBlocoId();
+		return novoBloco;
 	}
 	public Bloco getFromDisk(RowId tid){
 		GerenciadorArquivos ga = getGAFromCache();
@@ -100,7 +113,18 @@ public class GerenciadorBuffer {
 	
 	public GerenciadorArquivos getGAFromCache(){
 		if(ga == null){
-			ga = new GerenciadorArquivos();
+			ga = new GerenciadorArquivos(new ILog() {
+				
+				@Override
+				public void Write(String msg) {
+					
+				}
+				
+				@Override
+				public void Erro(String msg) {
+					
+				}
+			});
 		}
 			
 		return ga;
@@ -118,6 +142,7 @@ public class GerenciadorBuffer {
 		for(int i = 0; i < controle.length; i++){
 			if(controle[i] == posMem){
 				index = i;
+				break;
 			}
 		}
 		if(index == -1) index = Memoria.MEMORY_SIZE_IN_BLOCKS - 1;
@@ -143,7 +168,10 @@ public class GerenciadorBuffer {
 	public int getMiss(){
 		return miss;
 	}
-	public int getAcessos(){
+	public double getAcessos(){
 		return hit+miss;
+	}
+	public int getMemoriaSize(){
+		return memoria.getSize();
 	}
 }

@@ -8,7 +8,7 @@ import gerenciador.buffer.interfaces.IMemoryEvents;
 import gerenciador.utils.ByteArrayTools;
 
 public class Memoria {
-	public static final int MEMORY_SIZE_IN_BLOCKS = 10;
+	public static final int MEMORY_SIZE_IN_BLOCKS = 5000;
 	public static final int MEMORY_SIZE_IN_BYTES = MEMORY_SIZE_IN_BLOCKS * BlocoControle.TAMANHO_BLOCO;
 	private byte[] blocos;
 	private IMemoryEvents events;
@@ -93,9 +93,8 @@ public class Memoria {
 	}
 	
 	public void putBloco(Bloco b, int posMem){
-		try {
-			
-			ByteArrayTools.appendArrays(blocos, b.getByteArray(), posMem);
+		try {			
+			ByteArrayTools.appendArrays(blocos, b.getByteArray(), BlocoControle.TAMANHO_BLOCO*posMem);
 			
 		} catch (IncorrectFormatException e) {
 			e.printStackTrace();
@@ -107,5 +106,9 @@ public class Memoria {
 			if(blocos[i] == 0) return i / BlocoControle.TAMANHO_BLOCO;
 		}
 		return -1;
+	}
+
+	public int getSize() {
+		return blocos.length;
 	}
 }

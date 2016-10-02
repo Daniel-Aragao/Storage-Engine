@@ -6,21 +6,27 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import gerenciador.GerenciadorBuffer;
 import gerenciador.RowId;
+import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.interfaces.ILog;
 import gerenciador.loger.Log;
+import gerenciador.loger.LogLeituraTabela;
 
 public class ListaRowID {
 	private static ILog Log;
 	public static final File path = new File(
-			"C:\\Users\\Pedro\\Documents\\GitHub\\Storage-Engine\\res\\Log\\listaID.txt");
+//			"C:\\Users\\Pedro\\Documents\\GitHub\\Storage-Engine\\res\\Log\\listaID.txt");
+			"C:\\Users\\danda_000\\git\\Storage-Engine\\res\\Log\\listaID.txt");
 
 	public static void main(String[] args) {
-		Log = new Log();
+//		Log = new Log();
+		Log = new LogLeituraTabela(
+				new File("C:\\Users\\danda_000\\git\\Storage-Engine\\res\\Log\\bufferResult.txt"));
 		
 		// final String arquivo = "listaID.txt";
-		GerenciadorBuffer bm = new GerenciadorBuffer();
+		GerenciadorBuffer bm = new GerenciadorBuffer(Log);
 
 		// public ArrayList<RowId> listar[] {
 		ArrayList<RowId> listaID = new ArrayList<RowId>();
@@ -34,14 +40,14 @@ public class ListaRowID {
 
 			String linha;
 			while ((linha = br.readLine()) != null) {
-				Log.Write(linha);
-				Log.Write("Splitting a tupla");
+//				Log.Write(linha);
+//				Log.Write("Splitting no row id");
 
 				String[] dados = linha.split("\\.");
 				
 				RowId Ri = new RowId(Byte.parseByte(dados[0]), Integer.parseInt(dados[1]),
 						Integer.parseInt(dados[2]));
-				// dado do container no rowid tipo byte
+				
 				listaID.add(Ri);
 			}
 
@@ -57,19 +63,15 @@ public class ListaRowID {
 				e.printStackTrace();
 			}
 		}
-
-		// return listaID;
-		// }
-
+		
 		for (RowId id : listaID) {
-
 			bm.getBloco(id);
-			
-			// colocar os log.write no getbloco
 		}
-		Log.Write("Hit:"+bm.getHit());
-		Log.Write("Miss:"+bm.getMiss());
-		Log.Write("Acessos:"+bm.getAcessos());
+		Log.Write("Hit: "+bm.getHit()+" = "+bm.getHit()/bm.getAcessos());
+		Log.Write("Miss: "+bm.getMiss()+" = "+bm.getMiss()/bm.getAcessos());
+		Log.Write("Acessos: "+bm.getAcessos()+" = "+1);
+		Log.Write("Tamanho da memória em bytes: " + bm.getMemoriaSize());
+		Log.Write("Tamanho da memória em blocos: " + bm.getMemoriaSize()/BlocoControle.TAMANHO_BLOCO);
 		bm.resetHitNhit();
 	}
 
