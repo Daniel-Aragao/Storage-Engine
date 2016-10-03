@@ -15,6 +15,7 @@ public class GerenciadorBuffer {
 	private int contador;
 	private int hit;
 	private int miss;
+	private int swaps;
 	private ILog Log;
 	private GerenciadorArquivos ga;//cache
 	
@@ -28,6 +29,7 @@ public class GerenciadorBuffer {
 		startControlador();
 		hit = 0;
 		miss = 0;
+		swaps = 0;
 		Log = new Log();
 	}
 	private IMemoryEvents getMemoryEvents(){
@@ -69,7 +71,7 @@ public class GerenciadorBuffer {
 	public Bloco getBloco(RowId tid){
 		int posMem = memoria.getPosition(tid);
 		Log.Write("Buffer => Bloco: "+tid.getBlocoId());
-		
+		Log.Write(System.lineSeparator());
 		if(posMem >= 0){
 			
 			Log.Write("Buffer => em memória");
@@ -81,7 +83,7 @@ public class GerenciadorBuffer {
 		}
 		
 		Log.Write("Buffer => buscar no disco");
-		
+		Log.Write(System.lineSeparator());
 		miss++;
 		Bloco novoBloco = getFromDisk(tid);
 				
@@ -95,7 +97,7 @@ public class GerenciadorBuffer {
 			AtualizarControle(posMem);
 			return novoBloco;
 		}
-		
+		swaps++;
 		Log.Write("Buffer => swap");
 		Log.Write(System.lineSeparator());
 		
@@ -153,14 +155,11 @@ public class GerenciadorBuffer {
 		controle[0] = posMem;
 		
 	}
-
-	private void remover(RowId tupleId){
-		throw new RuntimeException("Não implementado");
-	}
 	
-	public void resetHitNhit(){
+	public void resetHitMissSwaps(){
 		hit = 0;
 		miss = 0;
+		swaps = 0;
 	}
 	public int getHit(){
 		return hit;
@@ -170,6 +169,9 @@ public class GerenciadorBuffer {
 	}
 	public double getAcessos(){
 		return hit+miss;
+	}
+	public double getSwaps(){
+		return swaps;
 	}
 	public int getMemoriaSize(){
 		return memoria.getSize();

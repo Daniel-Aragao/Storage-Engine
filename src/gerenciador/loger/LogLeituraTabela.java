@@ -21,7 +21,7 @@ public class LogLeituraTabela implements ILog {
 	@Override
 	public void Write(String msg) {
 		try {
-			fw.write(msg + System.lineSeparator());
+			fw.write(msg);
 			fw.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

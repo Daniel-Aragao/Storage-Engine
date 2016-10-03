@@ -67,12 +67,13 @@ public class ListaRowID {
 		for (RowId id : listaID) {
 			bm.getBloco(id);
 		}
-		Log.Write("Hit: "+bm.getHit()+" = "+bm.getHit()/bm.getAcessos());
-		Log.Write("Miss: "+bm.getMiss()+" = "+bm.getMiss()/bm.getAcessos());
-		Log.Write("Acessos: "+bm.getAcessos()+" = "+1);
-		Log.Write("Tamanho da memória em bytes: " + bm.getMemoriaSize());
-		Log.Write("Tamanho da memória em blocos: " + bm.getMemoriaSize()/BlocoControle.TAMANHO_BLOCO);
-		bm.resetHitNhit();
+		Log.Write("Hit: "+bm.getHit()+" = "+bm.getHit()/bm.getAcessos());Log.Write(System.lineSeparator());
+		Log.Write("Miss: "+bm.getMiss()+" = "+bm.getMiss()/bm.getAcessos());Log.Write(System.lineSeparator());
+		Log.Write("Acessos: "+bm.getAcessos()+" = "+1);Log.Write(System.lineSeparator());
+		Log.Write("SwapOut: "+bm.getSwaps()+" = "+bm.getSwaps()/bm.getMiss());Log.Write(System.lineSeparator());
+		Log.Write("Tamanho da memória em bytes: " + bm.getMemoriaSize());Log.Write(System.lineSeparator());
+		Log.Write("Tamanho da memória em blocos: " + bm.getMemoriaSize()/BlocoControle.TAMANHO_BLOCO);Log.Write(System.lineSeparator());
+		bm.resetHitMissSwaps();
 	}
 
 }

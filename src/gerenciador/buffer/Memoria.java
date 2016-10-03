@@ -8,7 +8,7 @@ import gerenciador.buffer.interfaces.IMemoryEvents;
 import gerenciador.utils.ByteArrayTools;
 
 public class Memoria {
-	public static final int MEMORY_SIZE_IN_BLOCKS = 5000;
+	public static final int MEMORY_SIZE_IN_BLOCKS = 4000;
 	public static final int MEMORY_SIZE_IN_BYTES = MEMORY_SIZE_IN_BLOCKS * BlocoControle.TAMANHO_BLOCO;
 	private byte[] blocos;
 	private IMemoryEvents events;

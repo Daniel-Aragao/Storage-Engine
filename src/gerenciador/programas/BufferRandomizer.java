@@ -73,15 +73,15 @@ public class BufferRandomizer {
 					Log.Write("Tupla..." + dados.getTupla(j).getTupleId() + "...Importada");
 					ids.add(dados.getTupla(j).getTupleId());
 					
-					if(j > 3 && j % 2 == 1){
-						if(random.nextBoolean()){
-							j -= 3;
-						}
-					}else if(j > 1 && j % 2 == 0){
-						if(random.nextBoolean()){
-							j--;
-						}
-					}
+//					if(j > 3 && j % 2 == 1){
+//						if(random.nextBoolean()){
+//							j -= 3;
+//						}
+//					}else if(j > 1 && j % 2 == 0){
+//						if(random.nextBoolean()){
+//							j--;
+//						}
+//					}
 					
 
 				}
