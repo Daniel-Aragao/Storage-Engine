@@ -1,2 +1,2 @@
-# Storage-Engine
-Storage engine composto de gerenciamento de arquivos e gerenciamento de buffer em JAVA
+# Storage-Engine 2.0
+implementação do gerenciador de índice composto
