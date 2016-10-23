@@ -14,7 +14,7 @@ import gerenciador.arquivos.interfaces.ILog;
 import gerenciador.loger.Log;
 import gerenciador.loger.LogLeituraTabela;
 
-public class ListaRowID {
+public class ListarRowID {
 	private static ILog Log;
 	public static final File path = new File(
 //			"C:\\Users\\Pedro\\Documents\\GitHub\\Storage-Engine\\res\\Log\\listaID.txt");
