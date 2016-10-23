@@ -50,15 +50,29 @@ public class GerenciadorArquivos {
 			
 			@Override
 			public void BlocoRemovido(Arquivo a, Bloco b) {
-				Log.Write("Bloco removido");
 				atualziarBlocoControle(a.getFile(),a.getBlocoControle());				
+				Log.Write("Bloco removido");
+			}
+			
+			@Override
+			public void BlocoRemovido(Bloco b) {
+				Arquivo a = loadArquivoFromCache(b.getBlocoTupleId().getContainerId());
+				atualziarBlocoControle(a.getFile(),a.getBlocoControle());				
+				Log.Write("Bloco removido");				
 			}
 			
 			@Override
 			public void BlocoAdicionado(Arquivo a, Bloco b) {
-				Log.Write("Bloco adicionado");
 				atualziarBlocoControle(a.getFile(), a.getBlocoControle());
 				EscreverBloco(a.getFile(), b);				
+				Log.Write("Bloco adicionado");
+			}
+			
+			@Override
+			public void BlocoAdicionado(Bloco b) {
+				Arquivo a = loadArquivoFromCache(b.getBlocoTupleId().getContainerId());
+				EscreverBloco(a.getFile(), b);				
+				Log.Write("Bloco adicionado");
 			}
 
 			@Override
@@ -66,11 +80,23 @@ public class GerenciadorArquivos {
 				Log.Write("Requisitar bloco ao disco");
 				return getBloco(a.getFile(), blocoId, a.getDescritor());
 			}
+			@Override
+			public Bloco RequisitarBloco(RowId rowid) {
+				Log.Write("Requisitar bloco ao disco");
+				return getBloco(rowid);
+			}
 
 			@Override
 			public void BlocoAlterado(Arquivo a, Bloco b) {
-				Log.Write("Bloco alterado");
 				EscreverBloco(a.getFile(), b);				
+				Log.Write("Bloco alterado");
+			}
+
+			@Override
+			public void BlocoAlterado(Bloco b) {
+				EscreverBloco(b);				
+				Log.Write("Bloco alterado");
+				
 			}
 		};
 	}
@@ -177,7 +203,7 @@ public class GerenciadorArquivos {
 		}
 		// não esquecer o rowId
 		//
-		Arquivo arquivo = loadFromCache(containerId);
+		Arquivo arquivo = loadArquivoFromCache(containerId);
 		 
 		
 		Tupla tupla = null;
@@ -207,12 +233,12 @@ public class GerenciadorArquivos {
 		return getBlocoControle(generateFile(containerId));
 	}
 	public Arquivo getArquivo(byte containerId){		
-		Arquivo arquivo = loadFromCache(containerId);
+		Arquivo arquivo = loadArquivoFromCache(containerId);
 		
 		return arquivo;
 	}
 	
-	private Arquivo loadFromCache(byte containerId){
+	private Arquivo loadArquivoFromCache(byte containerId){
 		Arquivo arquivo = null;
 		if(arquivoCached != null && arquivoCached.getId() == containerId){
 			Log.Write("Arquivo em cache");
@@ -234,7 +260,7 @@ public class GerenciadorArquivos {
 	}
 	
 	public Bloco getBloco(byte containerId, int blocoId){
-		Arquivo arquivo = loadFromCache(containerId);
+		Arquivo arquivo = loadArquivoFromCache(containerId);
 		
 		return getBloco(arquivo.getFile(), blocoId, arquivo.getDescritor());
 	}	
@@ -246,7 +272,7 @@ public class GerenciadorArquivos {
 	private Bloco getBloco(File file, int blocoId, Descritor descritor){
 		
 		byte[] bloco = IO_Operations
-				.readFromFile(file, startBloco(blocoId), BlocoControle.TAMANHO_BLOCO);
+				.readFromFile(file, blocoPosition(blocoId), BlocoControle.TAMANHO_BLOCO);
 		
 		try {
 			return new Bloco(bloco, descritor);
@@ -263,18 +289,24 @@ public class GerenciadorArquivos {
 	
 	protected void EscreverBloco(File file, Bloco b) {
 		try {
-			IO_Operations.writeFile(file, b.getByteArray(), startBloco(b.getBlocoId()));
+			IO_Operations.writeFile(file, b.getByteArray(), blocoPosition(b.getBlocoId()));
 		} catch (IncorrectFormatException e) {
 			e.printStackTrace();
 		}		
 	}
+	protected void EscreverBloco(Bloco b) {		
+		EscreverBloco(generateFile(b.getBlocoTupleId().getContainerId()), b);
+	}
 	
-	private int startBloco(int blocoId){
+	private int blocoPosition(int blocoId){
 		return BlocoControle.TAMANHO_BLOCO * blocoId;
 	}
 
 	public String getArquivoString(Arquivo a) {
 		return a.toString();
+	}
+	public IArquivoEvents getArquivoEvents() {
+		return ArquivoEvents;
 	}
 	
 }

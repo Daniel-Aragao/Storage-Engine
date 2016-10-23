@@ -3,6 +3,7 @@ package gerenciador;
 import gerenciador.arquivos.blocos.Bloco;
 import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
+import gerenciador.arquivos.interfaces.IArquivoEvents;
 import gerenciador.arquivos.interfaces.ILog;
 import gerenciador.buffer.Memoria;
 import gerenciador.buffer.interfaces.IMemoryEvents;
@@ -18,6 +19,7 @@ public class GerenciadorBuffer {
 	private int swaps;
 	private ILog Log;
 	private GerenciadorArquivos ga;//cache
+	private IArquivoEvents eventosDisco;
 	
 	public GerenciadorBuffer(){
 		construtor();
@@ -31,6 +33,7 @@ public class GerenciadorBuffer {
 		miss = 0;
 		swaps = 0;
 		Log = new Log();
+		GerenciadorArquivos ga = getGAFromCache();
 	}
 	private IMemoryEvents getMemoryEvents(){
 		return new IMemoryEvents() {
@@ -78,7 +81,7 @@ public class GerenciadorBuffer {
 			Log.Write(System.lineSeparator());
 			
 			hit++;
-			AtualizarControle(posMem);
+			atualizarControleLRU(posMem);
 			return memoria.getBloco(posMem);
 		}
 		
@@ -94,7 +97,7 @@ public class GerenciadorBuffer {
 			Log.Write(System.lineSeparator());	
 			
 			memoria.putBloco(novoBloco, posMem);
-			AtualizarControle(posMem);
+			atualizarControleLRU(posMem);
 			return novoBloco;
 		}
 		swaps++;
@@ -102,15 +105,22 @@ public class GerenciadorBuffer {
 		Log.Write(System.lineSeparator());
 		
 		posMem = controle[Memoria.MEMORY_SIZE_IN_BLOCKS - 1];
-		memoria.putBloco(novoBloco, posMem);
-		AtualizarControle(posMem);
 		
+		WriteDisk(memoria.getBloco(posMem));
+		
+		memoria.putBloco(novoBloco, posMem);
+		atualizarControleLRU(posMem);		
 		
 		return novoBloco;
 	}
 	public Bloco getFromDisk(RowId tid){
-		GerenciadorArquivos ga = getGAFromCache();
-		return ga.getBloco(tid);
+		return eventosDisco.RequisitarBloco(tid);
+	}
+	public void criarBloco(Bloco b){
+		eventosDisco.BlocoAdicionado(b);
+	}
+	public void WriteDisk(Bloco bloco){
+		eventosDisco.BlocoAlterado(bloco);
 	}
 	
 	public GerenciadorArquivos getGAFromCache(){
@@ -127,6 +137,7 @@ public class GerenciadorBuffer {
 					
 				}
 			});
+			eventosDisco = ga.getArquivoEvents();
 		}
 			
 		return ga;
@@ -139,7 +150,7 @@ public class GerenciadorBuffer {
 	}
 	
 	
-	private void AtualizarControle(int posMem) {
+	private void atualizarControleLRU(int posMem) {
 		int index = -1;
 		for(int i = 0; i < controle.length; i++){
 			if(controle[i] == posMem){
