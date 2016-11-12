@@ -1,8 +1,8 @@
 package gerenciador;
 
 import gerenciador.arquivos.blocos.Bloco;
-import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
+import gerenciador.arquivos.interfaces.IBloco;
 import gerenciador.arquivos.interfaces.ILog;
 import gerenciador.buffer.Memoria;
 import gerenciador.buffer.interfaces.IMemoryEvents;
@@ -68,7 +68,7 @@ public class GerenciadorBuffer {
 	 * 
 	 * */
 	
-	public Bloco getBloco(RowId tid){
+	public IBloco getBloco(RowId tid){
 		int posMem = memoria.getPosition(tid);
 		Log.Write("Buffer => Bloco: "+tid.getBlocoId());
 		Log.Write(System.lineSeparator());

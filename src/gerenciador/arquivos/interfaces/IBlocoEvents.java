@@ -1,10 +1,7 @@
 package gerenciador.arquivos.interfaces;
 
-import gerenciador.arquivos.blocos.Bloco;
-import gerenciador.arquivos.blocos.Tupla;
-
 public interface IBlocoEvents {
-	public void blocoCheio(Tupla tupla);
-	public void blocoVazio(Bloco bloco); 
-	public void blocoAlterado(Bloco bloco);
+	public void blocoCheio(ITupla tupla);
+	public void blocoVazio(IBloco bloco); 
+	public void blocoAlterado(IBloco bloco);
 }

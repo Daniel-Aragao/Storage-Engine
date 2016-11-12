@@ -4,6 +4,7 @@ import gerenciador.RowId;
 import gerenciador.arquivos.blocos.Bloco;
 import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
+import gerenciador.arquivos.interfaces.IBloco;
 import gerenciador.buffer.interfaces.IMemoryEvents;
 import gerenciador.utils.ByteArrayTools;
 
@@ -18,7 +19,7 @@ public class Memoria {
 		blocos = new byte[MEMORY_SIZE_IN_BYTES];
 	}
 	
-	public boolean contains(Bloco bloco){
+	public boolean contains(IBloco bloco){
 		throw new RuntimeException("Não implementado");
 	}
 	
@@ -38,7 +39,7 @@ public class Memoria {
 		return false;
 	}
 
-	public Bloco getBloco(RowId tid) {
+	public IBloco getBloco(RowId tid) {
 		
 		for(int i = 0; i < blocos.length; i += BlocoControle.TAMANHO_BLOCO){
 			RowId eachTid = new RowId(
@@ -63,7 +64,7 @@ public class Memoria {
 		
 		return null;
 	}
-	public Bloco getBloco(int index){
+	public IBloco getBloco(int index){
 		int i = index * BlocoControle.TAMANHO_BLOCO;
 		try {
 			

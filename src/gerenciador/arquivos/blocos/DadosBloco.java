@@ -6,23 +6,24 @@ import gerenciador.RowId;
 import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
+import gerenciador.arquivos.interfaces.ITupla;
 import gerenciador.utils.ByteArrayTools;
 
 public class DadosBloco  implements IBinarizable<DadosBloco>{
 	
-	private ArrayList<Tupla> tuplas;
+	private ArrayList<ITupla> tuplas;
 	private Descritor descritor;
 	private RowId tupleBlocoId ;
 	
 	public DadosBloco(Descritor descritor) {
 		this.descritor = descritor;
-		setTuplas(new ArrayList<Tupla>());
+		setTuplas(new ArrayList<ITupla>());
 	}
 
 	public DadosBloco(byte[] dados,RowId tupleBlocoId, Descritor descritor) throws IncorrectFormatException{
 		this.descritor = descritor;
 		this.tupleBlocoId = tupleBlocoId; 
-		setTuplas(new ArrayList<Tupla>());
+		setTuplas(new ArrayList<ITupla>());
 		fromByteArray(dados);
 	}
 	
@@ -30,14 +31,14 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 	public byte[] getByteArray() throws IncorrectFormatException {
 		byte[] retorno = new byte[0];
 		
-		for(Tupla t : tuplas){
+		for(ITupla t : tuplas){
 			retorno = ByteArrayTools.concatArrays(retorno, t.getByteArray());
 		}
 		
 		return retorno;
 	}
 	
-	public Tupla getTupla(int index){
+	public ITupla getTupla(int index){
 		return tuplas.get(index);
 	}
 	public int getSize(){
@@ -46,9 +47,9 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 	
 	public int getOffSet(int i){
 		int retorno = Bloco.HEADER_BLOCO_SIZE;
-		Tupla tuple = tuplas.get(i);
+		ITupla tuple = tuplas.get(i);
 		
-		for(Tupla t : tuplas){
+		for(ITupla t : tuplas){
 			if(tuple == t){
 				return retorno;
 			}
@@ -58,7 +59,7 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 		return -1;
 	}
 	
-	public boolean contains(Tupla tupla){
+	public boolean contains(ITupla tupla){
 		return tuplas.contains(tupla);
 	}
 	
@@ -66,12 +67,12 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 		return tuplas.contains(index);
 	}
 	
-	public void RemoveTupla(Tupla tupla){
+	public void RemoveTupla(ITupla tupla){
 		tuplas.remove(tupla);
 	}
 	
 	public int RemoveTupla(int index){
-		Tupla tupla = tuplas.remove(index);
+		ITupla tupla = tuplas.remove(index);
 		return tupla.getSize();
 	}
 	
@@ -79,11 +80,11 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 		return tuplas.isEmpty();
 	}
 	
-	public void addTupla(Tupla tupla){
+	public void addTupla(ITupla tupla){
 		tuplas.add(tupla);
 	}
 
-	private void setTuplas(ArrayList<Tupla> tuplas) {
+	private void setTuplas(ArrayList<ITupla> tuplas) {
 		this.tuplas = tuplas;
 	}
 

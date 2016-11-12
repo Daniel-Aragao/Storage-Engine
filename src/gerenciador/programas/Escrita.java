@@ -9,7 +9,7 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 
 import gerenciador.GerenciadorArquivos;
-import gerenciador.arquivos.Arquivo;
+import gerenciador.arquivos.interfaces.IArquivo;
 import gerenciador.arquivos.interfaces.ILog;
 import gerenciador.loger.LogEscrita;
 
@@ -33,7 +33,7 @@ public class Escrita {
 			BufferedReader buffer = new BufferedReader(reader);
 			
 			String linha = buffer.readLine();
-			Arquivo a = gerenciadorArquivo.CriarArquivo(linha);
+			IArquivo a = gerenciadorArquivo.CriarArquivo(linha);
 			
 			if(a != null){
 				byte containerId = a.getBlocoControle().getHeader().getContainerId();

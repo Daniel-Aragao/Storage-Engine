@@ -5,11 +5,11 @@ import org.junit.Test;
 
 import gerenciador.RowId;
 import gerenciador.arquivos.blocos.Bloco;
-import gerenciador.arquivos.blocos.DadosBloco;
 import gerenciador.arquivos.blocos.Tupla;
 import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.enums.ETipoBloco;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
+import gerenciador.arquivos.interfaces.IBloco;
 import gerenciador.utils.ByteArrayTools;
 
 public class BlocoTeste {
@@ -39,7 +39,7 @@ public class BlocoTeste {
 	
 	@Test
 	public void DeveReceber1_1_dado_descEFormarDadosCorretamente() throws IncorrectFormatException{
-		Bloco bloco = new Bloco((byte) 1,1,ETipoBloco.dados, getDescritor());
+		IBloco bloco = new Bloco((byte) 1,1,ETipoBloco.dados, getDescritor());
 		
 		Assert.assertEquals(1, bloco.getHeader().getBlocoId());
 		Assert.assertEquals(1, bloco.getHeader().getContainerId());
@@ -196,7 +196,7 @@ public class BlocoTeste {
 				00,0x41, 00,0x4D, 00,0x41, 
 				00,0x44, 00,0x4F};	
 		
-		Bloco bloco = new Bloco(ba, getDescritor());
+		IBloco bloco = new Bloco(ba, getDescritor());
 			
 		//Testar construção do header
 		Assert.assertEquals(1, bloco.getHeader().getBlocoId());
@@ -279,7 +279,7 @@ public class BlocoTeste {
 				00,0x41, 00,0x4D, 00,0x41, 
 				00,0x44, 00,0x4F};	
 		
-		Bloco bloco = new Bloco(ba, getDescritor());
+		IBloco bloco = new Bloco(ba, getDescritor());
 		
 		
 		// Testar tuplas
@@ -297,7 +297,7 @@ public class BlocoTeste {
 	
 	@Test
 	public void DeveConterOtamanhoCertoDoDescritorAoAdicionarLinha() throws IncorrectFormatException{
-		Bloco bloco = new Bloco((byte) 1,1,ETipoBloco.dados, getDescritor());
+		IBloco bloco = new Bloco((byte) 1,1,ETipoBloco.dados, getDescritor());
 		
 		Assert.assertEquals(1, bloco.getHeader().getBlocoId());
 		Assert.assertEquals(1, bloco.getHeader().getContainerId());

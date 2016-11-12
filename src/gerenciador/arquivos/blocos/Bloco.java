@@ -1,16 +1,16 @@
 package gerenciador.arquivos.blocos;
 
 import gerenciador.RowId;
-import gerenciador.arquivos.Arquivo;
 import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.enums.ETipoBloco;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
-import gerenciador.arquivos.interfaces.IBinarizable;
+import gerenciador.arquivos.interfaces.IBloco;
 import gerenciador.arquivos.interfaces.IBlocoEvents;
+import gerenciador.arquivos.interfaces.ITupla;
 import gerenciador.utils.ByteArrayTools;
 
-public class Bloco implements IBinarizable<Arquivo> {
+public class Bloco implements IBloco {
 	public static final int HEADER_BLOCO_SIZE = 8;
 
 	private HeaderBloco header;
@@ -31,23 +31,43 @@ public class Bloco implements IBinarizable<Arquivo> {
 		fromByteArray(dados);
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IBloco#setEvents(gerenciador.arquivos.interfaces.IBlocoEvents)
+	 */
+	@Override
 	public void setEvents(IBlocoEvents events){
 		this.events = events;
 	}
 
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IBloco#getHeader()
+	 */
+	@Override
 	public HeaderBloco getHeader() {
 		return header;
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IBloco#getBlocoId()
+	 */
+	@Override
 	public int getBlocoId(){
 		return header.getBlocoId();
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IBloco#getDados()
+	 */
+	@Override
 	public DadosBloco getDados() {
 		return dados;
 	}
 	
-	public void addTupla(Tupla tupla){
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IBloco#addTupla(gerenciador.arquivos.blocos.Tupla)
+	 */
+	@Override
+	public void addTupla(ITupla tupla){
 		if(this.getHeader().isFull(tupla.getSize())){
 			if(events != null){
 				events.blocoCheio(tupla);
@@ -62,6 +82,10 @@ public class Bloco implements IBinarizable<Arquivo> {
 			}
 		}
 	}
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IBloco#getNextTupleId()
+	 */
+	@Override
 	public RowId getNextTupleId(){
 				
 		RowId tupleId = new RowId(this.header.getContainerId(), 
@@ -70,6 +94,10 @@ public class Bloco implements IBinarizable<Arquivo> {
 		
 		return tupleId;
 	}
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IBloco#addTupla(byte[])
+	 */
+	@Override
 	public void addTupla(byte[] tuplaBytes) throws IncorrectFormatException{
 		
 		Tupla tupla = new Tupla(tuplaBytes, getNextTupleId(), this.descritor);
@@ -77,7 +105,11 @@ public class Bloco implements IBinarizable<Arquivo> {
 		addTupla(tupla);
 	}
 	
-	public void removeTupla(Tupla tupla){
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IBloco#removeTupla(gerenciador.arquivos.blocos.Tupla)
+	 */
+	@Override
+	public void removeTupla(ITupla tupla){
 		dados.RemoveTupla(tupla);
 		this.getHeader().decBytes(tupla.getSize());
 		
@@ -89,6 +121,10 @@ public class Bloco implements IBinarizable<Arquivo> {
 	
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IBloco#removeTupla(int)
+	 */
+	@Override
 	public void removeTupla(int index){
 		int tuplaSize = dados.RemoveTupla(index);
 		this.getHeader().decBytes(tuplaSize);
@@ -131,7 +167,7 @@ public class Bloco implements IBinarizable<Arquivo> {
 		int bId = header.getBlocoId();
 		
 		for(int i = 0; i < dados.size(); i++){
-			Tupla tupla = dados.getTupla(i);
+			ITupla tupla = dados.getTupla(i);
 			retorno += "("+tupla.getTupleId().toString()+ ") " 
 //					retorno += "("+cId + " " + bId + " " + dados.getOffSet(i) + ") " 
 					+ tupla.toString() + "\n";
@@ -140,6 +176,10 @@ public class Bloco implements IBinarizable<Arquivo> {
 		return retorno;
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IBloco#getBlocoTupleId()
+	 */
+	@Override
 	public RowId getBlocoTupleId(){
 		return new RowId(this.header.getContainerId(), this.getBlocoId(), -1);
 	}

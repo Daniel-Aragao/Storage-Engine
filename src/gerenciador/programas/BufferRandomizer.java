@@ -9,9 +9,9 @@ import javax.swing.JOptionPane;
 
 import gerenciador.GerenciadorArquivos;
 import gerenciador.RowId;
-import gerenciador.arquivos.Arquivo;
-import gerenciador.arquivos.blocos.Bloco;
 import gerenciador.arquivos.blocos.DadosBloco;
+import gerenciador.arquivos.interfaces.IArquivo;
+import gerenciador.arquivos.interfaces.IBloco;
 import gerenciador.arquivos.interfaces.ILog;
 import gerenciador.loger.Log;
 import gerenciador.loger.LogLeituraTabela;
@@ -42,7 +42,7 @@ public class BufferRandomizer {
 		try {
 			// GerenciadorBuffer gb = new GerenciadorBuffer();
 			GerenciadorArquivos ga = new GerenciadorArquivos();
-			Arquivo a = ga.getArquivo(Byte.parseByte(containerId));
+			IArquivo a = ga.getArquivo(Byte.parseByte(containerId));
 			Random random = new Random();
 
 			// Log = new LogLeituraTabela(a.getFile());
@@ -61,7 +61,7 @@ public class BufferRandomizer {
 
 				// System.out.println(a.getBlocoControle().getProxBlocoLivre());
 				// Log.Write(ga.getBloco(a.getId(), i).toString());
-				Bloco b = ga.getBloco(a.getId(), i);
+				IBloco b = ga.getBloco(a.getId(), i);
 				DadosBloco dados = b.getDados();
 				
 				Log.Write("Bloco..." + b.getBlocoId() + "...Importado");

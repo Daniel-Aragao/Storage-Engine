@@ -12,6 +12,7 @@ import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.blocosControle.UnidadeDescricao;
 import gerenciador.arquivos.enums.ETipoColuna;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
+import gerenciador.arquivos.interfaces.ITupla;
 
 public class TuplaTeste {
 	/*
@@ -37,7 +38,7 @@ public class TuplaTeste {
 	@Test
 	public void TuplaRecebe101_LUIZ_RUFFATO_EDeveTerSize() throws IncorrectFormatException{
 		
-		Tupla tupla = getTupla();
+		ITupla tupla = getTupla();
 		
 		Assert.assertEquals(4 + 6 + 26,tupla.getSize());
 		Assert.assertEquals(2,tupla.getColunas().size());		
@@ -47,7 +48,7 @@ public class TuplaTeste {
 	@Test 
 	public void TuplaCreateColunaRecebe101DevolveColunaInt() throws IncorrectFormatException{
 		
-		Tupla tupla = getTupla();
+		ITupla tupla = getTupla();
 		
 		UnidadeDescricao ud = new UnidadeDescricao("tanto faz", ETipoColuna.inteiro, (byte) 5);
 		String prop = "101";
@@ -60,7 +61,7 @@ public class TuplaTeste {
 	@Test 
 	public void TuplaCreateColunaRecebeLUIZ_RUFFATODevolveColunaString() throws IncorrectFormatException{
 		
-		Tupla tupla = getTupla();
+		ITupla tupla = getTupla();
 		
 		UnidadeDescricao ud = new UnidadeDescricao("tanto faz", ETipoColuna.string, (byte) 12);
 		String prop = "LUIZ_RUFFATO";
@@ -107,7 +108,7 @@ public class TuplaTeste {
 					00,0x41, 00,0x54, 00,0x4F
 				};
 		
-		Tupla tupla = getTupla();
+		ITupla tupla = getTupla();
 		
 		Assert.assertEquals(26, tupla.getColuna(1).getColumnSize());
 		Assert.assertEquals("LUIZ_RUFFATO",tupla.getColuna(1).getDado());
@@ -134,7 +135,7 @@ public class TuplaTeste {
 					00,0x41, 00,0x54, 00,0x4F
 				};
 		RowId t = new RowId((byte) 0, 0, 0); 
-		Tupla tupla = new Tupla(correto, t, getDescritor());
+		ITupla tupla = new Tupla(correto, t, getDescritor());
 		
 		Assert.assertEquals(6,tupla.getColuna(0).getColumnSize());
 		Assert.assertEquals(101,(int)tupla.getColuna(0).getDado());	
@@ -181,7 +182,7 @@ public class TuplaTeste {
 				};
 		
 		RowId t = new RowId((byte) 0, 0, 0); 
-		Tupla tupla = new Tupla(incorreto,t, getDescritor());
+		ITupla tupla = new Tupla(incorreto,t, getDescritor());
 	}
 }
 

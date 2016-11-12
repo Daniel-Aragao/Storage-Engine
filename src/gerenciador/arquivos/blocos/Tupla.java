@@ -6,10 +6,10 @@ import gerenciador.RowId;
 import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.blocosControle.UnidadeDescricao;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
-import gerenciador.arquivos.interfaces.IBinarizable;
+import gerenciador.arquivos.interfaces.ITupla;
 import gerenciador.utils.ByteArrayTools;
 
-public class Tupla implements IBinarizable<Tupla>{
+public class Tupla implements ITupla{
 
 	private int size;	
 	private ArrayList<Coluna> colunas;
@@ -46,10 +46,18 @@ public class Tupla implements IBinarizable<Tupla>{
 		fromByteArray(dados);
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.ITupla#getTupleId()
+	 */
+	@Override
 	public RowId getTupleId() {
 		return tupleId;
 	}
 
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.ITupla#setTupleId(gerenciador.RowId)
+	 */
+	@Override
 	public void setTupleId(RowId tupleId) {
 		this.tupleId = tupleId;
 	}
@@ -65,10 +73,18 @@ public class Tupla implements IBinarizable<Tupla>{
 		return retorno;
 	}
 
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.ITupla#getSize()
+	 */
+	@Override
 	public int getSize() {
 		return size;
 	}
 
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.ITupla#getColunas()
+	 */
+	@Override
 	public ArrayList<Coluna> getColunas() {
 		return colunas;
 	}
@@ -77,10 +93,18 @@ public class Tupla implements IBinarizable<Tupla>{
 		this.colunas = colunas;
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.ITupla#getColuna(int)
+	 */
+	@Override
 	public Coluna getColuna(int index){
 		return this.colunas.get(index);
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.ITupla#createColuna(java.lang.String, gerenciador.arquivos.blocosControle.UnidadeDescricao)
+	 */
+	@Override
 	public Coluna createColuna(String prop, UnidadeDescricao descricao) throws IncorrectFormatException{
 		Coluna coluna = null;
 		
@@ -96,6 +120,10 @@ public class Tupla implements IBinarizable<Tupla>{
 		return coluna;
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.ITupla#createColuna(byte[], gerenciador.arquivos.blocosControle.UnidadeDescricao)
+	 */
+	@Override
 	public Coluna createColuna(byte[] ba, UnidadeDescricao descricao) throws IncorrectFormatException{
 		Coluna coluna = null;
 		

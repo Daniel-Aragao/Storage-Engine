@@ -9,8 +9,11 @@ import gerenciador.arquivos.blocos.Tupla;
 import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
+import gerenciador.arquivos.interfaces.IArquivo;
 import gerenciador.arquivos.interfaces.IArquivoEvents;
+import gerenciador.arquivos.interfaces.IBloco;
 import gerenciador.arquivos.interfaces.ILog;
+import gerenciador.arquivos.interfaces.ITupla;
 import gerenciador.loger.Log;
 import gerenciador.utils.IO_Operations;
 
@@ -31,7 +34,7 @@ public class GerenciadorArquivos {
 	
 	private ILog Log;
 	private IArquivoEvents ArquivoEvents;
-	private Arquivo arquivoCached;
+	private IArquivo arquivoCached;
 	
 	public GerenciadorArquivos() {
 		construct();
@@ -49,33 +52,33 @@ public class GerenciadorArquivos {
 		this.ArquivoEvents = new IArquivoEvents() {
 			
 			@Override
-			public void BlocoRemovido(Arquivo a, Bloco b) {
+			public void BlocoRemovido(IArquivo a, IBloco b) {
 				Log.Write("Bloco removido");
 				atualziarBlocoControle(a.getFile(),a.getBlocoControle());				
 			}
 			
 			@Override
-			public void BlocoAdicionado(Arquivo a, Bloco b) {
+			public void BlocoAdicionado(IArquivo a, IBloco b) {
 				Log.Write("Bloco adicionado");
 				atualziarBlocoControle(a.getFile(), a.getBlocoControle());
 				EscreverBloco(a.getFile(), b);				
 			}
 
 			@Override
-			public Bloco RequisitarBloco(Arquivo a, int blocoId) {
+			public Bloco RequisitarBloco(IArquivo a, int blocoId) {
 				Log.Write("Requisitar bloco ao disco");
 				return getBloco(a.getFile(), blocoId, a.getDescritor());
 			}
 
 			@Override
-			public void BlocoAlterado(Arquivo a, Bloco b) {
+			public void BlocoAlterado(IArquivo a, IBloco b) {
 				Log.Write("Bloco alterado");
 				EscreverBloco(a.getFile(), b);				
 			}
 		};
 	}
 
-	public Arquivo CriarArquivo(String propriedades)	{
+	public IArquivo CriarArquivo(String propriedades)	{
 		Log.Write("-Iniciar criação de arquivo");
 		
 		String [] props = propriedades.split(CARACTERE_SEPARADOR);
@@ -100,7 +103,7 @@ public class GerenciadorArquivos {
 				BlocoControle blocoControle = new BlocoControle(props, containerId);
 				
 				Log.Write("Criar Arquivo");
-				Arquivo arquivo = new Arquivo(blocoControle, file);
+				IArquivo arquivo = new Arquivo(blocoControle, file);
 				arquivo.setArquivoEvent(ArquivoEvents);
 				
 				Log.Write("Gravar Arquivo");
@@ -177,10 +180,10 @@ public class GerenciadorArquivos {
 		}
 		// não esquecer o rowId
 		//
-		Arquivo arquivo = loadFromCache(containerId);
+		IArquivo arquivo = loadFromCache(containerId);
 		 
 		
-		Tupla tupla = null;
+		ITupla tupla = null;
 		try {
 			Log.Write("Montando tupla..."+props);
 			tupla = new Tupla(props.split(CARACTERE_SEPARADOR),null, arquivo.getDescritor());
@@ -206,14 +209,14 @@ public class GerenciadorArquivos {
 	public BlocoControle getBlocoControle(byte containerId){
 		return getBlocoControle(generateFile(containerId));
 	}
-	public Arquivo getArquivo(byte containerId){		
-		Arquivo arquivo = loadFromCache(containerId);
+	public IArquivo getArquivo(byte containerId){		
+		IArquivo arquivo = loadFromCache(containerId);
 		
 		return arquivo;
 	}
 	
-	private Arquivo loadFromCache(byte containerId){
-		Arquivo arquivo = null;
+	private IArquivo loadFromCache(byte containerId){
+		IArquivo arquivo = null;
 		if(arquivoCached != null && arquivoCached.getId() == containerId){
 			Log.Write("Arquivo em cache");
 			arquivo = arquivoCached;
@@ -234,12 +237,12 @@ public class GerenciadorArquivos {
 	}
 	
 	public Bloco getBloco(byte containerId, int blocoId){
-		Arquivo arquivo = loadFromCache(containerId);
+		IArquivo arquivo = loadFromCache(containerId);
 		
 		return getBloco(arquivo.getFile(), blocoId, arquivo.getDescritor());
 	}	
 	
-	public Bloco getBloco(byte containerId, int blocoId, Descritor descritor){
+	public IBloco getBloco(byte containerId, int blocoId, Descritor descritor){
 		return getBloco(generateFile(containerId), blocoId, descritor);
 	}
 	
@@ -261,7 +264,7 @@ public class GerenciadorArquivos {
 		IO_Operations.writeFile(file, b.getByteArray(), 0);
 	}
 	
-	protected void EscreverBloco(File file, Bloco b) {
+	protected void EscreverBloco(File file, IBloco b) {
 		try {
 			IO_Operations.writeFile(file, b.getByteArray(), startBloco(b.getBlocoId()));
 		} catch (IncorrectFormatException e) {
@@ -273,7 +276,7 @@ public class GerenciadorArquivos {
 		return BlocoControle.TAMANHO_BLOCO * blocoId;
 	}
 
-	public String getArquivoString(Arquivo a) {
+	public String getArquivoString(IArquivo a) {
 		return a.toString();
 	}
 	

@@ -10,14 +10,16 @@ import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.enums.ETipoBloco;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
+import gerenciador.arquivos.interfaces.IArquivo;
 import gerenciador.arquivos.interfaces.IArquivoEvents;
-import gerenciador.arquivos.interfaces.IBinarizable;
+import gerenciador.arquivos.interfaces.IBloco;
 import gerenciador.arquivos.interfaces.IBlocoEvents;
 import gerenciador.arquivos.interfaces.ILog;
+import gerenciador.arquivos.interfaces.ITupla;
 import gerenciador.loger.Log;
 import gerenciador.utils.ByteArrayTools;
 
-public class Arquivo implements IBinarizable<Arquivo>{
+public class Arquivo implements IArquivo{
 	private BlocoControle blocoControle;
 	private ArrayList<Bloco> blocos;
 	private IBlocoEvents blocoEvents;
@@ -43,37 +45,49 @@ public class Arquivo implements IBinarizable<Arquivo>{
 		fromByteArray(dados);
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.IArquivo#getDescritor()
+	 */
+	@Override
 	public Descritor getDescritor(){
 		return this.blocoControle.getDescritor();
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.IArquivo#getFile()
+	 */
+	@Override
 	public File getFile() {
 		return file;
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.IArquivo#setArquivoEvent(gerenciador.arquivos.interfaces.IArquivoEvents)
+	 */
+	@Override
 	public void setArquivoEvent(IArquivoEvents arquivoEvents){
 		this.events = arquivoEvents;
 	}
 	
 	private void createEvents(){
-		Arquivo a = this;
+		IArquivo a = this;
 		blocoEvents = new IBlocoEvents() {
 			
 			@Override
-			public void blocoVazio(Bloco bloco) {
+			public void blocoVazio(IBloco bloco) {
 				Log.Write("Bloco vazio");
 				removerBloco(bloco);				
 			}
 			
 			@Override
-			public void blocoCheio(Tupla tupla) {
+			public void blocoCheio(ITupla tupla) {
 				Log.Write("Bloco cheio");
-				Bloco novo = criarBloco();
+				IBloco novo = criarBloco();
 				novo.addTupla(tupla);				
 			}
 
 			@Override
-			public void blocoAlterado(Bloco bloco) {
+			public void blocoAlterado(IBloco bloco) {
 				if(events != null){
 					events.BlocoAlterado(a, bloco);
 				}				
@@ -81,7 +95,7 @@ public class Arquivo implements IBinarizable<Arquivo>{
 		};
 	}
 	
-	private Bloco criarBloco(){
+	private IBloco criarBloco(){
 		Log.Write("Criar bloco");
 		Bloco novo = new Bloco(blocoControle.getHeader().getContainerId(), 
 				blocoControle.getHeader().getProxBlocoLivre(), 
@@ -92,6 +106,10 @@ public class Arquivo implements IBinarizable<Arquivo>{
 		return novo;
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.IArquivo#addBloco(gerenciador.arquivos.blocos.Bloco)
+	 */
+	@Override
 	public void addBloco(Bloco bloco){
 		Log.Write("Adicionar bloco");
 		
@@ -104,7 +122,11 @@ public class Arquivo implements IBinarizable<Arquivo>{
 		}
 	}
 	
-	public void removerBloco(Bloco bloco){
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.IArquivo#removerBloco(gerenciador.arquivos.blocos.Bloco)
+	 */
+	@Override
+	public void removerBloco(IBloco bloco){
 		Log.Write("Remover bloco");
 		
 		this.blocoControle.getHeader().decProxBlocoLivre();
@@ -115,22 +137,30 @@ public class Arquivo implements IBinarizable<Arquivo>{
 		}
 	}
 	
-	public void AdicionarLinha(Tupla tupla){
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.IArquivo#AdicionarLinha(gerenciador.arquivos.blocos.Tupla)
+	 */
+	@Override
+	public void AdicionarLinha(ITupla tupla){
 		Log.Write("Adicionar linha");
 		
-		Bloco bloco = requisitarBloco(getBlocoControle().getProxBlocoLivre() - 1);
+		IBloco bloco = requisitarBloco(getBlocoControle().getProxBlocoLivre() - 1);
 		
 		bloco.addTupla(tupla);		
 	}
 	
-	public void RemoverLinha(Tupla tupla){
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.IArquivo#RemoverLinha(gerenciador.arquivos.blocos.Tupla)
+	 */
+	@Override
+	public void RemoverLinha(ITupla tupla){
 		Log.Write("Remover linha");
 		
 		if(this.blocoControle.getProxBlocoLivre() == 1){
 			throw new RuntimeException("Não existem blocos para efetur a remoção");			
 		}
 		
-		Bloco bloco = requisitarBloco(getBlocoControle().getProxBlocoLivre() - 1);
+		IBloco bloco = requisitarBloco(getBlocoControle().getProxBlocoLivre() - 1);
 		bloco.removeTupla(tupla);
 //		throw new RuntimeException("Não implementado");
 	}
@@ -153,13 +183,13 @@ public class Arquivo implements IBinarizable<Arquivo>{
 //		return  retorno;
 //	}
 	
-	private Bloco requisitarBloco(int requisitoId){
+	private IBloco requisitarBloco(int requisitoId){
 
 		if(requisitoId == 0) return criarBloco();
 		
 		if(requisitoId > this.blocoControle.getHeader().getProxBlocoLivre() - 1){
-			throw new RuntimeException("requisitoId deve ser "
-					+ "igual ou menor que o proximo bloco id");
+			throw new RuntimeException("o bloco requisitado "
+					+ "não pertence a este arquivo");
 		}
 		
 		Log.Write("Requisitar bloco..."+requisitoId);
@@ -175,10 +205,18 @@ public class Arquivo implements IBinarizable<Arquivo>{
 		return  retorno;
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.IArquivo#getBlocoControle()
+	 */
+	@Override
 	public BlocoControle getBlocoControle() {
 		return blocoControle;
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.IArquivo#getId()
+	 */
+	@Override
 	public byte getId(){
 		return blocoControle.getHeader().getContainerId();
 	}
@@ -221,6 +259,5 @@ public class Arquivo implements IBinarizable<Arquivo>{
 			retorno += blocos.get(i).toString() + "\n";
 		}
 		return retorno;
-//		throw new RuntimeException("Não implementado");// sugestão, requisitar vai receber id
 	}
 }

@@ -6,6 +6,7 @@ import gerenciador.RowId;
 import gerenciador.arquivos.blocos.Tupla;
 import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
+import gerenciador.arquivos.interfaces.ITupla;
 
 public class main {
 
@@ -74,7 +75,7 @@ public class main {
 		System.out.println(new Integer(2).toString());
 	}
 	
-	private static Tupla getTupla() throws IncorrectFormatException{
+	private static ITupla getTupla() throws IncorrectFormatException{
 		Descritor d = getDescritor();
 		
 		String props[] = {"101", "LUIZ_RUFFATO"};
