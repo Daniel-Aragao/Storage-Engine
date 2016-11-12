@@ -60,6 +60,7 @@ public class DescritorUnidadeDescricaoTeste {
 	public void DeveReceberUmNomeMuitoGrandeEGerarIncorrectFormatException() throws IncorrectFormatException{
 		String[] propriedades = {"COD_AUTHOR[I(5)]","NAME_AUTHOR12345[A(100)]"};
 				
+		@SuppressWarnings("unused")
 		Descritor d = new Descritor(propriedades);
 	}
 	

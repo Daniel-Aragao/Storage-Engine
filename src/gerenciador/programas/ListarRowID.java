@@ -11,7 +11,6 @@ import gerenciador.GerenciadorBuffer;
 import gerenciador.RowId;
 import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.interfaces.ILog;
-import gerenciador.loger.Log;
 import gerenciador.loger.LogLeituraTabela;
 
 public class ListarRowID {

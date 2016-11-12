@@ -6,7 +6,6 @@ import gerenciador.GerenciadorArquivos;
 import gerenciador.arquivos.interfaces.IArquivo;
 import gerenciador.arquivos.interfaces.ILog;
 import gerenciador.loger.Log;
-import gerenciador.loger.LogLeituraTabela;
 
 public class Leitura {
 

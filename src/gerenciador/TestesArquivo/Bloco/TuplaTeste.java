@@ -94,6 +94,7 @@ public class TuplaTeste {
 	
 	@Test
 	public void TuplaRecebe101_LUIZ_RUFFATO_ERetornaDadosDasColunasCorretos() throws IncorrectFormatException{
+		@SuppressWarnings("unused")
 		byte[] correto = {
 					// inicio da tupla
 					0,0,0,36,
@@ -182,6 +183,7 @@ public class TuplaTeste {
 				};
 		
 		RowId t = new RowId((byte) 0, 0, 0); 
+		@SuppressWarnings("unused")
 		ITupla tupla = new Tupla(incorreto,t, getDescritor());
 	}
 }

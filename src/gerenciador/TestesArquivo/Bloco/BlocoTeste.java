@@ -239,6 +239,7 @@ public class BlocoTeste {
 		
 		Bloco bloco = new Bloco(ba, getDescritor());
 		
+		@SuppressWarnings("unused")
 		byte[] resultado = ByteArrayTools.subArray(bloco.getByteArray(),0,78);
 
 		

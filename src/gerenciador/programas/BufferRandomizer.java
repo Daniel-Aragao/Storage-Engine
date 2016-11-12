@@ -43,6 +43,7 @@ public class BufferRandomizer {
 			// GerenciadorBuffer gb = new GerenciadorBuffer();
 			GerenciadorArquivos ga = new GerenciadorArquivos();
 			IArquivo a = ga.getArquivo(Byte.parseByte(containerId));
+			@SuppressWarnings("unused")
 			Random random = new Random();
 
 			// Log = new LogLeituraTabela(a.getFile());

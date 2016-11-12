@@ -36,6 +36,7 @@ public class ColunasTeste {
 	@Test(expected=IncorrectFormatException.class)
 	public void ColunaIntRecebe57A68EDeveLancarException() throws IncorrectFormatException{
 		UnidadeDescricao ud = new UnidadeDescricao("tanto faz", ETipoColuna.inteiro, (byte) 5);
+		@SuppressWarnings("unused")
 		ColunaInt col = new ColunaInt("57A68", ud);
 	}
 	
@@ -60,6 +61,7 @@ public class ColunasTeste {
 	@Test(expected=IncorrectFormatException.class)
 	public void ColunaStringRecebe0123456789012345678901234567890EDeveRetornarErro() throws IncorrectFormatException{
 		UnidadeDescricao ud = new UnidadeDescricao("tanto faz", ETipoColuna.string, (byte) 30);
+		@SuppressWarnings("unused")
 		ColunaString col = new ColunaString("0123456789012345678901234567890", ud);	
 	}
 	
