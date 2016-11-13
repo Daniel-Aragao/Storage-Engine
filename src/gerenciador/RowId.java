@@ -1,14 +1,22 @@
 package gerenciador;
 
-public class RowId {
-	private byte containerId;
-	private int blocoId;
-	private int offSet;
+import gerenciador.arquivos.exceptions.IncorrectFormatException;
+import gerenciador.arquivos.interfaces.IBinarizable;
+
+public class RowId implements IBinarizable<RowId>{
+	public static final int ROWID_SIZE = 8;
+	private byte containerId; // 1 byte
+	private int blocoId; // 3 bytes
+	private int offSet; // 4 bytes
 
 	public RowId(byte cId, int bId, int off) {
 		this.containerId = cId;
 		this.blocoId = bId;
 		this.offSet = off;
+	}
+	
+	public RowId(byte[] dados) throws IncorrectFormatException{
+		fromByteArray(dados);
 	}
 
 	public byte getContainerId() {
@@ -46,5 +54,17 @@ public class RowId {
 	@Override
 	public String toString() {
 		return containerId + "." + blocoId + "." + offSet;
+	}
+
+	@Override
+	public byte[] getByteArray() throws IncorrectFormatException {
+		// 8 bytes no total
+		throw new RuntimeException("Não implementado");
+	}
+
+	@Override
+	public void fromByteArray(byte[] dados) throws IncorrectFormatException {
+		throw new RuntimeException("Não implementado");
+		
 	}
 }

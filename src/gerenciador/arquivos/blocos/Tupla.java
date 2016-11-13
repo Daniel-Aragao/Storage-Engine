@@ -39,10 +39,28 @@ public class Tupla implements ITupla{
 		this.size += 4;
 	}
 	
+	public Tupla(Coluna[] props, RowId tupleId, Descritor descritor)throws IncorrectFormatException{
+		setColunas(new ArrayList<>());
+		this.size = 0;
+		this.tupleId = tupleId;
+		
+		if (props.length != descritor.getNumberOfColumns()){
+			throw new IncorrectFormatException("Número de colunas inseridas é diferente"
+					+ "do número de colunas da tabela");
+		}
+		
+		for(int i = 0; i < props.length; i++){			
+			colunas.add(props[i]);
+			this.size += props[i].getColumnSize();
+		}		
+		
+		this.size += 4;
+	}
+	
 	public Tupla(byte[] dados, RowId tupleId, Descritor descritor) throws IncorrectFormatException{		
 		this.descritor = descritor;
 		this.tupleId = tupleId;
-		setColunas(new ArrayList<>());
+		setColunas(new ArrayList<Coluna>());
 		fromByteArray(dados);
 	}
 	
@@ -141,12 +159,13 @@ public class Tupla implements ITupla{
 
 	@Override
 	public void fromByteArray(byte[] dados) throws IncorrectFormatException {
+		// BA = Byte Array
 		if(dados.length < (4 + 6 + 4)) 
 				throw new IncorrectFormatException("Tupla não tem o mínimo de "+14+" bytes exigido");
 		
 		this.size = ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 4));
 		
-		int pointer = 4, cont = 0;;
+		int pointer = 4, cont = 0;
 		while(pointer != -1){
 			
 			short colSize = (short) ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, pointer, 2));

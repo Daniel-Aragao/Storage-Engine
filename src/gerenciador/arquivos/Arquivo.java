@@ -21,7 +21,7 @@ import gerenciador.utils.ByteArrayTools;
 
 public class Arquivo implements IArquivo{
 	private BlocoControle blocoControle;
-	private ArrayList<Bloco> blocos;
+	private ArrayList<IBloco> blocos;
 	private IBlocoEvents blocoEvents;
 	private IArquivoEvents events;
 	private File file;
@@ -32,7 +32,7 @@ public class Arquivo implements IArquivo{
 		this.Log = new Log();
 		this.blocoControle = blocoControle;
 		this.file = file;
-		blocos = new ArrayList<Bloco>();		
+		blocos = new ArrayList<IBloco>();		
 		createEvents();
 	}
 	
@@ -40,7 +40,7 @@ public class Arquivo implements IArquivo{
 	public Arquivo(byte[] dados, File file) throws IncorrectFormatException {
 		this.Log = new Log();
 		this.file = file;
-		blocos = new ArrayList<Bloco>();
+		blocos = new ArrayList<IBloco>();
 		createEvents();
 		fromByteArray(dados);
 	}
@@ -110,7 +110,7 @@ public class Arquivo implements IArquivo{
 	 * @see gerenciador.arquivos.IArquivo#addBloco(gerenciador.arquivos.blocos.Bloco)
 	 */
 	@Override
-	public void addBloco(Bloco bloco){
+	public void addBloco(IBloco bloco){
 		Log.Write("Adicionar bloco");
 		
 		bloco.setEvents(blocoEvents);
@@ -194,7 +194,7 @@ public class Arquivo implements IArquivo{
 		
 		Log.Write("Requisitar bloco..."+requisitoId);
 				
-		Optional<Bloco> opt = blocos.stream().findAny().filter(b -> b.getBlocoId() == requisitoId);
+		Optional<IBloco> opt = blocos.stream().findAny().filter(b -> b.getBlocoId() == requisitoId);
 		
 		if(opt.isPresent()) return opt.get();
 		
@@ -232,7 +232,7 @@ public class Arquivo implements IArquivo{
 			
 			
 		byte[] blocosArray = blocoControle.getByteArray();
-		for(Bloco bloco : blocos){
+		for(IBloco bloco : blocos){
 			if(!bloco.getDados().isEmpty()){
 				blocosArray = ByteArrayTools.concatArrays(blocosArray, bloco.getByteArray());				
 			}

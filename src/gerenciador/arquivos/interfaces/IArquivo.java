@@ -2,7 +2,6 @@ package gerenciador.arquivos.interfaces;
 
 import java.io.File;
 
-import gerenciador.arquivos.blocos.Bloco;
 import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
 
@@ -14,7 +13,7 @@ public interface IArquivo extends IBinarizable<IArquivo> {
 
 	void setArquivoEvent(IArquivoEvents arquivoEvents);
 
-	void addBloco(Bloco bloco);
+	void addBloco(IBloco bloco);
 
 	void removerBloco(IBloco bloco);
 
