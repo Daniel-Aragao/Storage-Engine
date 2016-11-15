@@ -8,12 +8,14 @@ import gerenciador.arquivos.blocos.Bloco;
 import gerenciador.arquivos.blocos.Tupla;
 import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
+import gerenciador.arquivos.enums.ETipoBlocoArquivo;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IArquivo;
 import gerenciador.arquivos.interfaces.IArquivoEvents;
 import gerenciador.arquivos.interfaces.IBloco;
 import gerenciador.arquivos.interfaces.ILog;
 import gerenciador.arquivos.interfaces.ITupla;
+import gerenciador.indice.blocos.Node;
 import gerenciador.loger.Log;
 import gerenciador.utils.IO_Operations;
 
@@ -65,7 +67,7 @@ public class GerenciadorArquivos {
 			}
 
 			@Override
-			public Bloco RequisitarBloco(IArquivo a, int blocoId) {
+			public IBloco RequisitarBloco(IArquivo a, int blocoId) {
 				Log.Write("Requisitar bloco ao disco");
 				return getBloco(a.getFile(), blocoId, a.getDescritor());
 			}
@@ -149,7 +151,7 @@ public class GerenciadorArquivos {
 	}
 
 	public File generateFile(byte i){
-		return new File(GerenciadorArquivos.DISC_PATH.getAbsolutePath()+"\\tabela-"+i+".txt");
+		return new File(GerenciadorArquivos.DISC_PATH.getAbsolutePath()+"\\arquivo-"+i+".txt");
 	}		
 	
 	private byte getNextContainerId(){
@@ -232,11 +234,11 @@ public class GerenciadorArquivos {
 		return arquivo;
 	}
 	
-	public Bloco getBloco(RowId tid) {
+	public IBloco getBloco(RowId tid) {
 		return getBloco(tid.getContainerId(), tid.getBlocoId());
 	}
 	
-	public Bloco getBloco(byte containerId, int blocoId){
+	public IBloco getBloco(byte containerId, int blocoId){
 		IArquivo arquivo = loadFromCache(containerId);
 		
 		return getBloco(arquivo.getFile(), blocoId, arquivo.getDescritor());
@@ -246,15 +248,18 @@ public class GerenciadorArquivos {
 		return getBloco(generateFile(containerId), blocoId, descritor);
 	}
 	
-	private Bloco getBloco(File file, int blocoId, Descritor descritor){
+	private IBloco getBloco(File file, int blocoId, Descritor descritor){
 		
 		byte[] bloco = IO_Operations
 				.readFromFile(file, startBloco(blocoId), BlocoControle.TAMANHO_BLOCO);
 		
 		try {
-			return new Bloco(bloco, descritor);
+			if(bloco[4] == ETipoBlocoArquivo.dados.getValor()){
+				return new Bloco(bloco, descritor);				
+			}else if(bloco[4] == ETipoBlocoArquivo.indices.getValor()){
+				return new Node(bloco, descritor);		
+			}
 		} catch (IncorrectFormatException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

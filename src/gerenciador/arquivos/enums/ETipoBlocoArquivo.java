@@ -1,12 +1,12 @@
 package gerenciador.arquivos.enums;
 
-public enum ETipoBloco {
+public enum ETipoBlocoArquivo {
 	dados(0),
 	indices(1);
 	
 	public int valor;
 	
-	private ETipoBloco(int val) {
+	private ETipoBlocoArquivo(int val) {
 		valor = val;
 	}
 	
@@ -14,8 +14,8 @@ public enum ETipoBloco {
 		return (byte)valor;
 	}
 	
-	public static ETipoBloco getByValue(int value){
-		for(ETipoBloco e : ETipoBloco.values()){
+	public static ETipoBlocoArquivo getByValue(int value){
+		for(ETipoBlocoArquivo e : ETipoBlocoArquivo.values()){
 			if(e.valor == value){
 				return e;
 			}

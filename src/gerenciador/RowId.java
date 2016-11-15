@@ -2,6 +2,7 @@ package gerenciador;
 
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
+import gerenciador.utils.ByteArrayTools;
 
 public class RowId implements IBinarizable<RowId>{
 	public static final int ROWID_SIZE = 8;
@@ -59,12 +60,25 @@ public class RowId implements IBinarizable<RowId>{
 	@Override
 	public byte[] getByteArray() throws IncorrectFormatException {
 		// 8 bytes no total
-		throw new RuntimeException("Não implementado");
+		byte[] retorno = new byte[8];
+		retorno[0] = this.containerId;
+		
+		byte[] blocoid = ByteArrayTools.intToByteArray(this.blocoId);
+		retorno[1] = blocoid[1];
+		retorno[2] = blocoid[2];
+		retorno[3] = blocoid[3];
+		
+		ByteArrayTools.appendArrays(retorno, ByteArrayTools.intToByteArray(this.offSet), 4);
+		
+		return retorno;
 	}
 
 	@Override
 	public void fromByteArray(byte[] dados) throws IncorrectFormatException {
-		throw new RuntimeException("Não implementado");
+		this.containerId = dados[0];
 		
+		this.blocoId = ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 1, 3));
+		
+		this.offSet = ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 4, 4));		
 	}
 }

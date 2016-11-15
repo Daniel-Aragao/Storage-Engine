@@ -85,7 +85,7 @@ public class GerenciadorBuffer {
 		Log.Write("Buffer => buscar no disco");
 		Log.Write(System.lineSeparator());
 		miss++;
-		Bloco novoBloco = getFromDisk(tid);
+		IBloco novoBloco = getFromDisk(tid);
 				
 		posMem = memoria.getPosVazia();
 		if(posMem >= 0){
@@ -108,7 +108,7 @@ public class GerenciadorBuffer {
 		
 		return novoBloco;
 	}
-	public Bloco getFromDisk(RowId tid){
+	public IBloco getFromDisk(RowId tid){
 		GerenciadorArquivos ga = getGAFromCache();
 		return ga.getBloco(tid);
 	}

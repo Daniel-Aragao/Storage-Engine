@@ -7,7 +7,7 @@ import gerenciador.RowId;
 import gerenciador.arquivos.blocos.Bloco;
 import gerenciador.arquivos.blocos.Tupla;
 import gerenciador.arquivos.blocosControle.Descritor;
-import gerenciador.arquivos.enums.ETipoBloco;
+import gerenciador.arquivos.enums.ETipoBlocoArquivo;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBloco;
 import gerenciador.utils.ByteArrayTools;
@@ -39,21 +39,21 @@ public class BlocoTeste {
 	
 	@Test
 	public void DeveReceber1_1_dado_descEFormarDadosCorretamente() throws IncorrectFormatException{
-		IBloco bloco = new Bloco((byte) 1,1,ETipoBloco.dados, getDescritor());
+		IBloco bloco = new Bloco((byte) 1,1,ETipoBlocoArquivo.dados, getDescritor());
 		
 		Assert.assertEquals(1, bloco.getHeader().getBlocoId());
 		Assert.assertEquals(1, bloco.getHeader().getContainerId());
 		Assert.assertEquals(8, bloco.getHeader().getBytesUsados());
-		Assert.assertEquals(ETipoBloco.dados, bloco.getHeader().getTipo());		
+		Assert.assertEquals(ETipoBlocoArquivo.dados, bloco.getHeader().getTipo());		
 	}
 	
 	@Test
 	public void DeveReceber1_1_dado_descEFormarDadosCorretamenteByteArray() throws IncorrectFormatException{
-		Bloco bloco = new Bloco((byte) 1,1,ETipoBloco.dados, getDescritor());
+		Bloco bloco = new Bloco((byte) 1,1,ETipoBlocoArquivo.dados, getDescritor());
 		byte[] ba = {
 				1,
 				0,0,1,
-				ETipoBloco.dados.getValor(),
+				ETipoBlocoArquivo.dados.getValor(),
 				0,0,8
 				,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 		};
@@ -65,13 +65,13 @@ public class BlocoTeste {
 	
 	@Test
 	public void DeveReceberTuplaFormarDadosCorretamenteByteArray() throws IncorrectFormatException{
-		Bloco bloco = new Bloco((byte) 1,1,ETipoBloco.dados, getDescritor());
+		Bloco bloco = new Bloco((byte) 1,1,ETipoBlocoArquivo.dados, getDescritor());
 		bloco.addTupla(getTupla(0));
 		
 		byte[] ba = {
 				1,
 				0,0,1,
-				ETipoBloco.dados.getValor(),
+				ETipoBlocoArquivo.dados.getValor(),
 				0,0,44,				
 				// inicio da tupla
 				0,0,0,36,
@@ -92,13 +92,13 @@ public class BlocoTeste {
 	}
 	@Test
 	public void DeveReceberDuasTuplaFormarDadosCorretamenteByteArray() throws IncorrectFormatException{
-		Bloco bloco = new Bloco((byte) 1,1,ETipoBloco.dados, getDescritor());
+		Bloco bloco = new Bloco((byte) 1,1,ETipoBlocoArquivo.dados, getDescritor());
 		bloco.addTupla(getTupla(0));
 		bloco.addTupla(getTupla(1));
 		byte[] ba = {
 				1,
 				0,0,1,
-				ETipoBloco.dados.getValor(),
+				ETipoBlocoArquivo.dados.getValor(),
 				0,0,78,				
 				// inicio da tupla
 				0,0,0,36,
@@ -130,13 +130,13 @@ public class BlocoTeste {
 	
 	@Test
 	public void DeveReceberDuasTuplasEOByteArrayRetornadoDeveSer0Do_i_78_EmDiante() throws IncorrectFormatException{
-		Bloco bloco = new Bloco((byte) 1,1,ETipoBloco.dados, getDescritor());
+		Bloco bloco = new Bloco((byte) 1,1,ETipoBlocoArquivo.dados, getDescritor());
 		bloco.addTupla(getTupla(0));
 		bloco.addTupla(getTupla(1));
 		byte[] ba = {
 				1,
 				0,0,1,
-				ETipoBloco.dados.getValor(),
+				ETipoBlocoArquivo.dados.getValor(),
 				0,0,78,				
 				// inicio da tupla
 				0,0,0,36,
@@ -171,7 +171,7 @@ public class BlocoTeste {
 		byte[] ba = {
 				1,
 				0,0,1,
-				ETipoBloco.dados.getValor(),
+				ETipoBlocoArquivo.dados.getValor(),
 				0,0,78,				
 				// inicio da tupla
 				0,0,0,36,
@@ -202,7 +202,7 @@ public class BlocoTeste {
 		Assert.assertEquals(1, bloco.getHeader().getBlocoId());
 		Assert.assertEquals(1, bloco.getHeader().getContainerId());
 		Assert.assertEquals(78, bloco.getHeader().getBytesUsados());
-		Assert.assertEquals(ETipoBloco.dados, bloco.getHeader().getTipo());
+		Assert.assertEquals(ETipoBlocoArquivo.dados, bloco.getHeader().getTipo());
 		
 		
 		
@@ -212,7 +212,7 @@ public class BlocoTeste {
 		byte[] ba = {
 				1,
 				0,0,1,
-				ETipoBloco.dados.getValor(),
+				ETipoBlocoArquivo.dados.getValor(),
 				0,0,78,				
 				// inicio da tupla
 				0,0,0,36,
@@ -255,7 +255,7 @@ public class BlocoTeste {
 		byte[] ba = {
 				1,
 				0,0,1,
-				ETipoBloco.dados.getValor(),
+				ETipoBlocoArquivo.dados.getValor(),
 				0,0,78,				
 				// inicio da tupla
 				0,0,0,36,
@@ -298,12 +298,12 @@ public class BlocoTeste {
 	
 	@Test
 	public void DeveConterOtamanhoCertoDoDescritorAoAdicionarLinha() throws IncorrectFormatException{
-		IBloco bloco = new Bloco((byte) 1,1,ETipoBloco.dados, getDescritor());
+		IBloco bloco = new Bloco((byte) 1,1,ETipoBlocoArquivo.dados, getDescritor());
 		
 		Assert.assertEquals(1, bloco.getHeader().getBlocoId());
 		Assert.assertEquals(1, bloco.getHeader().getContainerId());
 		Assert.assertEquals(8, bloco.getHeader().getBytesUsados());
-		Assert.assertEquals(ETipoBloco.dados, bloco.getHeader().getTipo());	
+		Assert.assertEquals(ETipoBlocoArquivo.dados, bloco.getHeader().getTipo());	
 		
 		bloco.addTupla(getTupla(2));
 		bloco.addTupla(getTupla(2).getByteArray());
@@ -312,7 +312,7 @@ public class BlocoTeste {
 		Assert.assertEquals(1, bloco.getHeader().getContainerId());
 		Assert.assertEquals(getTupla(2).getSize()*2 + 8, bloco.getHeader().getBytesUsados());
 		Assert.assertEquals(92, bloco.getHeader().getBytesUsados());
-		Assert.assertEquals(ETipoBloco.dados, bloco.getHeader().getTipo());
+		Assert.assertEquals(ETipoBlocoArquivo.dados, bloco.getHeader().getTipo());
 	}
 	
 }

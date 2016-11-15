@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 
 import gerenciador.GerenciadorArquivos;
 import gerenciador.RowId;
-import gerenciador.arquivos.blocos.DadosBloco;
+import gerenciador.arquivos.blocos.IDados;
 import gerenciador.arquivos.interfaces.IArquivo;
 import gerenciador.arquivos.interfaces.IBloco;
 import gerenciador.arquivos.interfaces.ILog;
@@ -63,7 +63,7 @@ public class BufferRandomizer {
 				// System.out.println(a.getBlocoControle().getProxBlocoLivre());
 				// Log.Write(ga.getBloco(a.getId(), i).toString());
 				IBloco b = ga.getBloco(a.getId(), i);
-				DadosBloco dados = b.getDados();
+				IDados dados = b.getDados();
 				
 				Log.Write("Bloco..." + b.getBlocoId() + "...Importado");
 

@@ -21,6 +21,7 @@ public class Tupla implements ITupla{
 		setColunas(new ArrayList<>());
 		this.size = 0;
 		this.tupleId = tupleId;
+		this.descritor = descritor;
 		
 		if (props.length != descritor.getNumberOfColumns()){
 			throw new IncorrectFormatException("Número de colunas inseridas é diferente"
@@ -43,6 +44,7 @@ public class Tupla implements ITupla{
 		setColunas(new ArrayList<>());
 		this.size = 0;
 		this.tupleId = tupleId;
+		this.descritor = descritor;
 		
 		if (props.length != descritor.getNumberOfColumns()){
 			throw new IncorrectFormatException("Número de colunas inseridas é diferente"

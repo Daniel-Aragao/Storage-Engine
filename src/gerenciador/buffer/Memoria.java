@@ -93,7 +93,7 @@ public class Memoria {
 		return -1;
 	}
 	
-	public void putBloco(Bloco b, int posMem){
+	public void putBloco(IBloco b, int posMem){
 		try {			
 			ByteArrayTools.appendArrays(blocos, b.getByteArray(), BlocoControle.TAMANHO_BLOCO*posMem);
 			

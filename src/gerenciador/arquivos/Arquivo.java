@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import gerenciador.arquivos.blocos.Bloco;
-import gerenciador.arquivos.blocos.Tupla;
 import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
-import gerenciador.arquivos.enums.ETipoBloco;
+import gerenciador.arquivos.enums.ETipoBlocoArquivo;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IArquivo;
 import gerenciador.arquivos.interfaces.IArquivoEvents;
@@ -97,10 +96,16 @@ public class Arquivo implements IArquivo{
 	
 	private IBloco criarBloco(){
 		Log.Write("Criar bloco");
-		Bloco novo = new Bloco(blocoControle.getHeader().getContainerId(), 
-				blocoControle.getHeader().getProxBlocoLivre(), 
-				ETipoBloco.dados, 
-				blocoControle.getDescritor());
+		Bloco novo = null;
+		try {
+			novo = new Bloco(blocoControle.getHeader().getContainerId(), 
+					blocoControle.getHeader().getProxBlocoLivre(), 
+					ETipoBlocoArquivo.dados, 
+					blocoControle.getDescritor());
+		} catch (IncorrectFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		addBloco(novo);
 		return novo;
@@ -162,26 +167,7 @@ public class Arquivo implements IArquivo{
 		
 		IBloco bloco = requisitarBloco(getBlocoControle().getProxBlocoLivre() - 1);
 		bloco.removeTupla(tupla);
-//		throw new RuntimeException("Não implementado");
 	}
-	
-//	private Bloco requisitarBloco(){
-//		
-//		int requisitoId = this.blocoControle.getHeader().getProxBlocoLivre() - 1;
-//		Log.Write("Requisitar bloco..."+requisitoId);
-//		
-//		if(requisitoId == 0) return criarBloco();
-//		
-//		Optional<Bloco> opt = blocos.stream().findAny().filter(b -> b.getBlocoId() == requisitoId);
-//		
-//		if(opt.isPresent()) return opt.get();
-//		
-//		Bloco retorno = this.events.RequisitarBloco(this, requisitoId);
-//		retorno.setEvents(blocoEvents);
-//		blocos.add(retorno);
-//		
-//		return  retorno;
-//	}
 	
 	private IBloco requisitarBloco(int requisitoId){
 
@@ -198,7 +184,7 @@ public class Arquivo implements IArquivo{
 		
 		if(opt.isPresent()) return opt.get();
 		
-		Bloco retorno = this.events.RequisitarBloco(this, requisitoId);
+		IBloco retorno = this.events.RequisitarBloco(this, requisitoId);
 		retorno.setEvents(blocoEvents);
 		blocos.add(retorno);
 		

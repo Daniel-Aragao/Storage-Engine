@@ -9,7 +9,7 @@ import gerenciador.arquivos.interfaces.IBinarizable;
 import gerenciador.arquivos.interfaces.ITupla;
 import gerenciador.utils.ByteArrayTools;
 
-public class DadosBloco  implements IBinarizable<DadosBloco>{
+public class DadosBloco  implements IDados{
 	
 	private ArrayList<ITupla> tuplas;
 	private Descritor descritor;
@@ -27,6 +27,9 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 		fromByteArray(dados);
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IDados#getByteArray()
+	 */
 	@Override
 	public byte[] getByteArray() throws IncorrectFormatException {
 		byte[] retorno = new byte[0];
@@ -38,13 +41,25 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 		return retorno;
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IDados#getTupla(int)
+	 */
+	@Override
 	public ITupla getTupla(int index){
 		return tuplas.get(index);
 	}
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IDados#getSize()
+	 */
+	@Override
 	public int getSize(){
 		return tuplas.size();
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IDados#getOffSet(int)
+	 */
+	@Override
 	public int getOffSet(int i){
 		int retorno = Bloco.HEADER_BLOCO_SIZE;
 		ITupla tuple = tuplas.get(i);
@@ -59,27 +74,51 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 		return -1;
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IDados#contains(gerenciador.arquivos.interfaces.ITupla)
+	 */
+	@Override
 	public boolean contains(ITupla tupla){
 		return tuplas.contains(tupla);
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IDados#contains(int)
+	 */
+	@Override
 	public boolean contains(int index){
 		return tuplas.contains(index);
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IDados#RemoveTupla(gerenciador.arquivos.interfaces.ITupla)
+	 */
+	@Override
 	public void RemoveTupla(ITupla tupla){
 		tuplas.remove(tupla);
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IDados#RemoveTupla(int)
+	 */
+	@Override
 	public int RemoveTupla(int index){
 		ITupla tupla = tuplas.remove(index);
 		return tupla.getSize();
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IDados#isEmpty()
+	 */
+	@Override
 	public boolean isEmpty(){
 		return tuplas.isEmpty();
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IDados#addTupla(gerenciador.arquivos.interfaces.ITupla)
+	 */
+	@Override
 	public void addTupla(ITupla tupla){
 		tuplas.add(tupla);
 	}
@@ -88,6 +127,10 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 		this.tuplas = tuplas;
 	}
 
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IDados#fromByteArray(byte[])
+	 */
+	
 	@Override
 	public void fromByteArray(byte[] dados) throws IncorrectFormatException {
 		int pointer = 0;
@@ -99,7 +142,7 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 			RowId tupleId = new RowId(this.tupleBlocoId.getContainerId(), 
 					this.tupleBlocoId.getBlocoId(), 
 					pointer + Bloco.HEADER_BLOCO_SIZE);
-			Tupla tupla = new Tupla(tuplaBA, tupleId, this.descritor);
+			ITupla tupla = new Tupla(tuplaBA, tupleId, this.descritor);
 						
 			this.tuplas.add(tupla);
 			
@@ -120,6 +163,10 @@ public class DadosBloco  implements IBinarizable<DadosBloco>{
 		return super.toString();
 	}
 
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IDados#size()
+	 */
+	@Override
 	public int size() {
 		return tuplas.size();
 	}

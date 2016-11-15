@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import gerenciador.RowId;
 import gerenciador.arquivos.blocos.DadosBloco;
+import gerenciador.arquivos.blocos.IDados;
 import gerenciador.arquivos.blocos.Tupla;
 import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
@@ -39,7 +40,7 @@ public class DadosBlocoTeste {
 		
 		Tupla tupla = getTupla(0);
 		
-		DadosBloco db = new DadosBloco(getDescritor());
+		IDados db = new DadosBloco(getDescritor());
 		db.addTupla(tupla);
 		
 		
@@ -50,7 +51,7 @@ public class DadosBlocoTeste {
 	@Test
 	public void DeveReceberDuasTuplaEForma_laCorretamente() throws IncorrectFormatException{
 				
-		DadosBloco db = new DadosBloco(getDescritor());
+		IDados db = new DadosBloco(getDescritor());
 		db.addTupla(getTupla(0));
 		db.addTupla(getTupla(1));
 		
@@ -135,7 +136,7 @@ public class DadosBlocoTeste {
 				00,0x41, 00,0x54, 00,0x4F
 			};
 		RowId tupleId = new RowId((byte) 0, 0, 0);
-		DadosBloco db = new DadosBloco(correto, tupleId, getDescritor());
+		IDados db = new DadosBloco(correto, tupleId, getDescritor());
 		
 		
 		Assert.assertEquals(4 + 6 + 26,db.getTupla(0).getSize());
@@ -170,7 +171,7 @@ public class DadosBlocoTeste {
 		
 
 		RowId tupleId = new RowId((byte) 0, 0, 0);
-		DadosBloco db = new DadosBloco(correto, tupleId, getDescritor());
+		IDados db = new DadosBloco(correto, tupleId, getDescritor());
 		
 		Assert.assertEquals(4 + 6 + 26,db.getTupla(0).getSize());
 		Assert.assertEquals(2,db.getTupla(0).getColunas().size());

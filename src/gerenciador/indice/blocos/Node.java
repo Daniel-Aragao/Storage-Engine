@@ -3,23 +3,44 @@ package gerenciador.indice.blocos;
 import java.util.ArrayList;
 
 import gerenciador.RowId;
-import gerenciador.arquivos.blocos.DadosBloco;
 import gerenciador.arquivos.blocos.HeaderBloco;
+import gerenciador.arquivos.blocos.IDados;
+import gerenciador.arquivos.blocosControle.Descritor;
+import gerenciador.arquivos.enums.ETipoBlocoArquivo;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBloco;
 import gerenciador.arquivos.interfaces.IBlocoEvents;
 import gerenciador.arquivos.interfaces.ITupla;
 
-public class Node implements IBloco{
-	
+public class Node implements IBloco {
+
 	private ArrayList<RowId> ponteiro;
 	private ArrayList<Chave> chaves;
+	
+	private Descritor descritor;
+	private IBlocoEvents events;
+	private DadosNode dados;
+	private HeaderNode header;
 
+	public Node(byte containerId, int BlockId, ETipoBlocoArquivo tipoBloco, Descritor descritor)
+			throws IncorrectFormatException {
+		this.descritor = descritor;
+		if (tipoBloco != ETipoBlocoArquivo.dados) {
+			throw new IncorrectFormatException("Tipo de bloco deve ser de dados");
+		}
+		header = new HeaderNode(containerId, BlockId, tipoBloco);
+		dados = new DadosNode(descritor);
+	}
+
+	public Node(byte[] dados, Descritor descritor) throws IncorrectFormatException {
+		this.descritor = descritor;
+		this.fromByteArray(dados);
+	}
 
 	@Override
 	public void setEvents(IBlocoEvents events) {
-		throw new RuntimeException("Não implementado");
-		
+		this.events = events;
+
 	}
 
 	@Override
@@ -33,52 +54,56 @@ public class Node implements IBloco{
 	}
 
 	@Override
-	public DadosBloco getDados() {
+	public IDados getDados() {
 		throw new RuntimeException("Não implementado");
 	}
 
 	@Override
 	public void addTupla(ITupla tupla) {
 		throw new RuntimeException("Não implementado");
-		
+
 	}
 
 	@Override
 	public RowId getNextTupleId() {
-		throw new RuntimeException("Não implementado");
+		RowId tupleId = new RowId(this.header.getContainerId(), getBlocoId(), this.header.getBytesUsados());
+
+		return tupleId;
 	}
 
 	@Override
 	public void addTupla(byte[] tuplaBytes) throws IncorrectFormatException {
 		throw new RuntimeException("Não implementado");
-		
+
 	}
 
 	@Override
 	public void removeTupla(ITupla tupla) {
 		throw new RuntimeException("Não implementado");
-		
+
 	}
 
 	@Override
 	public void removeTupla(int index) {
 		throw new RuntimeException("Não implementado");
-		
+
 	}
 
 	@Override
 	public RowId getBlocoTupleId() {
-		throw new RuntimeException("Não implementado");
+		return new RowId(this.header.getContainerId(), this.getBlocoId(), -1);
 	}
 
 	@Override
 	public byte[] getByteArray() throws IncorrectFormatException {
+		// intercalar cada chave com um rowid
 		throw new RuntimeException("Não implementado");
 	}
-	
+
 	@Override
 	public void fromByteArray(byte[] dados) throws IncorrectFormatException {
+		// intercalados chaves com rowid
 		throw new RuntimeException("Não implementado");
-		
+
 	}
 }

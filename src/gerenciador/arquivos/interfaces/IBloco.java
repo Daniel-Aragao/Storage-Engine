@@ -1,8 +1,8 @@
 package gerenciador.arquivos.interfaces;
 
 import gerenciador.RowId;
-import gerenciador.arquivos.blocos.DadosBloco;
 import gerenciador.arquivos.blocos.HeaderBloco;
+import gerenciador.arquivos.blocos.IDados;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 
 public interface IBloco extends IBinarizable<IBloco>{
@@ -13,7 +13,7 @@ public interface IBloco extends IBinarizable<IBloco>{
 
 	int getBlocoId();
 
-	DadosBloco getDados();
+	IDados getDados();
 
 	void addTupla(ITupla tupla);
 
