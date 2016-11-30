@@ -21,6 +21,7 @@ public class Node implements IBloco {
 	private Descritor descritor;
 	private IBlocoEvents events;
 	private DadosNode dados;
+//	k, p e n(ordem)
 	private HeaderNode header;
 
 	public Node(byte containerId, int BlockId, ETipoBlocoArquivo tipoBloco, Descritor descritor)
@@ -29,8 +30,8 @@ public class Node implements IBloco {
 		if (tipoBloco != ETipoBlocoArquivo.indices) {
 			throw new IncorrectFormatException("Tipo de bloco deve ser de indice");
 		}
-		header = new HeaderNode(containerId, BlockId, tipoBloco);
-		dados = new DadosNode(descritor);
+//		header = new HeaderNode(containerId, BlockId, tipoBloco);
+//		dados = new DadosNode(descritor);
 	}
 
 	public Node(byte[] dados, Descritor descritor) throws IncorrectFormatException {

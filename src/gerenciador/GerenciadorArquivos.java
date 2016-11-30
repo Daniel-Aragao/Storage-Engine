@@ -82,7 +82,7 @@ public class GerenciadorArquivos {
 		};
 	}
 
-	public IArquivo CriarArquivo(String nome, String propriedades)	{
+	public IArquivo CriarArquivo(String nome, String propriedades, ETipoBlocoArquivo tipo)	{
 		Log.Write("-Iniciar criação de arquivo");
 		
 		String [] props = propriedades.split(CARACTERE_SEPARADOR);
@@ -104,7 +104,7 @@ public class GerenciadorArquivos {
 			// certificar que o arquivo vai ser criado
 			if(file.createNewFile()){
 				Log.Write("Criar bloco de controle");
-				BlocoControle blocoControle = new BlocoControle(nome, props, containerId);
+				BlocoControle blocoControle = new BlocoControle(nome, props, containerId, tipo);
 				
 				Log.Write("Criar Arquivo");
 				IArquivo arquivo = new Arquivo(blocoControle, file);

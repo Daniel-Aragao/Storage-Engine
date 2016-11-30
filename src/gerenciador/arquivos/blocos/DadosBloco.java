@@ -5,11 +5,10 @@ import java.util.ArrayList;
 import gerenciador.RowId;
 import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
-import gerenciador.arquivos.interfaces.IBinarizable;
 import gerenciador.arquivos.interfaces.ITupla;
 import gerenciador.utils.ByteArrayTools;
 
-public class DadosBloco  implements IDados{
+public class DadosBloco implements IDados{
 	
 	private ArrayList<ITupla> tuplas;
 	private Descritor descritor;
@@ -160,7 +159,7 @@ public class DadosBloco  implements IDados{
 		for(int i = 0;i < tuplas.size(); i++){
 			retorno += "" + tuplas.toString() +"\n";			
 		}
-		return super.toString();
+		return retorno.toString();
 	}
 
 	/* (non-Javadoc)

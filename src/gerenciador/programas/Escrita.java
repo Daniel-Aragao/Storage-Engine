@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 
 import gerenciador.GerenciadorArquivos;
+import gerenciador.arquivos.enums.ETipoBlocoArquivo;
 import gerenciador.arquivos.interfaces.IArquivo;
 import gerenciador.arquivos.interfaces.ILog;
 import gerenciador.loger.LogEscrita;
@@ -37,7 +38,7 @@ public class Escrita {
 			linha = split[1];
 			String nome = split[0];
 			
-			IArquivo a = gerenciadorArquivo.CriarArquivo(nome, linha);
+			IArquivo a = gerenciadorArquivo.CriarArquivo(nome, linha, ETipoBlocoArquivo.dados);
 			
 			if(a != null){
 				byte containerId = a.getBlocoControle().getHeader().getContainerId();

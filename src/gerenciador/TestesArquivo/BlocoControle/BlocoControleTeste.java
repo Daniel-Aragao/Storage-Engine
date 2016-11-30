@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import gerenciador.GerenciadorArquivos;
 import gerenciador.arquivos.blocosControle.BlocoControle;
+import gerenciador.arquivos.enums.ETipoBlocoArquivo;
 import gerenciador.arquivos.enums.ETipoColuna;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.utils.ByteArrayTools;
@@ -14,7 +15,7 @@ public class BlocoControleTeste {
 	@Test
 	public void deveReceberPropriedadesEGetByteArrayDeveVirCorreto() throws IncorrectFormatException{
 		String []props = {"COD_AUTHOR[I(5)]","NAME_AUTHOR[A(100)]"};
-		BlocoControle bc = new BlocoControle("Author", props, (byte)1);
+		BlocoControle bc = new BlocoControle("Author", props, (byte)1, ETipoBlocoArquivo.dados);
 		
 		byte[] a = {
 				//header
@@ -26,12 +27,13 @@ public class BlocoControleTeste {
 				//nome
 				0,0,0,0,0,0,0,0,0,0x41,0,0x75,0,0x74,0,0x68,0,0x6f,0,0x72,
 				0,0,0,0,0,0,0,0,0,0,0,
+				ETipoBlocoArquivo.dados.getValor(),
 				//descritores
 				0,0,0,0,0,0,0,0,0,0,00,0x43, 00,0x4F, 00,0x44, 00,0x5F, 00,0x41, 00,0x55,
 				00,0x54, 00,0x48, 00,0x4F, 00,0x52, GerenciadorArquivos.CARACTERE_INTEIRO,5,
 				0,0,0,0,0,0,0,0,00,0x4E, 00,0x41, 00,0x4D, 00,0x45, 00,0x5F, 00,0x41, 00,0x55, 00,
 				0x54, 00,0x48, 00,0x4F, 00,0x52, GerenciadorArquivos.CARACTERE_STRING,100};
-		int tamanho = 106;
+		int tamanho = 107;
 		
 		byte [] b = bc.getByteArray();
 		
@@ -46,7 +48,7 @@ public class BlocoControleTeste {
 	@Test
 	public void deveByteArrayRetornarPropriedadesFromByteArrayCorreto() throws IncorrectFormatException{
 		String []props = {"COD_AUTHOR[I(5)]","NAME_AUTHOR[A(100)]"};
-		BlocoControle bc = new BlocoControle("Author", props, (byte)1);
+		BlocoControle bc = new BlocoControle("Author", props, (byte)1, ETipoBlocoArquivo.dados);
 		
 		BlocoControle result = new BlocoControle(bc.getByteArray());
 		
@@ -68,6 +70,7 @@ public class BlocoControleTeste {
 		Assert.assertEquals(1, result.getHeader().getProxBlocoLivre());
 		Assert.assertEquals(64, result.getHeader().getSizeDescritor());
 		Assert.assertEquals(0, result.getHeader().qtdIndices());
+		Assert.assertEquals(ETipoBlocoArquivo.dados, result.getHeader().getTipo());		
 		
 	}
 	

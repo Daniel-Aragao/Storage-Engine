@@ -1,5 +1,6 @@
 package gerenciador.arquivos.blocosControle;
 
+import gerenciador.arquivos.enums.ETipoBlocoArquivo;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
 import gerenciador.arquivos.interfaces.ILog;
@@ -17,10 +18,11 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 	private String Nome;
 	private byte qtdIndices;
 	private byte[] indiceIds;
+	private ETipoBlocoArquivo tipo;
 
 	private ILog Log;
 
-	public HeaderControle(String nome, byte containerId, short descSize) throws IncorrectFormatException {
+	public HeaderControle(String nome, byte containerId, short descSize, ETipoBlocoArquivo tipo) throws IncorrectFormatException {
 		this.Log = new Log();
 		setContainerId(containerId);
 		setSizeBloco(BlocoControle.TAMANHO_BLOCO);
@@ -30,6 +32,7 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 		setNome(nome);
 		this.indiceIds = new byte[BlocoControle.TAMANHO_INDICES-1];
 		this.qtdIndices = 0;
+		this.tipo = tipo;
 	}
 	
 	public HeaderControle(byte[] dados){
@@ -96,6 +99,8 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 			i++;
 		}
 		
+		byteArray[42] = this.tipo.getValor();
+		
 		return byteArray;
 	}
 
@@ -158,6 +163,7 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 		
 		this.qtdIndices = dados[31];
 		this.indiceIds = ByteArrayTools.subArray(dados, 32, BlocoControle.TAMANHO_INDICES-1);
+		this.tipo = ETipoBlocoArquivo.getByValue(dados[42]);
 	}
 
 	public String getNome() {
@@ -165,6 +171,10 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 	}
 	public void setNome(String nome) {
 		this.Nome = nome;
+	}
+
+	public ETipoBlocoArquivo getTipo() {
+		return this.tipo;
 	}
 
 }
