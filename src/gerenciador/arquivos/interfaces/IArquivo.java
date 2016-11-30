@@ -4,6 +4,7 @@ import java.io.File;
 
 import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
+import gerenciador.arquivos.enums.ETipoBlocoArquivo;
 
 public interface IArquivo extends IBinarizable<IArquivo> {
 
@@ -26,5 +27,7 @@ public interface IArquivo extends IBinarizable<IArquivo> {
 	byte getId();
 
 	String getNome();
+
+	ETipoBlocoArquivo getTipo();
 
 }

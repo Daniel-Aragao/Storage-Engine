@@ -81,24 +81,25 @@ public class main {
 		GerenciadorArquivos ga = new GerenciadorArquivos();
 		ArrayList<IArquivo> arquivos = ga.getTabelas();
 		for(IArquivo a : arquivos){
-			System.out.println(a.getNome());
+			System.out.println(a.getNome() + " : "+a.getTipo());
 			for (UnidadeDescricao c : a.getDescritor().getDescritores()){
-				System.out.println(" "+c.toString());				
+				System.out.println("	"+c.toString());				
 			}
+			System.out.println();
 		}
 	}
-	
-	private static ITupla getTupla() throws IncorrectFormatException{
-		Descritor d = getDescritor();
-		
-		String props[] = {"101", "LUIZ_RUFFATO"};
-		RowId t = new RowId((byte) 0, 0, 0); 
-		return new Tupla(props, t, d);
-	}
-	
-	private static Descritor getDescritor() throws IncorrectFormatException{
-		String descs[] = {"COD_AUTHOR[I(5)]","NAME_AUTHOR[A(100)]"};
-		return new Descritor(descs); 
-	}
+//	
+//	private static ITupla getTupla() throws IncorrectFormatException{
+//		Descritor d = getDescritor();
+//		
+//		String props[] = {"101", "LUIZ_RUFFATO"};
+//		RowId t = new RowId((byte) 0, 0, 0); 
+//		return new Tupla(props, t, d);
+//	}
+//	
+//	private static Descritor getDescritor() throws IncorrectFormatException{
+//		String descs[] = {"COD_AUTHOR[I(5)]","NAME_AUTHOR[A(100)]"};
+//		return new Descritor(descs); 
+//	}
 
 }

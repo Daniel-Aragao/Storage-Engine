@@ -10,20 +10,17 @@ import gerenciador.utils.ByteArrayTools;
 public class Chave extends Tupla{
 	
 	private RowId rowid;
-	private Coluna[] colunas;
 	
 	public Chave(Coluna[] props, RowId tupleId, Descritor descritor, RowId rowid)throws IncorrectFormatException{
 		super(props, tupleId, descritor);
 		this.rowid = rowid;
-		this.size += 4;
-		this.colunas = props;
+		this.size += RowId.ROWID_SIZE;
 	}
 	
 	public Chave(byte[] dados, RowId tupleId, Descritor descritor) throws IncorrectFormatException {
 		super(ByteArrayTools.subArray(dados, RowId.ROWID_SIZE, dados.length - RowId.ROWID_SIZE), tupleId, descritor);
 		this.rowid = new RowId(ByteArrayTools.subArray(dados, RowId.ROWID_SIZE));
-		this.size += 4; // porque esse size += 4?
-		fromByteArray(dados);
+		this.size += RowId.ROWID_SIZE;
 	}
 
 	@Override
@@ -32,8 +29,7 @@ public class Chave extends Tupla{
 		
 		ba = ByteArrayTools.concatArrays(ba, super.getByteArray());
 		
-//		return ba;
-		throw new RuntimeException("Não implementado");
+		return ba;
 	}
 	
 	@Override
@@ -42,7 +38,7 @@ public class Chave extends Tupla{
 		
 		super.fromByteArray(ByteArrayTools.subArray(dados, RowId.ROWID_SIZE, dados.length - RowId.ROWID_SIZE));
 		
-		throw new RuntimeException("Não implementado");
+		this.size += RowId.ROWID_SIZE;
 		
 	}
 }

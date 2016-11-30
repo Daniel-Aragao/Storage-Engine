@@ -12,7 +12,7 @@ public interface IHeader extends IBinarizable<IHeader> {
 
 	int getBytesUsados();
 
-	void setBytesUsados(int bytesUsados);
+//	void setBytesUsados(int bytesUsados);
 
 	void incBytes(int bytes);
 

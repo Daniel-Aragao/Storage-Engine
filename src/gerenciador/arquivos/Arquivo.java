@@ -252,4 +252,10 @@ public class Arquivo implements IArquivo{
 	public String getNome() {
 		return blocoControle.getHeader().getNome();
 	}
+
+
+	@Override
+	public ETipoBlocoArquivo getTipo() {
+		return this.blocoControle.getHeader().getTipo();
+	}
 }

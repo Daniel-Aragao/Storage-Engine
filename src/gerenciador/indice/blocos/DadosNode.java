@@ -1,11 +1,19 @@
 package gerenciador.indice.blocos;
 
+import java.util.ArrayList;
+
+import gerenciador.RowId;
 import gerenciador.arquivos.blocos.IDados;
+import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.ITupla;
 
-public class DadosNode implements IDados{
+public class DadosNode implements IDados{	
+
+	private ArrayList<RowId> ponteiro;
+	private ArrayList<Chave> chaves;
+	
 
 	public DadosNode(Descritor descritor) {
 		// TODO Auto-generated constructor stub
@@ -13,6 +21,7 @@ public class DadosNode implements IDados{
 
 	@Override
 	public byte[] getByteArray() throws IncorrectFormatException {
+		byte [] array = new byte[BlocoControle.TAMANHO_BLOCO - HeaderNode.TAMANHO_HEADER];
 		throw new RuntimeException("Não implementado");
 	}
 

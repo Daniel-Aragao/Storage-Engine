@@ -64,10 +64,10 @@ public class HeaderBloco implements IHeader{
 	/* (non-Javadoc)
 	 * @see gerenciador.arquivos.blocos.IHeader#setBytesUsados(int)
 	 */
-	@Override
-	public void setBytesUsados(int bytesUsados) {
-		this.bytesUsados = bytesUsados;
-	}
+//	@Override
+//	public void setBytesUsados(int bytesUsados) {
+//		this.bytesUsados = bytesUsados;
+//	}
 	
 	/* (non-Javadoc)
 	 * @see gerenciador.arquivos.blocos.IHeader#incBytes(int)

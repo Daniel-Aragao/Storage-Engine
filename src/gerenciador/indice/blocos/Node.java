@@ -15,23 +15,19 @@ import gerenciador.arquivos.interfaces.ITupla;
 public class Node implements IBloco {
 	public static final int HEADER_BLOCO_INDICE_SIZE = 8;
 
-	private ArrayList<RowId> ponteiro;
-	private ArrayList<Chave> chaves;
-	
 	private Descritor descritor;
 	private IBlocoEvents events;
 	private DadosNode dados;
-//	k, p e n(ordem)
 	private HeaderNode header;
 
-	public Node(byte containerId, int BlockId, ETipoBlocoArquivo tipoBloco, Descritor descritor)
+	public Node(byte containerId, int BlockId, ETipoBlocoArquivo tipoBloco, Descritor descritor, short ordem)
 			throws IncorrectFormatException {
 		this.descritor = descritor;
 		if (tipoBloco != ETipoBlocoArquivo.indices) {
 			throw new IncorrectFormatException("Tipo de bloco deve ser de indice");
 		}
-//		header = new HeaderNode(containerId, BlockId, tipoBloco);
-//		dados = new DadosNode(descritor);
+		header = new HeaderNode(containerId, BlockId, tipoBloco, ordem);
+		dados = new DadosNode(descritor);
 	}
 
 	public Node(byte[] dados, Descritor descritor) throws IncorrectFormatException {
@@ -47,21 +43,24 @@ public class Node implements IBloco {
 
 	@Override
 	public IHeader getHeader() {
-		throw new RuntimeException("Não implementado");
+		return header;
 	}
 
 	@Override
 	public int getBlocoId() {
-		throw new RuntimeException("Não implementado");
+		return header.getBlocoId();
 	}
 
 	@Override
 	public IDados getDados() {
-		throw new RuntimeException("Não implementado");
+		return this.dados;
 	}
 
 	@Override
 	public void addTupla(ITupla tupla) {
+		/*
+		 * adicionar tupla e possibilitar alguma maneira de acrescentar os ponteiros da árvore
+		 */
 		throw new RuntimeException("Não implementado");
 
 	}
