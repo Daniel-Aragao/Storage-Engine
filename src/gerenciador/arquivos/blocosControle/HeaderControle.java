@@ -14,16 +14,22 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 	private byte statusContainer;
 	private int proxBlocoLivre;
 	private short SizeDescritor;
+	private String Nome;
+	private byte qtdIndices;
+	private byte[] indiceIds;
 
 	private ILog Log;
 
-	public HeaderControle(byte containerId, short descSize) throws IncorrectFormatException {
+	public HeaderControle(String nome, byte containerId, short descSize) throws IncorrectFormatException {
 		this.Log = new Log();
 		setContainerId(containerId);
 		setSizeBloco(BlocoControle.TAMANHO_BLOCO);
 		setStatusContainer((byte) 0);
 		setProxBlocoLivre(1);
 		setSizeDescritor(descSize);
+		setNome(nome);
+		this.indiceIds = new byte[BlocoControle.TAMANHO_INDICES-1];
+		this.qtdIndices = 0;
 	}
 	
 	public HeaderControle(byte[] dados){
@@ -78,6 +84,18 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 		byteArray[9] = sizeDesc[2];
 		byteArray[10] = sizeDesc[3];
 		
+		ByteArrayTools.appendArrays(
+				byteArray, 
+				ByteArrayTools.stringToByteArray(this.Nome, BlocoControle.TAMANHO_NOME), 
+				11);
+		
+		byteArray[31] = this.qtdIndices;
+		int i = 32;
+		for(byte j : this.indiceIds){
+			byteArray[i] = j; 
+			i++;
+		}
+		
 		return byteArray;
 	}
 
@@ -110,6 +128,14 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 	public void decProxBlocoLivre() {
 		this.proxBlocoLivre--;
 	}
+	
+	public int qtdIndices(){
+		return this.qtdIndices;
+	}
+	
+	public byte[] getIndices(){
+		return this.indiceIds;
+	}
 
 	public void setSizeDescritor(short sizeDescritor) {
 		SizeDescritor = sizeDescritor;
@@ -128,6 +154,17 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 		setProxBlocoLivre(ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 5, 4)));
 		setSizeDescritor((short) ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 9, 2)));
 		
+		setNome(ByteArrayTools.byteArrayToString(ByteArrayTools.subArray(dados, 11, BlocoControle.TAMANHO_NOME)));
+		
+		this.qtdIndices = dados[31];
+		this.indiceIds = ByteArrayTools.subArray(dados, 32, BlocoControle.TAMANHO_INDICES-1);
+	}
+
+	public String getNome() {
+		return this.Nome;
+	}
+	public void setNome(String nome) {
+		this.Nome = nome;
 	}
 
 }

@@ -4,12 +4,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import gerenciador.arquivos.blocos.HeaderBloco;
+import gerenciador.arquivos.blocos.IHeader;
 import gerenciador.arquivos.enums.ETipoBlocoArquivo;
 
 public class HeaderBlocoTeste {
 	@Test
 	public void DeveReceber11dadosERetornar1100(){
-		HeaderBloco hb = new HeaderBloco((byte) 1,1,ETipoBlocoArquivo.dados);
+		IHeader hb = new HeaderBloco((byte) 1,1,ETipoBlocoArquivo.dados);
 		
 		Assert.assertEquals(1, hb.getBlocoId());
 		Assert.assertEquals(1, hb.getContainerId());

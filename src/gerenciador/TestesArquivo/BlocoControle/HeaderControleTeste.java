@@ -11,7 +11,7 @@ public class HeaderControleTeste {
 
 	@Test
 	public void DeveReceber1e64eMontarOHeaderCorretamente() throws IncorrectFormatException{
-		HeaderControle hc = new HeaderControle((byte)1,(short) 64);
+		HeaderControle hc = new HeaderControle("Author",(byte)1,(short) 64);
 		
 		
 		Assert.assertEquals(1, hc.getContainerId());
@@ -23,13 +23,15 @@ public class HeaderControleTeste {
 	
 	@Test
 	public void DeveReceber1e64EReceberByteArrayBemFormado() throws IncorrectFormatException{
-		HeaderControle hc = new HeaderControle((byte)1,(short) 64);
+		HeaderControle hc = new HeaderControle("Author", (byte)1,(short) 64);
 		
 		byte[] b = {1,
 				0,16,0,
 				0,
 				0,0,0,1,
-				0,64};		
+				0,64,
+				0,0,0,0,0,0,0,0,0,0x41,0,0x75,0,0x74,0,0x68,0,0x6f,0,0x72,
+				0,0,0,0,0,0,0,0,0,0,0,};		
 		
 		byte[]result = hc.getByteArray();
 		
@@ -37,13 +39,15 @@ public class HeaderControleTeste {
 	}
 	@Test
 	public void DeveReceber200e4096EReceberByteArrayBemFormado() throws IncorrectFormatException{
-		HeaderControle hc = new HeaderControle((byte)200,(short) 4096);
+		HeaderControle hc = new HeaderControle("Author", (byte)200,(short) 4096);
 		
 		byte[] b = {(byte) 200,
 				0,16,0,
 				0,
 				0,0,0,1,
-				16,0};		
+				16,0,
+				0,0,0,0,0,0,0,0,0,0x41,0,0x75,0,0x74,0,0x68,0,0x6f,0,0x72,
+				0,0,0,0,0,0,0,0,0,0,0,};		
 		
 		byte[]result = hc.getByteArray();
 		
@@ -56,7 +60,9 @@ public class HeaderControleTeste {
 				0,16,0,
 				0,
 				0,0,8,8,
-				0,64};	
+				0,64,
+				0,0,0,0,0,0,0,0,0,0x41,0,0x75,0,0x74,0,0x68,0,0x6f,0,0x72,
+				0,0,0,0,0,0,0,0,0,0,0,};	
 		HeaderControle hc = new HeaderControle(b);
 		
 		

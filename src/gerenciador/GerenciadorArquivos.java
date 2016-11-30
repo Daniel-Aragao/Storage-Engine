@@ -1,7 +1,9 @@
 package gerenciador;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import gerenciador.arquivos.Arquivo;
 import gerenciador.arquivos.blocos.Bloco;
@@ -80,7 +82,7 @@ public class GerenciadorArquivos {
 		};
 	}
 
-	public IArquivo CriarArquivo(String propriedades)	{
+	public IArquivo CriarArquivo(String nome, String propriedades)	{
 		Log.Write("-Iniciar criação de arquivo");
 		
 		String [] props = propriedades.split(CARACTERE_SEPARADOR);
@@ -102,7 +104,7 @@ public class GerenciadorArquivos {
 			// certificar que o arquivo vai ser criado
 			if(file.createNewFile()){
 				Log.Write("Criar bloco de controle");
-				BlocoControle blocoControle = new BlocoControle(props, containerId);
+				BlocoControle blocoControle = new BlocoControle(nome, props, containerId);
 				
 				Log.Write("Criar Arquivo");
 				IArquivo arquivo = new Arquivo(blocoControle, file);
@@ -234,6 +236,22 @@ public class GerenciadorArquivos {
 		return arquivo;
 	}
 	
+	private IArquivo loadFromCache(File file){
+		IArquivo arquivo = null;
+		if(arquivoCached != null && arquivoCached.getFile().equals(file)){
+			Log.Write("Arquivo em cache");
+			arquivo = arquivoCached;
+		}else{
+			Log.Write("Inicializando o arquivo encontrado");
+			
+			arquivo = new Arquivo(getBlocoControle(file), file);
+			arquivo.setArquivoEvent(ArquivoEvents);
+			
+			arquivoCached = arquivo;
+		} 
+		return arquivo;
+	}
+	
 	public IBloco getBloco(RowId tid) {
 		return getBloco(tid.getContainerId(), tid.getBlocoId());
 	}
@@ -283,6 +301,16 @@ public class GerenciadorArquivos {
 
 	public String getArquivoString(IArquivo a) {
 		return a.toString();
+	}
+	
+	public ArrayList<IArquivo> getTabelas(){
+		ArrayList<IArquivo> arquivos = new ArrayList<IArquivo>();
+		
+		for(File f : DISC_PATH.listFiles()){
+			arquivos.add(loadFromCache(f));
+		}
+		
+		return arquivos;
 	}
 	
 }

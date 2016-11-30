@@ -1,10 +1,9 @@
 package gerenciador.arquivos.blocos;
 
 import gerenciador.arquivos.enums.ETipoBlocoArquivo;
-import gerenciador.arquivos.interfaces.IBinarizable;
 import gerenciador.utils.ByteArrayTools;
 
-public class HeaderBloco implements IBinarizable<HeaderBloco>{
+public class HeaderBloco implements IHeader{
 
 	private byte containerId;
 	private int blocoId; // 3 bytes
@@ -22,10 +21,17 @@ public class HeaderBloco implements IBinarizable<HeaderBloco>{
 		fromByteArray(dados);
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IHeader#isFull(int)
+	 */
+	@Override
 	public boolean isFull(int size){
 		return this.bytesUsados + size > 4096;
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IHeader#getByteArray()
+	 */
 	@Override
 	public byte[] getByteArray() {
 		byte[] retorno = new byte[8];
@@ -47,34 +53,65 @@ public class HeaderBloco implements IBinarizable<HeaderBloco>{
 		return retorno;
 	}
 
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IHeader#getBytesUsados()
+	 */
+	@Override
 	public int getBytesUsados() {
 		return bytesUsados;
 	}
 
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IHeader#setBytesUsados(int)
+	 */
+	@Override
 	public void setBytesUsados(int bytesUsados) {
 		this.bytesUsados = bytesUsados;
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IHeader#incBytes(int)
+	 */
+	@Override
 	public void incBytes(int bytes){
 		this.bytesUsados += bytes;
 	}
 	
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IHeader#decBytes(int)
+	 */
+	@Override
 	public void decBytes(int bytes){
 		this.bytesUsados -= bytes;
 	}
 
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IHeader#getContainerId()
+	 */
+	@Override
 	public byte getContainerId() {
 		return containerId;
 	}
 
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IHeader#getBlocoId()
+	 */
+	@Override
 	public int getBlocoId() {
 		return blocoId;
 	}
 
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IHeader#getTipo()
+	 */
+	@Override
 	public ETipoBlocoArquivo getTipo() {
 		return tipo;
 	}
 
+	/* (non-Javadoc)
+	 * @see gerenciador.arquivos.blocos.IHeader#fromByteArray(byte[])
+	 */
 	@Override
 	public void fromByteArray(byte[] dados) {
 		this.containerId = dados[0];

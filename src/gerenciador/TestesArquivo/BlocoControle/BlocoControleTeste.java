@@ -14,7 +14,7 @@ public class BlocoControleTeste {
 	@Test
 	public void deveReceberPropriedadesEGetByteArrayDeveVirCorreto() throws IncorrectFormatException{
 		String []props = {"COD_AUTHOR[I(5)]","NAME_AUTHOR[A(100)]"};
-		BlocoControle bc = new BlocoControle(props, (byte)1);
+		BlocoControle bc = new BlocoControle("Author", props, (byte)1);
 		
 		byte[] a = {
 				//header
@@ -23,26 +23,30 @@ public class BlocoControleTeste {
 				0,
 				0,0,0,1,
 				0,64,
+				//nome
+				0,0,0,0,0,0,0,0,0,0x41,0,0x75,0,0x74,0,0x68,0,0x6f,0,0x72,
+				0,0,0,0,0,0,0,0,0,0,0,
 				//descritores
 				0,0,0,0,0,0,0,0,0,0,00,0x43, 00,0x4F, 00,0x44, 00,0x5F, 00,0x41, 00,0x55,
 				00,0x54, 00,0x48, 00,0x4F, 00,0x52, GerenciadorArquivos.CARACTERE_INTEIRO,5,
 				0,0,0,0,0,0,0,0,00,0x4E, 00,0x41, 00,0x4D, 00,0x45, 00,0x5F, 00,0x41, 00,0x55, 00,
 				0x54, 00,0x48, 00,0x4F, 00,0x52, GerenciadorArquivos.CARACTERE_STRING,100};
+		int tamanho = 106;
 		
 		byte [] b = bc.getByteArray();
 		
-		byte[] result = ByteArrayTools.subArray(b,75);
-		byte[] result2 = ByteArrayTools.subArray(b,75, b.length - 75);
+		byte[] result = ByteArrayTools.subArray(b, tamanho);
+		byte[] result2 = ByteArrayTools.subArray(b, tamanho, b.length - tamanho);
 		
 		Assert.assertArrayEquals(a, result);
-		Assert.assertArrayEquals(new byte[b.length - 75], result2);
+		Assert.assertArrayEquals(new byte[b.length - tamanho], result2);
 		
 	}
 	
 	@Test
 	public void deveByteArrayRetornarPropriedadesFromByteArrayCorreto() throws IncorrectFormatException{
 		String []props = {"COD_AUTHOR[I(5)]","NAME_AUTHOR[A(100)]"};
-		BlocoControle bc = new BlocoControle(props, (byte)1);
+		BlocoControle bc = new BlocoControle("Author", props, (byte)1);
 		
 		BlocoControle result = new BlocoControle(bc.getByteArray());
 		
@@ -57,12 +61,13 @@ public class BlocoControleTeste {
 		Assert.assertEquals(ETipoColuna.string, result.getDescritor().getUnidadeDescricao(1).getTipo());
 		
 		// Header
-		
+		Assert.assertEquals("Author", result.getHeader().getNome());
 		Assert.assertEquals(1, result.getHeader().getContainerId());
 		Assert.assertEquals(BlocoControle.TAMANHO_BLOCO, result.getHeader().getSizeBloco());
 		Assert.assertEquals(0, result.getHeader().getStatusContainer());
 		Assert.assertEquals(1, result.getHeader().getProxBlocoLivre());
 		Assert.assertEquals(64, result.getHeader().getSizeDescritor());
+		Assert.assertEquals(0, result.getHeader().qtdIndices());
 		
 	}
 	

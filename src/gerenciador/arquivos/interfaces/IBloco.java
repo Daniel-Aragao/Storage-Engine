@@ -1,15 +1,15 @@
 package gerenciador.arquivos.interfaces;
 
 import gerenciador.RowId;
-import gerenciador.arquivos.blocos.HeaderBloco;
 import gerenciador.arquivos.blocos.IDados;
+import gerenciador.arquivos.blocos.IHeader;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 
 public interface IBloco extends IBinarizable<IBloco>{
 
 	void setEvents(IBlocoEvents events);
 
-	HeaderBloco getHeader();
+	IHeader getHeader();
 
 	int getBlocoId();
 

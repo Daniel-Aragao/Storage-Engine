@@ -33,7 +33,11 @@ public class Escrita {
 			BufferedReader buffer = new BufferedReader(reader);
 			
 			String linha = buffer.readLine();
-			IArquivo a = gerenciadorArquivo.CriarArquivo(linha);
+			String[] split = linha.split(";");
+			linha = split[1];
+			String nome = split[0];
+			
+			IArquivo a = gerenciadorArquivo.CriarArquivo(nome, linha);
 			
 			if(a != null){
 				byte containerId = a.getBlocoControle().getHeader().getContainerId();

@@ -72,8 +72,10 @@ public class UnidadeDescricao implements IBinarizable<Descritor>{
 		
 		this.tipo = ETipoColuna.getByValue(dados[NOME_SIZE]);
 		this.tamanho = dados[NOME_SIZE+1];
-		
-		
+	}
+	
+	public String toString(){
+		return this.nome+"["+((char)this.tipo.getValor())+"("+this.tamanho+")"+"]";
 	}
 	
 	

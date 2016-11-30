@@ -53,6 +53,10 @@ public class Descritor implements IBinarizable<Descritor>{
 		return descs.get(index);
 	}
 	
+	public ArrayList<UnidadeDescricao> getDescritores(){
+		return this.descs;
+	}
+	
 	@Override
 	public byte[] getByteArray() {
 		byte[] retorno = new byte[getDescritorSize()];

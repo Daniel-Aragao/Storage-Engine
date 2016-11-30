@@ -1,11 +1,15 @@
 package gerenciador.programas;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
+import gerenciador.GerenciadorArquivos;
 import gerenciador.RowId;
 import gerenciador.arquivos.blocos.Tupla;
 import gerenciador.arquivos.blocosControle.Descritor;
+import gerenciador.arquivos.blocosControle.UnidadeDescricao;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
+import gerenciador.arquivos.interfaces.IArquivo;
 import gerenciador.arquivos.interfaces.ITupla;
 
 public class main {
@@ -72,7 +76,16 @@ public class main {
 //		byte a = 0x00;
 //		byte b = 0x6F;
 //		System.out.println((char)(a + b));
-		System.out.println(new Integer(2).toString());
+//		System.out.println(new Integer(2).toString());
+		
+		GerenciadorArquivos ga = new GerenciadorArquivos();
+		ArrayList<IArquivo> arquivos = ga.getTabelas();
+		for(IArquivo a : arquivos){
+			System.out.println(a.getNome());
+			for (UnidadeDescricao c : a.getDescritor().getDescritores()){
+				System.out.println(" "+c.toString());				
+			}
+		}
 	}
 	
 	private static ITupla getTupla() throws IncorrectFormatException{

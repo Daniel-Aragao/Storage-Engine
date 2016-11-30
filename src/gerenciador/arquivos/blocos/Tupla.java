@@ -11,7 +11,7 @@ import gerenciador.utils.ByteArrayTools;
 
 public class Tupla implements ITupla{
 
-	private int size;	
+	protected int size;	
 	private ArrayList<Coluna> colunas;
 	private Descritor descritor;
 	private RowId tupleId;

@@ -3,8 +3,8 @@ package gerenciador.indice.blocos;
 import java.util.ArrayList;
 
 import gerenciador.RowId;
-import gerenciador.arquivos.blocos.HeaderBloco;
 import gerenciador.arquivos.blocos.IDados;
+import gerenciador.arquivos.blocos.IHeader;
 import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.enums.ETipoBlocoArquivo;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
@@ -13,6 +13,7 @@ import gerenciador.arquivos.interfaces.IBlocoEvents;
 import gerenciador.arquivos.interfaces.ITupla;
 
 public class Node implements IBloco {
+	public static final int HEADER_BLOCO_INDICE_SIZE = 8;
 
 	private ArrayList<RowId> ponteiro;
 	private ArrayList<Chave> chaves;
@@ -25,8 +26,8 @@ public class Node implements IBloco {
 	public Node(byte containerId, int BlockId, ETipoBlocoArquivo tipoBloco, Descritor descritor)
 			throws IncorrectFormatException {
 		this.descritor = descritor;
-		if (tipoBloco != ETipoBlocoArquivo.dados) {
-			throw new IncorrectFormatException("Tipo de bloco deve ser de dados");
+		if (tipoBloco != ETipoBlocoArquivo.indices) {
+			throw new IncorrectFormatException("Tipo de bloco deve ser de indice");
 		}
 		header = new HeaderNode(containerId, BlockId, tipoBloco);
 		dados = new DadosNode(descritor);
@@ -44,7 +45,7 @@ public class Node implements IBloco {
 	}
 
 	@Override
-	public HeaderBloco getHeader() {
+	public IHeader getHeader() {
 		throw new RuntimeException("Não implementado");
 	}
 

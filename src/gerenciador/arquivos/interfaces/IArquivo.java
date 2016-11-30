@@ -25,4 +25,6 @@ public interface IArquivo extends IBinarizable<IArquivo> {
 
 	byte getId();
 
+	String getNome();
+
 }

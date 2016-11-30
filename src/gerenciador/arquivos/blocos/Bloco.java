@@ -51,7 +51,7 @@ public class Bloco implements IBloco {
 	 * @see gerenciador.arquivos.blocos.IBloco#getHeader()
 	 */
 	@Override
-	public HeaderBloco getHeader() {
+	public IHeader getHeader() {
 		return header;
 	}
 
