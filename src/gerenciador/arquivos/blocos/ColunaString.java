@@ -59,5 +59,11 @@ public class ColunaString extends Coluna{
 	public String getDado() {
 		return dado;
 	}
+	
+	@Override
+	public int compare(Coluna coluna) {
+		String dadoColuna =(String)coluna.getDado();
+		return this.dado.compareToIgnoreCase(dadoColuna);
+	}
 
 }

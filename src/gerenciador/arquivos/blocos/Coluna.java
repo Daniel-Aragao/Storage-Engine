@@ -21,4 +21,6 @@ public abstract class Coluna implements IBinarizable<Coluna> {
 	public String toString() {
 		return getDado().toString();
 	}
+
+	public abstract int compare(Coluna coluna);
 }

@@ -57,4 +57,15 @@ public class ColunaInt extends Coluna{
 		this.dado = ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 2, 4));		
 	}
 
+	@Override
+	public int compare(Coluna coluna) {
+		int dadoColuna =(int)coluna.getDado();
+		if(this.dado < dadoColuna){
+			return -1;
+		}else if(this.dado > dadoColuna){
+			return 1;
+		}
+		return 0;
+	}
+
 }

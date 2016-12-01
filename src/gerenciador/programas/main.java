@@ -83,7 +83,7 @@ public class main {
 		for(IArquivo a : arquivos){
 			System.out.println(a.getNome() + " : "+a.getTipo());
 			for (UnidadeDescricao c : a.getDescritor().getDescritores()){
-				System.out.println("	"+c.toString());				
+				System.out.println("   "+c.toString());				
 			}
 			System.out.println();
 		}

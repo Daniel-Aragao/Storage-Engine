@@ -55,6 +55,10 @@ public class DadosBloco implements IDados{
 		return tuplas.size();
 	}
 	
+	public ArrayList<ITupla> getTuplas(){
+		return this.tuplas;
+	}
+	
 	/* (non-Javadoc)
 	 * @see gerenciador.arquivos.blocos.IDados#getOffSet(int)
 	 */

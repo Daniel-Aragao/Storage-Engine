@@ -14,32 +14,33 @@ public class HeaderNode implements IHeader{
 	private ETipoBlocoArquivo tipo; // bloco de dados ou bloco de índices
 	private int bytesUsados; // 3 bytes
 	
-	private short ordem; // 2 bytes
+	private short ordemArvore; // 2 bytes
 	
 	private int minPonteiros; // p min
 	private int maxPonteiros;
 	private int minChaves; // k min
 	private int maxChaves;
 
-	public HeaderNode(byte containerId, int blockId, ETipoBlocoArquivo tipoBloco, short ordem) {
+	public HeaderNode(byte containerId, int blockId, ETipoBlocoArquivo tipoBloco, short ordemArvore) {
 		this.blocoId = blockId;
 		this.containerId = containerId;
 		this.tipo = tipoBloco;
 		bytesUsados = TAMANHO_HEADER;
-		this.ordem = ordem;
+		this.ordemArvore = ordemArvore;
 		
 		kpConfig();
 	}
 	
 	private void kpConfig(){
-		this.minPonteiros = ordem / 2 + ((ordem % 2 == 0) ? 0 : 1); 
-		this.maxPonteiros = ordem;
-		this.minChaves = (ordem - 1)/2;
-		this.maxChaves = ordem - 1;
+		this.minPonteiros = ordemArvore / 2 + ((ordemArvore % 2 == 0) ? 0 : 1); 
+		this.maxPonteiros = ordemArvore;
+		this.minChaves = (ordemArvore - 1)/2;
+		this.maxChaves = ordemArvore - 1;
 	}
 	
 	public HeaderNode(byte[] dados) throws IncorrectFormatException{
-		fromByteArray(dados);
+		fromByteArray(dados);		
+		kpConfig();		
 	}
 
 	public byte getContainerId() {
@@ -68,7 +69,7 @@ public class HeaderNode implements IHeader{
 		retorno[6] = bytesUsados[2];
 		retorno[7] = bytesUsados[3];
 		
-		byte[] ordem = ByteArrayTools.intToByteArray(this.ordem);
+		byte[] ordem = ByteArrayTools.intToByteArray(this.ordemArvore);
 		retorno[8] = ordem[2];
 		retorno[9] = ordem[3];
 		
@@ -87,10 +88,8 @@ public class HeaderNode implements IHeader{
 		this.bytesUsados = ByteArrayTools
 				.byteArrayToInt(ByteArrayTools.subArray(dados, 5, 3));
 		
-		this.ordem = (short) ByteArrayTools
+		this.ordemArvore = (short) ByteArrayTools
 				.byteArrayToInt(ByteArrayTools.subArray(dados, 8, 2));
-		
-		kpConfig();		
 	}
 
 	@Override

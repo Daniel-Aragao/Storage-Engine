@@ -2,10 +2,12 @@ package gerenciador;
 
 import gerenciador.arquivos.blocos.Bloco;
 import gerenciador.arquivos.blocosControle.Descritor;
+import gerenciador.arquivos.interfaces.IArquivo;
 import gerenciador.arquivos.interfaces.IBloco;
 import gerenciador.arquivos.interfaces.ILog;
 import gerenciador.buffer.Memoria;
 import gerenciador.buffer.interfaces.IMemoryEvents;
+import gerenciador.indice.blocos.Node;
 import gerenciador.loger.Log;
 
 public class GerenciadorBuffer {
@@ -175,5 +177,10 @@ public class GerenciadorBuffer {
 	}
 	public int getMemoriaSize(){
 		return memoria.getSize();
+	}
+
+	public void addBloco(IArquivo indice, Node node) {
+		indice.addBloco(node);
+		
 	}
 }

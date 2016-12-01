@@ -1,5 +1,7 @@
 package gerenciador.arquivos.blocos;
 
+import java.util.ArrayList;
+
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
 import gerenciador.arquivos.interfaces.ITupla;
@@ -29,5 +31,7 @@ public interface IDados extends IBinarizable<IDados>{
 	void fromByteArray(byte[] dados) throws IncorrectFormatException;
 
 	int size();
+
+	ArrayList<ITupla> getTuplas();
 
 }

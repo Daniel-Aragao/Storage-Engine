@@ -5,4 +5,5 @@ public interface IArquivoEvents {
 	public void BlocoRemovido(IArquivo a, IBloco b);
 	public IBloco RequisitarBloco(IArquivo a, int blocoId);
 	public void BlocoAlterado(IArquivo a, IBloco b);
+	public void BlocoControleAlterado(IArquivo a);
 }

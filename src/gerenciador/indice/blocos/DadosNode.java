@@ -3,6 +3,7 @@ package gerenciador.indice.blocos;
 import java.util.ArrayList;
 
 import gerenciador.RowId;
+import gerenciador.arquivos.blocos.Coluna;
 import gerenciador.arquivos.blocos.IDados;
 import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
@@ -11,7 +12,7 @@ import gerenciador.arquivos.interfaces.ITupla;
 
 public class DadosNode implements IDados{	
 
-	private ArrayList<RowId> ponteiro;
+	private ArrayList<RowId> ponteiros;
 	private ArrayList<Chave> chaves;
 	
 
@@ -23,6 +24,41 @@ public class DadosNode implements IDados{
 	public byte[] getByteArray() throws IncorrectFormatException {
 		byte [] array = new byte[BlocoControle.TAMANHO_BLOCO - HeaderNode.TAMANHO_HEADER];
 		throw new RuntimeException("Não implementado");
+	}
+	
+	public RowId getSubArvore(Chave tupla) {
+		for(int i = 0; i < chaves.size(); i++){
+			Chave chave = chaves.get(i);
+			if (compareChave(tupla, chave) <= 0){
+				return ponteiros.get(i);
+			}else if(i+1 == chaves.size()){
+				return ponteiros.get(i+1);
+			}
+		}
+		throw new RuntimeException("Não implementado");
+	}
+	
+	public int compareChave(Chave chave1, Chave chave2){
+		ArrayList<Coluna> colunas1 = chave1.getColunas();
+		ArrayList<Coluna> colunas2 = chave1.getColunas();
+		
+		if(colunas1.size() != colunas2.size()){
+			throw new RuntimeException("Chaves incompatíveis");
+		}
+		for(int i = 0; i < colunas1.size(); i++){
+			int comparacao = colunas1.get(i).compare(colunas2.get(i));
+			if (comparacao != 0) return comparacao;
+		}
+		
+		return 0;
+	}
+	
+	public int getSizeChaves(){
+		return chaves.size();
+	}
+	
+	public int getSizePonteiros(){
+		return ponteiros.size();
 	}
 
 	@Override
@@ -80,6 +116,11 @@ public class DadosNode implements IDados{
 
 	@Override
 	public int size() {
+		throw new RuntimeException("Não implementado");
+	}
+
+	@Override
+	public ArrayList<ITupla> getTuplas() {
 		throw new RuntimeException("Não implementado");
 	}
 

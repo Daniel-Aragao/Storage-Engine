@@ -94,6 +94,7 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 		
 		byteArray[31] = this.qtdIndices;
 		int i = 32;
+		
 		for(byte j : this.indiceIds){
 			byteArray[i] = j; 
 			i++;
@@ -134,12 +135,27 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 		this.proxBlocoLivre--;
 	}
 	
+	public String addIndice(byte containerId){
+		if (qtdIndices() < BlocoControle.TAMANHO_INDICES-1){
+			this.indiceIds[qtdIndices()] = containerId;
+			qtdIndices++;			
+			return "Adicionado.";			
+		}else{
+			this.Log.Write("Máximo de índices atingido");
+			return "Não Adicionado!";
+		}
+	}
+	
+	public void setIndices(byte[]indices){
+		this.indiceIds = indices;
+	}
+	
 	public int qtdIndices(){
 		return this.qtdIndices;
 	}
 	
-	public byte[] getIndices(){
-		return this.indiceIds;
+	public byte getIndice(int index){
+		return this.indiceIds[index];
 	}
 
 	public void setSizeDescritor(short sizeDescritor) {
@@ -162,8 +178,12 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 		setNome(ByteArrayTools.byteArrayToString(ByteArrayTools.subArray(dados, 11, BlocoControle.TAMANHO_NOME)));
 		
 		this.qtdIndices = dados[31];
-		this.indiceIds = ByteArrayTools.subArray(dados, 32, BlocoControle.TAMANHO_INDICES-1);
 		this.tipo = ETipoBlocoArquivo.getByValue(dados[42]);
+		if( tipo == ETipoBlocoArquivo.indices){
+			this.indiceIds = ByteArrayTools.subArray(dados, 32, 4); // tamanho de um inteiro que será o raiz
+		}else{
+			this.indiceIds = ByteArrayTools.subArray(dados, 32, BlocoControle.TAMANHO_INDICES-1);			
+		}
 	}
 
 	public String getNome() {
@@ -175,6 +195,10 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 
 	public ETipoBlocoArquivo getTipo() {
 		return this.tipo;
+	}
+
+	public byte[] getIndices() {
+		return this.indiceIds;
 	}
 
 }

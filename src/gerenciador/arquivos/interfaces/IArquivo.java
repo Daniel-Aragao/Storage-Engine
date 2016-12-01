@@ -30,4 +30,8 @@ public interface IArquivo extends IBinarizable<IArquivo> {
 
 	ETipoBlocoArquivo getTipo();
 
+	boolean hasIndice(byte id);
+
+	int qtdIndices();
+
 }

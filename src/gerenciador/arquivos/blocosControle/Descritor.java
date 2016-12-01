@@ -35,6 +35,15 @@ public class Descritor implements IBinarizable<Descritor>{
 		}
 	}
 	
+	public Descritor(UnidadeDescricao[] descs){
+		this.descs = new ArrayList<UnidadeDescricao>();
+		
+		for(UnidadeDescricao ud : descs){
+			// criação de novo objeto através do byteArray
+			this.descs.add(new UnidadeDescricao(ud.getByteArray()));
+		}
+	}
+	
 	public Descritor(byte[] dados, short sizeDescritor) {
 		this.sizeDescritor = sizeDescritor;
 		descs = new ArrayList<UnidadeDescricao>();

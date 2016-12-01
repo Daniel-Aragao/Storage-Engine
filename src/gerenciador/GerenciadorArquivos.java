@@ -10,6 +10,7 @@ import gerenciador.arquivos.blocos.Bloco;
 import gerenciador.arquivos.blocos.Tupla;
 import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
+import gerenciador.arquivos.blocosControle.UnidadeDescricao;
 import gerenciador.arquivos.enums.ETipoBlocoArquivo;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IArquivo;
@@ -52,7 +53,7 @@ public class GerenciadorArquivos {
 		construct();
 		this.Log = log;
 	}
-	private void createArquivoEvents(){
+	public void createArquivoEvents(){
 		this.ArquivoEvents = new IArquivoEvents() {
 			
 			@Override
@@ -79,11 +80,35 @@ public class GerenciadorArquivos {
 				Log.Write("Bloco alterado");
 				EscreverBloco(a.getFile(), b);				
 			}
+
+			@Override
+			public void BlocoControleAlterado(IArquivo a) {
+				atualziarBlocoControle(a.getFile(),a.getBlocoControle());				
+			}
 		};
+	}
+	public IArquivo CriarArquivo(String nome, UnidadeDescricao[] propriedades, ETipoBlocoArquivo tipo){
+		Log.Write("- Iniciar criação de arquivo");
+		
+		Log.Write("Criar diretório");
+		
+		criarDiretório();
+		
+		Log.Write("Pegar container id");
+		
+		byte containerId =  getNextContainerId();
+		
+		Log.Write("Containerid: "+containerId);
+		
+		Descritor descritor = null;
+		
+		descritor = new Descritor(propriedades);		
+		
+		return processarCriacao(containerId, nome, descritor, tipo);
 	}
 
 	public IArquivo CriarArquivo(String nome, String propriedades, ETipoBlocoArquivo tipo)	{
-		Log.Write("-Iniciar criação de arquivo");
+		Log.Write("- Iniciar criação de arquivo");
 		
 		String [] props = propriedades.split(CARACTERE_SEPARADOR);
 		
@@ -97,6 +122,20 @@ public class GerenciadorArquivos {
 		
 		Log.Write("Containerid: "+containerId);
 		
+		Descritor descritor = null;
+		
+		try {
+			descritor = new Descritor(props);
+		} catch (IncorrectFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		return processarCriacao(containerId, nome, descritor, tipo);
+	}
+	
+	private IArquivo processarCriacao(byte containerId, String nome, Descritor descritor, ETipoBlocoArquivo tipo){
 		File file = null;
 		
 		try{
@@ -104,7 +143,7 @@ public class GerenciadorArquivos {
 			// certificar que o arquivo vai ser criado
 			if(file.createNewFile()){
 				Log.Write("Criar bloco de controle");
-				BlocoControle blocoControle = new BlocoControle(nome, props, containerId, tipo);
+				BlocoControle blocoControle = new BlocoControle(nome, descritor, containerId, tipo);
 				
 				Log.Write("Criar Arquivo");
 				IArquivo arquivo = new Arquivo(blocoControle, file);

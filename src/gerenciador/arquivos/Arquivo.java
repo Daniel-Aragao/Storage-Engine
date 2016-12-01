@@ -96,15 +96,25 @@ public class Arquivo implements IArquivo{
 	
 	private IBloco criarBloco(){
 		Log.Write("Criar bloco");
-		Bloco novo = null;
-		try {
-			novo = new Bloco(blocoControle.getHeader().getContainerId(), 
-					blocoControle.getHeader().getProxBlocoLivre(), 
-					ETipoBlocoArquivo.dados, 
-					blocoControle.getDescritor());
-		} catch (IncorrectFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		IBloco novo = null;
+		if (blocoControle.getHeader().getTipo() == ETipoBlocoArquivo.dados){
+			try {
+				novo = new Bloco(blocoControle.getHeader().getContainerId(), 
+						blocoControle.getHeader().getProxBlocoLivre(), 
+						ETipoBlocoArquivo.dados, 
+						blocoControle.getDescritor());
+			} catch (IncorrectFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+		}else{
+			throw new RuntimeException("Não implementado");
+//			try {
+//				novo = new Node();
+//			} catch (IncorrectFormatException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}		
 		}
 		
 		addBloco(novo);
@@ -169,7 +179,7 @@ public class Arquivo implements IArquivo{
 		bloco.removeTupla(tupla);
 	}
 	
-	private IBloco requisitarBloco(int requisitoId){
+	public IBloco requisitarBloco(int requisitoId){
 
 		if(requisitoId == 0) return criarBloco();
 		
@@ -237,9 +247,7 @@ public class Arquivo implements IArquivo{
 	public String toString() {
 		String retorno = "";
 		
-		for(int i = 1; i < getBlocoControle().getProxBlocoLivre(); i++){
-			requisitarBloco(i);
-		}
+		carregarBlocos();
 		
 		for(int i = 0 ; i < blocos.size(); i++){
 			retorno += blocos.get(i).toString() + "\n";
@@ -258,4 +266,42 @@ public class Arquivo implements IArquivo{
 	public ETipoBlocoArquivo getTipo() {
 		return this.blocoControle.getHeader().getTipo();
 	}
+	
+	public String adicionarIndice(byte containerId){
+		String retorno = this.blocoControle.getHeader().addIndice(containerId);
+		
+		events.BlocoControleAlterado(this);
+		
+		return retorno;
+	}
+	
+	public void carregarBlocos(){
+		for(int i = 1; i < getBlocoControle().getProxBlocoLivre(); i++){
+			requisitarBloco(i);
+		}
+	}
+
+
+	public void setQtdIndice(byte id) {
+		blocoControle.setQtdeIndice(id);
+		events.BlocoControleAlterado(this);
+	}
+
+
+	@Override
+	public boolean hasIndice(byte id) {
+		if(! (this.blocoControle.getHeader().qtdIndices() > 0)){
+			return false;
+		}else{
+			
+		}
+		
+		return true;
+	}
+	
+	@Override
+	public int qtdIndices(){
+		return blocoControle.getHeader().qtdIndices();
+	}
+	
 }

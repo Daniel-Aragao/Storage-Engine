@@ -1,5 +1,7 @@
 package gerenciador.arquivos.blocosControle;
 
+import java.beans.EventSetDescriptor;
+
 import gerenciador.arquivos.enums.ETipoBlocoArquivo;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
@@ -27,6 +29,17 @@ public class BlocoControle implements IBinarizable<BlocoControle> {
 		descritor = new Descritor(propriedades);
 		header = new HeaderControle(nome, containerId, descritor.getDescritorSize(), tipo);
 	}
+	
+	public BlocoControle(String nome, UnidadeDescricao[] propriedades, byte containerId, ETipoBlocoArquivo tipo)throws IncorrectFormatException{		
+		descritor = new Descritor(propriedades);
+		header = new HeaderControle(nome, containerId, descritor.getDescritorSize(), tipo);
+	}
+	
+	public BlocoControle(String nome, Descritor descritor, byte containerId, ETipoBlocoArquivo tipo)throws IncorrectFormatException{		
+		this.descritor = descritor;
+		header = new HeaderControle(nome, containerId, descritor.getDescritorSize(), tipo);
+	}
+	
 	public BlocoControle(byte[] dados){
 		fromByteArray(dados);
 	}
@@ -39,6 +52,18 @@ public class BlocoControle implements IBinarizable<BlocoControle> {
 
 	public Descritor getDescritor() {
 		return descritor;
+	}
+	
+	public String addIndice(byte containerId){
+		return header.addIndice(containerId);
+	}
+	
+	public void setIndices(byte[]indices){
+		header.setIndices(indices);
+	}
+	
+	public byte getIndice(int index){
+		return header.getIndice(index);
 	}
 
 	@Override
@@ -62,5 +87,14 @@ public class BlocoControle implements IBinarizable<BlocoControle> {
 		this.descritor = new Descritor(ByteArrayTools
 				.subArray(dados, HEADER_CONTROLE_SIZE, 
 						dados.length - HEADER_CONTROLE_SIZE), header.getSizeDescritor());		
+	}
+
+	public byte[] getIndices() {
+		return this.header.getIndices();
+	}
+
+	public void setQtdeIndice(byte id) {
+		setQtdeIndice(id);
+		
 	}
 }

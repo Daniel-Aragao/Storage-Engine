@@ -1,8 +1,7 @@
 package gerenciador.indice.blocos;
 
-import java.util.ArrayList;
-
 import gerenciador.RowId;
+import gerenciador.arquivos.blocos.Coluna;
 import gerenciador.arquivos.blocos.IDados;
 import gerenciador.arquivos.blocos.IHeader;
 import gerenciador.arquivos.blocosControle.Descritor;
@@ -20,13 +19,13 @@ public class Node implements IBloco {
 	private DadosNode dados;
 	private HeaderNode header;
 
-	public Node(byte containerId, int BlockId, ETipoBlocoArquivo tipoBloco, Descritor descritor, short ordem)
+	public Node(byte containerId, int BlockId, ETipoBlocoArquivo tipoBloco, Descritor descritor, short ordemArvore)
 			throws IncorrectFormatException {
 		this.descritor = descritor;
 		if (tipoBloco != ETipoBlocoArquivo.indices) {
 			throw new IncorrectFormatException("Tipo de bloco deve ser de indice");
 		}
-		header = new HeaderNode(containerId, BlockId, tipoBloco, ordem);
+		header = new HeaderNode(containerId, BlockId, tipoBloco, ordemArvore);
 		dados = new DadosNode(descritor);
 	}
 
@@ -39,6 +38,14 @@ public class Node implements IBloco {
 	public void setEvents(IBlocoEvents events) {
 		this.events = events;
 
+	}
+	
+	public boolean isFull(){
+		return dados.getSizePonteiros() == header.getMaxChaves();
+	}
+	
+	public boolean hasChild(){
+		return this.dados.getSizeChaves() != 0;
 	}
 
 	@Override
@@ -58,8 +65,11 @@ public class Node implements IBloco {
 
 	@Override
 	public void addTupla(ITupla tupla) {
+		if(isFull()){
+			throw new RuntimeException("Nó já está cheio");
+		}
 		/*
-		 * adicionar tupla e possibilitar alguma maneira de acrescentar os ponteiros da árvore
+		 * adicionar tupla e possibilitar alguma maneira de ordenar os ponteiros da árvore
 		 */
 		throw new RuntimeException("Não implementado");
 
@@ -106,5 +116,9 @@ public class Node implements IBloco {
 		// intercalados chaves com rowid
 		throw new RuntimeException("Não implementado");
 
+	}
+
+	public RowId getSubArvore(Chave tupla) {
+		return dados.getSubArvore(tupla);
 	}
 }
