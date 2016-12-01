@@ -1,7 +1,8 @@
 package gerenciador.indice.blocos;
 
+import java.util.ArrayList;
+
 import gerenciador.RowId;
-import gerenciador.arquivos.blocos.Coluna;
 import gerenciador.arquivos.blocos.IDados;
 import gerenciador.arquivos.blocos.IHeader;
 import gerenciador.arquivos.blocosControle.Descritor;
@@ -44,6 +45,10 @@ public class Node implements IBloco {
 		return dados.getSizePonteiros() == header.getMaxChaves();
 	}
 	
+	public boolean overflow(){
+		return dados.getSizePonteiros() > header.getMaxChaves();
+	}
+	
 	public boolean hasChild(){
 		return this.dados.getSizeChaves() != 0;
 	}
@@ -64,13 +69,16 @@ public class Node implements IBloco {
 	}
 
 	@Override
-	public void addTupla(ITupla tupla) {
-		if(isFull()){
-			throw new RuntimeException("Nó já está cheio");
-		}
+	public void addTupla(ITupla tupla) {		
 		/*
 		 * adicionar tupla e possibilitar alguma maneira de ordenar os ponteiros da árvore
 		 */
+		if(this.hasChild()){
+			throw new RuntimeException("Não implementado");
+		}else{
+			dados.ordenarFolha((Chave) tupla);
+		}
+		
 		throw new RuntimeException("Não implementado");
 
 	}
@@ -120,5 +128,14 @@ public class Node implements IBloco {
 
 	public RowId getSubArvore(Chave tupla) {
 		return dados.getSubArvore(tupla);
+	}
+
+	public void addWithOverflow(Chave chave) {
+		throw new RuntimeException("Não implementado");
+		
+	}
+	
+	public void atualizar(){
+		events.blocoAlterado(this);
 	}
 }

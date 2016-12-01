@@ -53,7 +53,7 @@ public class GerenciadorIndice {
 			IBloco bloco = buffer.getBloco(new RowId(containerid, i, 0));//arquivo.requisitarBloco(i);
 			
 			for(ITupla tupla : bloco.getDados().getTuplas()){
-//				AdicionarAoIndice(indice, tupla);				
+				AdicionarAoIndice(indice, tupla, arquivo);				
 			}
 		}
 		
@@ -75,32 +75,38 @@ public class GerenciadorIndice {
 	}
 	
 	private void AdicionarAoIndice(IArquivo indice, ITupla tupla, IArquivo tabela){
-		// verificar se tem valores compatíveis com indice na tupla
-		// antes de inserir, seleciona-los e inserir
 		BlocoControle bcontroleIndice = indice.getBlocoControle();
-		Chave chave = getChave_VS_Tupla(bcontroleIndice.getDescritor(), tupla, tabela.getDescritor());
+		Chave chave = convertTuplaIntoChave(bcontroleIndice.getDescritor(), tupla, tabela.getDescritor());
 		
 		if(chave != null){
 			boolean primeira_entrada = bcontroleIndice.getProxBlocoLivre() == 1;
 			
 			if(primeira_entrada){
-				// indiceids serão a raiz
+				// vetor indiceids serão a raiz
 				Node node = createNode(indice);
 				bcontroleIndice.setIndices(ByteArrayTools.intToByteArray(node.getBlocoId()));
+				
 				node.addTupla(tupla);
 				buffer.addBloco(indice, node);
 			}else{
 				Node raiz = getRaiz(indice);
 				boolean adicionou = false;
+				
 				while (!adicionou){
 					if(!raiz.hasChild()){
 						// então é folha
-						if(raiz.isFull()){
-							// overflow
-						}else{
-							raiz.addTupla(chave);
-							// atualizar esse bloco no disco
+						
+						// overflow
+						// passar a chave para o método vai fazer uma inserção, porém vai
+						// logo em seguida partir o vetor em dois e vai retornar o conjunto
+						// de tuplas que será inserido na nova chave formada aqui
+						
+						raiz.addTupla(chave);
+						
+						if(raiz.overflow()){
+							throw new RuntimeException("Não implementado");
 						}
+						
 						adicionou = true;
 					}else{
 						// não é folha ainda
@@ -115,14 +121,13 @@ public class GerenciadorIndice {
 			
 	}
 	
-	private Chave getChave_VS_Tupla(Descritor descritorIndice, ITupla tupla, Descritor descritorArquivo) {
-		// TODO verificar corretude do método
+	private Chave convertTuplaIntoChave(Descritor descritorIndice, ITupla tupla, Descritor descritorArquivo) {
 		Coluna[] colunas = new Coluna[descritorIndice.getNumberOfColumns()];
 		
 		for(int i = 0; i < descritorIndice.getNumberOfColumns(); i++){
 			UnidadeDescricao descricao = descritorIndice.getUnidadeDescricao(i);
 			
-			int indexDescricaoNaTabela = 0;
+			int indexDescricaoNaTabela = -1;
 			for(int j = 0; j < descritorArquivo.getNumberOfColumns(); j++){
 				if(descritorArquivo.getUnidadeDescricao(i).getNome().equals(descricao.getNome())){
 					indexDescricaoNaTabela = j;
@@ -130,7 +135,7 @@ public class GerenciadorIndice {
 				}
 			}
 			
-			if(indexDescricaoNaTabela == 0) return null;
+			if(indexDescricaoNaTabela == -1) return null;
 			
 			Coluna coluna = tupla.getColuna(indexDescricaoNaTabela);
 			
@@ -146,7 +151,6 @@ public class GerenciadorIndice {
 	}
 
 	private Node getRaiz(IArquivo indice){
-		// TODO verificar corretude do método
 		return (Node) buffer.getBloco(
 				new RowId(
 						indice.getId(), 
@@ -155,7 +159,6 @@ public class GerenciadorIndice {
 	}
 	
 	private Node createNode(IArquivo indice){
-		// TODO verificar corretude do método
 		Node node = null;
 		try {
 			
@@ -171,6 +174,8 @@ public class GerenciadorIndice {
 		}
 		return node;
 	}
+	
+//	public IBloco buscar()
 }
 
 

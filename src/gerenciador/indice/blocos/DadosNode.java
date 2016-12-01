@@ -1,6 +1,10 @@
 package gerenciador.indice.blocos;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import gerenciador.RowId;
 import gerenciador.arquivos.blocos.Coluna;
@@ -8,6 +12,7 @@ import gerenciador.arquivos.blocos.IDados;
 import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
+import gerenciador.arquivos.interfaces.IBloco;
 import gerenciador.arquivos.interfaces.ITupla;
 
 public class DadosNode implements IDados{	
@@ -122,6 +127,18 @@ public class DadosNode implements IDados{
 	@Override
 	public ArrayList<ITupla> getTuplas() {
 		throw new RuntimeException("Não implementado");
+	}
+
+	public void ordenarFolha(Chave tupla) {
+		
+		Collections.sort(chaves, new Comparator<Chave>(){
+		  public int compare(Chave c1, Chave c2){
+		    return compareChave(c1,c2);
+		  }
+		});
+		
+		
+		throw new RuntimeException("Não implementado");		
 	}
 
 }
