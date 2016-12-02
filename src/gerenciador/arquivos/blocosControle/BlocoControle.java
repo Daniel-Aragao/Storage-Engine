@@ -66,7 +66,6 @@ public class BlocoControle implements IBinarizable<BlocoControle> {
 		return header.getIndice(index);
 	}
 
-	@Override
 	public byte[] getByteArray() {
 		byte[]retorno = new byte[TAMANHO_BLOCO];
 		
@@ -79,7 +78,6 @@ public class BlocoControle implements IBinarizable<BlocoControle> {
 		return retorno;
 	}
 
-	@Override
 	public void fromByteArray(byte[] dados) {
 		this.header = new HeaderControle(ByteArrayTools
 				.subArray(dados, 0, HEADER_CONTROLE_SIZE));

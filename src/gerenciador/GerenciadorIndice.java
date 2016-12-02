@@ -28,11 +28,11 @@ public class GerenciadorIndice {
 		log = new Log();
 	}
 	
-	public void CriarIndice(byte arquivo, UnidadeDescricao[] descricoes, String nome){
+	public int CriarIndice(byte arquivo, UnidadeDescricao[] descricoes, String nome){
 		throw new RuntimeException("Não implementado");
 	}
 	
-	public void CriarIndice(Arquivo arquivo, UnidadeDescricao[] descricoes, String nome){
+	public int CriarIndice(Arquivo arquivo, UnidadeDescricao[] descricoes, String nome){
 		if (descricoes.length < 1){
 			throw new RuntimeException("Selecione no mínimo uma descrição!");
 		}
@@ -60,6 +60,7 @@ public class GerenciadorIndice {
 		
 		// atualizar os arquivos em disco
 //		arquivo.adicionarIndice(containerId)
+		return 0;
 	}
 	
 	public void AdicionarEntrada(ITupla tupla, IArquivo arquivo){

@@ -57,7 +57,6 @@ public class RowId implements IBinarizable<RowId>{
 		return containerId + "." + blocoId + "." + offSet;
 	}
 
-	@Override
 	public byte[] getByteArray() throws IncorrectFormatException {
 		// 8 bytes no total
 		byte[] retorno = new byte[8];
@@ -73,7 +72,6 @@ public class RowId implements IBinarizable<RowId>{
 		return retorno;
 	}
 
-	@Override
 	public void fromByteArray(byte[] dados) throws IncorrectFormatException {
 		this.containerId = dados[0];
 		

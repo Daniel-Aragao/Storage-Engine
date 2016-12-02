@@ -47,7 +47,7 @@ public class Arquivo implements IArquivo{
 	/* (non-Javadoc)
 	 * @see gerenciador.arquivos.IArquivo#getDescritor()
 	 */
-	@Override
+	
 	public Descritor getDescritor(){
 		return this.blocoControle.getDescritor();
 	}
@@ -55,7 +55,7 @@ public class Arquivo implements IArquivo{
 	/* (non-Javadoc)
 	 * @see gerenciador.arquivos.IArquivo#getFile()
 	 */
-	@Override
+	
 	public File getFile() {
 		return file;
 	}
@@ -63,7 +63,7 @@ public class Arquivo implements IArquivo{
 	/* (non-Javadoc)
 	 * @see gerenciador.arquivos.IArquivo#setArquivoEvent(gerenciador.arquivos.interfaces.IArquivoEvents)
 	 */
-	@Override
+	
 	public void setArquivoEvent(IArquivoEvents arquivoEvents){
 		this.events = arquivoEvents;
 	}
@@ -72,20 +72,20 @@ public class Arquivo implements IArquivo{
 		IArquivo a = this;
 		blocoEvents = new IBlocoEvents() {
 			
-			@Override
+			
 			public void blocoVazio(IBloco bloco) {
 				Log.Write("Bloco vazio");
 				removerBloco(bloco);				
 			}
 			
-			@Override
+			
 			public void blocoCheio(ITupla tupla) {
 				Log.Write("Bloco cheio");
 				IBloco novo = criarBloco();
 				novo.addTupla(tupla);				
 			}
 
-			@Override
+			
 			public void blocoAlterado(IBloco bloco) {
 				if(events != null){
 					events.BlocoAlterado(a, bloco);
@@ -124,7 +124,7 @@ public class Arquivo implements IArquivo{
 	/* (non-Javadoc)
 	 * @see gerenciador.arquivos.IArquivo#addBloco(gerenciador.arquivos.blocos.Bloco)
 	 */
-	@Override
+	
 	public void addBloco(IBloco bloco){
 		Log.Write("Adicionar bloco");
 		
@@ -140,7 +140,7 @@ public class Arquivo implements IArquivo{
 	/* (non-Javadoc)
 	 * @see gerenciador.arquivos.IArquivo#removerBloco(gerenciador.arquivos.blocos.Bloco)
 	 */
-	@Override
+	
 	public void removerBloco(IBloco bloco){
 		Log.Write("Remover bloco");
 		
@@ -155,7 +155,7 @@ public class Arquivo implements IArquivo{
 	/* (non-Javadoc)
 	 * @see gerenciador.arquivos.IArquivo#AdicionarLinha(gerenciador.arquivos.blocos.Tupla)
 	 */
-	@Override
+	
 	public void AdicionarLinha(ITupla tupla){
 		Log.Write("Adicionar linha");
 		
@@ -167,7 +167,7 @@ public class Arquivo implements IArquivo{
 	/* (non-Javadoc)
 	 * @see gerenciador.arquivos.IArquivo#RemoverLinha(gerenciador.arquivos.blocos.Tupla)
 	 */
-	@Override
+	
 	public void RemoverLinha(ITupla tupla){
 		Log.Write("Remover linha");
 		
@@ -204,7 +204,7 @@ public class Arquivo implements IArquivo{
 	/* (non-Javadoc)
 	 * @see gerenciador.arquivos.IArquivo#getBlocoControle()
 	 */
-	@Override
+	
 	public BlocoControle getBlocoControle() {
 		return blocoControle;
 	}
@@ -212,14 +212,14 @@ public class Arquivo implements IArquivo{
 	/* (non-Javadoc)
 	 * @see gerenciador.arquivos.IArquivo#getId()
 	 */
-	@Override
+	
 	public byte getId(){
 		return blocoControle.getHeader().getContainerId();
 	}
 
 	
 	
-	@Override
+	
 	public byte[] getByteArray() throws IncorrectFormatException {
 		if(blocos.size() != blocoControle.getHeader().getProxBlocoLivre() - 1){
 			throw new IncorrectFormatException("Devem ser carregados todos os blocos "
@@ -237,13 +237,13 @@ public class Arquivo implements IArquivo{
 		return blocosArray;
 	}
 
-	@Override
+	
 	public void fromByteArray(byte[] dados) throws IncorrectFormatException {
 		throw new RuntimeException("Não implementado");
 		
 	}
 	
-	@Override
+	
 	public String toString() {
 		String retorno = "";
 		
@@ -256,13 +256,13 @@ public class Arquivo implements IArquivo{
 	}
 
 
-	@Override
+	
 	public String getNome() {
 		return blocoControle.getHeader().getNome();
 	}
 
 
-	@Override
+	
 	public ETipoBlocoArquivo getTipo() {
 		return this.blocoControle.getHeader().getTipo();
 	}
@@ -288,7 +288,7 @@ public class Arquivo implements IArquivo{
 	}
 
 
-	@Override
+	
 	public boolean hasIndice(byte id) {
 		if(! (this.blocoControle.getHeader().qtdIndices() > 0)){
 			return false;
@@ -299,7 +299,7 @@ public class Arquivo implements IArquivo{
 		return true;
 	}
 	
-	@Override
+	
 	public int qtdIndices(){
 		return blocoControle.getHeader().qtdIndices();
 	}

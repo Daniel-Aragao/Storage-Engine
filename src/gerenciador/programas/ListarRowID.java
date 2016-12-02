@@ -11,7 +11,7 @@ import gerenciador.GerenciadorBuffer;
 import gerenciador.RowId;
 import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.interfaces.ILog;
-import gerenciador.loger.LogLeituraTabela;
+import gerenciador.loger.Log;
 
 public class ListarRowID {
 	private static ILog Log;
@@ -20,14 +20,12 @@ public class ListarRowID {
 			"C:\\Users\\danda_000\\git\\Storage-Engine\\res\\Log\\listaID.txt");
 
 	public static void main(String[] args) {
-//		Log = new Log();
-		Log = new LogLeituraTabela(
-				new File("C:\\Users\\danda_000\\git\\Storage-Engine\\res\\Log\\bufferResult.txt"));
+		Log = new Log();
+//		Log = new LogLeituraTabela(
+//				new File("C:\\Users\\danda_000\\git\\Storage-Engine\\res\\Log\\bufferResult.txt"));
 		
-		// final String arquivo = "listaID.txt";
 		GerenciadorBuffer bm = new GerenciadorBuffer(Log);
 
-		// public ArrayList<RowId> listar[] {
 		ArrayList<RowId> listaID = new ArrayList<RowId>();
 
 		FileReader fr = null;
@@ -66,10 +64,10 @@ public class ListarRowID {
 		for (RowId id : listaID) {
 			bm.getBloco(id);
 		}
-		Log.Write("Hit: "+bm.getHit()+" = "+bm.getHit()/bm.getAcessos());Log.Write(System.lineSeparator());
-		Log.Write("Miss: "+bm.getMiss()+" = "+bm.getMiss()/bm.getAcessos());Log.Write(System.lineSeparator());
-		Log.Write("Acessos: "+bm.getAcessos()+" = "+1);Log.Write(System.lineSeparator());
-		Log.Write("SwapOut: "+bm.getSwaps()+" = "+bm.getSwaps()/bm.getMiss());Log.Write(System.lineSeparator());
+		Log.Write("Hit: "+bm.getHit()+": "+bm.getHit()/bm.getAcessos());Log.Write(System.lineSeparator());
+		Log.Write("Miss: "+bm.getMiss()+": "+bm.getMiss()/bm.getAcessos());Log.Write(System.lineSeparator());
+		Log.Write("Acessos: "+bm.getAcessos()+": "+1);Log.Write(System.lineSeparator());
+		Log.Write("SwapOut: "+bm.getSwaps()+": "+bm.getSwaps()/bm.getMiss());Log.Write(System.lineSeparator());
 		Log.Write("Tamanho da memória em bytes: " + bm.getMemoriaSize());Log.Write(System.lineSeparator());
 		Log.Write("Tamanho da memória em blocos: " + bm.getMemoriaSize()/BlocoControle.TAMANHO_BLOCO);Log.Write(System.lineSeparator());
 		bm.resetHitMissSwaps();

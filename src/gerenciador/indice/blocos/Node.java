@@ -79,6 +79,8 @@ public class Node implements IBloco {
 			dados.ordenarFolha((Chave) tupla);
 		}
 		
+		// se sofrer um overflow NÃO salvar em disco
+		
 		throw new RuntimeException("Não implementado");
 
 	}
