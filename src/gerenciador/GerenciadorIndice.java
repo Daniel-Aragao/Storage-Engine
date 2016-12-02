@@ -166,8 +166,7 @@ public class GerenciadorIndice {
 			node = new Node(indice.getId(), 
 					indice.getBlocoControle().getProxBlocoLivre(), 
 					ETipoBlocoArquivo.indices, 
-					indice.getDescritor(), 
-					(short) 0);
+					indice.getDescritor());
 			
 		} catch (IncorrectFormatException e) {
 			// TODO Auto-generated catch block

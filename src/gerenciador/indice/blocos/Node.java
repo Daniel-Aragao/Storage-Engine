@@ -1,11 +1,12 @@
 package gerenciador.indice.blocos;
 
-import java.util.ArrayList;
-
 import gerenciador.RowId;
+import gerenciador.arquivos.blocos.Bloco;
 import gerenciador.arquivos.blocos.IDados;
 import gerenciador.arquivos.blocos.IHeader;
+import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
+import gerenciador.arquivos.blocosControle.UnidadeDescricao;
 import gerenciador.arquivos.enums.ETipoBlocoArquivo;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBloco;
@@ -13,19 +14,22 @@ import gerenciador.arquivos.interfaces.IBlocoEvents;
 import gerenciador.arquivos.interfaces.ITupla;
 
 public class Node implements IBloco {
-	public static final int HEADER_BLOCO_INDICE_SIZE = 8;
+	public static final int HEADER_BLOCO_INDICE_SIZE = HeaderNode.TAMANHO_HEADER;
 
 	private Descritor descritor;
 	private IBlocoEvents events;
 	private DadosNode dados;
 	private HeaderNode header;
 
-	public Node(byte containerId, int BlockId, ETipoBlocoArquivo tipoBloco, Descritor descritor, short ordemArvore)
+	public Node(byte containerId, int BlockId, ETipoBlocoArquivo tipoBloco, Descritor descritor)
 			throws IncorrectFormatException {
 		this.descritor = descritor;
 		if (tipoBloco != ETipoBlocoArquivo.indices) {
 			throw new IncorrectFormatException("Tipo de bloco deve ser de indice");
 		}
+		
+		short ordemArvore = calcularOrdem(descritor);	
+		
 		header = new HeaderNode(containerId, BlockId, tipoBloco, ordemArvore);
 		dados = new DadosNode(descritor);
 	}
@@ -33,6 +37,20 @@ public class Node implements IBloco {
 	public Node(byte[] dados, Descritor descritor) throws IncorrectFormatException {
 		this.descritor = descritor;
 		this.fromByteArray(dados);
+	}
+	
+	private short calcularOrdem(Descritor descritor){
+		short tamanho_chaves = 0;
+		short tamanho_ponteiros = RowId.ROWID_SIZE;
+		
+		for(UnidadeDescricao ud : descritor.getDescritores()){
+			tamanho_chaves += ud.getTamanho();
+		}
+
+		short ordem = (short) ((BlocoControle.TAMANHO_BLOCO - Node.HEADER_BLOCO_INDICE_SIZE - tamanho_ponteiros)
+				/(tamanho_chaves + tamanho_ponteiros) + 1);// + 1 é o ponteiro já retirado do total
+		
+		return ordem;
 	}
 
 	@Override
@@ -80,6 +98,10 @@ public class Node implements IBloco {
 		}
 		
 		// se sofrer um overflow NÃO salvar em disco
+		
+		if(!overflow()){
+			events.blocoAlterado(this);
+		}
 		
 		throw new RuntimeException("Não implementado");
 
