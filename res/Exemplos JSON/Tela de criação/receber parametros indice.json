@@ -1,0 +1,16 @@
+{
+    "idArquivo":5,
+    "unidadeDescricao":[
+			{
+				"nome":"COD_AUTHOR",
+                "tipo":"inteiro",
+                "tamanho":4
+			},
+            {
+				"nome":"outra coluna",
+                "tipo":"string",
+                "tamanho":67
+			}
+	],
+    "nomeIndice": "Codigo do autor"
+}

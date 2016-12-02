@@ -1,0 +1,29 @@
+[
+	{
+		"id": 5,
+		"nome":"fornecedores",
+		"colunas":[
+			{
+				"nome":"COD_AUTHOR",
+                "tipo":"inteiro",
+                "tamanho":4
+			},
+			{
+				"nome":"NOME_AUTHOR",
+                "tipo":"string",
+                "tamanho":248
+			}
+		]
+	},
+    {
+		"id": 6,
+		"nome":"clientes",
+		"colunas":[
+			{
+				"nome":"CLI_NOME",
+                "tipo":"string",
+                "tamanho":32
+			}
+		]
+	}
+]
