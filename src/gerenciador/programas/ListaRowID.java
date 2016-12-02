@@ -21,12 +21,14 @@ public class ListaRowID {
 			"C:\\Users\\danda_000\\git\\Storage-Engine\\res\\Log\\listaID.txt");
 
 	public static void main(String[] args) {
-		Log = new Log();
-//		Log = new LogLeituraTabela(
-//				new File("C:\\Users\\danda_000\\git\\Storage-Engine\\res\\Log\\bufferResult.txt"));
+//		Log = new Log();
+		Log = new LogLeituraTabela(
+				new File("C:\\Users\\danda_000\\git\\Storage-Engine\\res\\Log\\bufferResult.txt"));
 		
+		// final String arquivo = "listaID.txt";
 		GerenciadorBuffer bm = new GerenciadorBuffer(Log);
 
+		// public ArrayList<RowId> listar[] {
 		ArrayList<RowId> listaID = new ArrayList<RowId>();
 
 		FileReader fr = null;
