@@ -52,8 +52,7 @@ public class GerenciadorIndice {
 		// adicionarEntrada somente no indice novo
 
 		for(int i = 1; i < arquivo.getBlocoControle().getProxBlocoLivre(); i++){
-			byte containerid = arquivo.getBlocoControle().getHeader().getContainerId();
-			IBloco bloco = buffer.getBloco(new RowId(containerid, i, 0));//arquivo.requisitarBloco(i);
+			IBloco bloco = buffer.getBloco(new RowId(arquivo.getId(), i, 0));
 			
 			for(ITupla tupla : bloco.getDados().getTuplas()){
 				AdicionarAoIndice(indice, tupla, arquivo);				
@@ -92,26 +91,26 @@ public class GerenciadorIndice {
 				node.addTupla(tupla);
 				buffer.addBloco(indice, node);
 			}else{
-				Node raiz = getRaiz(indice);
+				Node folha = getRaiz(indice);
 				boolean adicionou = false;
 				
 				while (!adicionou){
-					if(!raiz.hasChild()){
+					if(!folha.hasChild()){
 						// então é folha						
 						
-						raiz.addTupla(chave);
-						raiz.ordenar( buffer);
+						folha.addTupla(chave);
+						folha.ordenar(buffer);
 						
-						if(raiz.overflow()){
-							tratarOverflow(indice, raiz);							
+						if(folha.overflow()){
+							tratarOverflow(indice, folha);							
 						}else{
-							raiz.atualizar();
+							folha.atualizar();
 						}
 						
 						adicionou = true;
 					}else{
 						// não é folha ainda
-						raiz = (Node) buffer.getBloco(raiz.getSubArvore(chave));
+						folha = (Node) buffer.getBloco(folha.getSubArvore(chave));
 					}
 				}
 				
@@ -122,10 +121,10 @@ public class GerenciadorIndice {
 			
 	}
 	
-	private void tratarOverflow(IArquivo indice, Node raiz){
+	private void tratarOverflow(IArquivo indice, Node folha){
 		Node node = createNode(indice);
 		
-		ArrayList<Chave> mchaves = raiz.getMetadeChaves();
+		ArrayList<Chave> mchaves = folha.getMetadeChaves();
 		
 		Chave chaveCentral = mchaves.remove(0);
 		
@@ -133,7 +132,7 @@ public class GerenciadorIndice {
 			node.addTupla(c);
 		}
 		
-		ArrayList<RowId> mponteiros = raiz.getMetadePonteiros();
+		ArrayList<RowId> mponteiros = folha.getMetadePonteiros();
 		for(RowId ri : mponteiros){
 			node.addPonteiro(ri);
 		}
@@ -141,14 +140,15 @@ public class GerenciadorIndice {
 		node.ordenar(buffer);
 		
 		indice.addBloco(node);
-		raiz.atualizar();
+		folha.atualizar();
 		
-		Node pai = getPai();
+		Node pai = getPai(folha, indice);
 		
 		if (pai == null){
 			pai = createNode(indice);
 			
-			pai.addPonteiro(raiz.getBlocoTupleId());
+			pai.addPonteiro(folha.getBlocoTupleId());
+			atualizarRaiz(indice.getBlocoControle(), pai);
 		}
 		
 		pai.addTupla(chaveCentral);
@@ -157,13 +157,19 @@ public class GerenciadorIndice {
 		
 		if(pai.overflow()){
 			tratarOverflow(indice, pai);
-		}else{
-			pai.atualizar();
 		}
+		pai.atualizar();
 	}
 	
-	private Node getPai(){
-		throw new RuntimeException("Não implementado");
+	private Node getPai(Node folha, IArquivo indice){
+		
+		Node raiz = getRaiz(indice);
+		if(raiz == null){
+			return null;			
+		}
+		
+		aqui
+		return null;
 	}
 	
 	private Chave convertTuplaIntoChave(Descritor descritorIndice, ITupla tupla, Descritor descritorArquivo) {
