@@ -1,5 +1,6 @@
 package gerenciador;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import gerenciador.arquivos.Arquivo;
@@ -29,7 +30,7 @@ public class GerenciadorIndice {
 	}
 	
 	public int CriarIndice(byte arquivo, UnidadeDescricao[] descricoes, String nome){
-		throw new RuntimeException("Não implementado");
+		return CriarIndice((Arquivo)buffer.getGAFromCache().getArquivo(arquivo), descricoes, nome);		
 	}
 	
 	public int CriarIndice(Arquivo arquivo, UnidadeDescricao[] descricoes, String nome){
@@ -42,6 +43,8 @@ public class GerenciadorIndice {
 		
 		// criar arquivo de indice
 		IArquivo indice = buffer.getGAFromCache().CriarArquivo(nome, descricoes, ETipoBlocoArquivo.indices);
+		indice.setQtdIndice(
+				(byte) ByteArrayTools.byteArrayToInt(indice.getBlocoControle().getIndices()));
 		
 		// adicionar indice no aruqivo
 		arquivo.adicionarIndice(indice.getId());
@@ -59,7 +62,6 @@ public class GerenciadorIndice {
 		
 		
 		// atualizar os arquivos em disco
-//		arquivo.adicionarIndice(containerId)
 		return 0;
 	}
 	
@@ -85,7 +87,7 @@ public class GerenciadorIndice {
 			if(primeira_entrada){
 				// vetor indiceids serão a raiz
 				Node node = createNode(indice);
-				bcontroleIndice.setIndices(ByteArrayTools.intToByteArray(node.getBlocoId()));
+				atualizarRaiz(bcontroleIndice, node);
 				
 				node.addTupla(tupla);
 				buffer.addBloco(indice, node);
@@ -95,17 +97,15 @@ public class GerenciadorIndice {
 				
 				while (!adicionou){
 					if(!raiz.hasChild()){
-						// então é folha
-						
-						// overflow
-						// passar a chave para o método vai fazer uma inserção, porém vai
-						// logo em seguida partir o vetor em dois e vai retornar o conjunto
-						// de tuplas que será inserido na nova chave formada aqui
+						// então é folha						
 						
 						raiz.addTupla(chave);
+						raiz.ordenar( buffer);
 						
 						if(raiz.overflow()){
-							throw new RuntimeException("Não implementado");
+							tratarOverflow(indice, raiz);							
+						}else{
+							raiz.atualizar();
 						}
 						
 						adicionou = true;
@@ -120,6 +120,50 @@ public class GerenciadorIndice {
 			log.Write(tupla.toString() + " imcompativel com o indice " + indice.getNome());
 		}
 			
+	}
+	
+	private void tratarOverflow(IArquivo indice, Node raiz){
+		Node node = createNode(indice);
+		
+		ArrayList<Chave> mchaves = raiz.getMetadeChaves();
+		
+		Chave chaveCentral = mchaves.remove(0);
+		
+		for(Chave c : mchaves){
+			node.addTupla(c);
+		}
+		
+		ArrayList<RowId> mponteiros = raiz.getMetadePonteiros();
+		for(RowId ri : mponteiros){
+			node.addPonteiro(ri);
+		}
+		
+		node.ordenar(buffer);
+		
+		indice.addBloco(node);
+		raiz.atualizar();
+		
+		Node pai = getPai();
+		
+		if (pai == null){
+			pai = createNode(indice);
+			
+			pai.addPonteiro(raiz.getBlocoTupleId());
+		}
+		
+		pai.addTupla(chaveCentral);
+		pai.addPonteiro(node.getBlocoTupleId());
+		pai.ordenar(buffer);
+		
+		if(pai.overflow()){
+			tratarOverflow(indice, pai);
+		}else{
+			pai.atualizar();
+		}
+	}
+	
+	private Node getPai(){
+		throw new RuntimeException("Não implementado");
 	}
 	
 	private Chave convertTuplaIntoChave(Descritor descritorIndice, ITupla tupla, Descritor descritorArquivo) {
@@ -151,7 +195,7 @@ public class GerenciadorIndice {
 		}
 	}
 
-	private Node getRaiz(IArquivo indice){
+	public Node getRaiz(IArquivo indice){
 		return (Node) buffer.getBloco(
 				new RowId(
 						indice.getId(), 
@@ -173,6 +217,10 @@ public class GerenciadorIndice {
 			e.printStackTrace();
 		}
 		return node;
+	}
+	
+	private void atualizarRaiz(BlocoControle bcontroleIndice, IBloco node){
+		bcontroleIndice.setIndices(ByteArrayTools.intToByteArray(node.getBlocoId()));
 	}
 	
 //	public IBloco buscar()

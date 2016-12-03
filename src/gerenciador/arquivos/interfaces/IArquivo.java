@@ -34,4 +34,6 @@ public interface IArquivo extends IBinarizable<IArquivo> {
 
 	int qtdIndices();
 
+	void setQtdIndice(byte byteArrayToInt);
+
 }

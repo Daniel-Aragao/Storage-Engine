@@ -281,7 +281,7 @@ public class Arquivo implements IArquivo{
 		}
 	}
 
-
+	@Override
 	public void setQtdIndice(byte id) {
 		blocoControle.setQtdeIndice(id);
 		events.BlocoControleAlterado(this);

@@ -92,7 +92,6 @@ public class BlocoControle implements IBinarizable<BlocoControle> {
 	}
 
 	public void setQtdeIndice(byte id) {
-		setQtdeIndice(id);
-		
+		header.setsetQtdeIndice(id);
 	}
 }

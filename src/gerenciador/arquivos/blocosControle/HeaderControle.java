@@ -202,4 +202,9 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 		return this.indiceIds;
 	}
 
+	public void setsetQtdeIndice(byte id) {
+		this.qtdIndices = id;
+		
+	}
+
 }

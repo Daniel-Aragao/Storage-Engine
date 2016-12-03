@@ -1,7 +1,9 @@
 package gerenciador.indice.blocos;
 
+import java.util.ArrayList;
+
+import gerenciador.GerenciadorBuffer;
 import gerenciador.RowId;
-import gerenciador.arquivos.blocos.Bloco;
 import gerenciador.arquivos.blocos.IDados;
 import gerenciador.arquivos.blocos.IHeader;
 import gerenciador.arquivos.blocosControle.BlocoControle;
@@ -87,24 +89,16 @@ public class Node implements IBloco {
 	}
 
 	@Override
-	public void addTupla(ITupla tupla) {		
-		/*
-		 * adicionar tupla e possibilitar alguma maneira de ordenar os ponteiros da árvore
-		 */
+	public void addTupla(ITupla tupla) {
+		dados.addTupla(tupla);
+		
+		//NÃO salvar em disco, operação manual após a ordenação externa e overflow
+	}
+	public void ordenar(GerenciadorBuffer buffer) {
+		dados.ordenarChaves();
 		if(this.hasChild()){
-			throw new RuntimeException("Não implementado");
-		}else{
-			dados.ordenarFolha((Chave) tupla);
+			dados.ordenarPonteiros(buffer);	
 		}
-		
-		// se sofrer um overflow NÃO salvar em disco
-		
-		if(!overflow()){
-			events.blocoAlterado(this);
-		}
-		
-		throw new RuntimeException("Não implementado");
-
 	}
 
 	@Override
@@ -139,13 +133,13 @@ public class Node implements IBloco {
 
 	@Override
 	public byte[] getByteArray() throws IncorrectFormatException {
-		// intercalar cada chave com um rowid
+		// intercalar cada chave com um rowid ou não?
 		throw new RuntimeException("Não implementado");
 	}
 
 	@Override
 	public void fromByteArray(byte[] dados) throws IncorrectFormatException {
-		// intercalados chaves com rowid
+		// intercalados chaves com rowid ou não?
 		throw new RuntimeException("Não implementado");
 
 	}
@@ -153,13 +147,24 @@ public class Node implements IBloco {
 	public RowId getSubArvore(Chave tupla) {
 		return dados.getSubArvore(tupla);
 	}
-
-	public void addWithOverflow(Chave chave) {
-		throw new RuntimeException("Não implementado");
-		
-	}
 	
 	public void atualizar(){
 		events.blocoAlterado(this);
+	}
+	
+	public Chave menorChave(){
+		return this.dados.getChave(0);
+	}
+	
+	public ArrayList<Chave> getMetadeChaves(){
+		return dados.getMetadeChaves();
+	}
+	
+	public ArrayList<RowId> getMetadePonteiros(){
+		return dados.getMetadePonteiros();
+	}
+
+	public void addPonteiro(RowId ri) {
+		dados.addPonteiro(ri);
 	}
 }

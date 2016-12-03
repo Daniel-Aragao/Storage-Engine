@@ -1,0 +1,125 @@
+/* http://balloonalerts.azurewebsites.net/ */
+#balloon-container{
+    display: block;
+    position: fixed;
+    z-index: 111111;    
+    /*height: 45vw;*/
+    overflow: hidden;
+}
+
+.balloon-top{
+    top: 10px;
+}
+.balloon-bottom{
+    bottom: 10px;
+}
+.balloon-right{
+    right: 10px;
+}
+.balloon-left{
+    left: 10px;
+}
+
+.balloon{
+    width: 250px;
+    display: block;
+    border-radius: 3px;
+    /*background-color: #2a2730;*/
+    margin: 5px;
+    padding: 14px;
+    /*imagem vai ser absolute, e prefere padding: 14px 14px 14px 54px;, 
+    porém sem imagem deveria ser padding: 14px;*/
+    min-height: 50px;
+    opacity: .8;
+    z-index: 111112;
+    position: relative;
+    
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    background-size: 35px;
+}
+
+.balloon:hover{
+    opacity: 1;
+    box-shadow: 0px 0px 7px #000;
+    cursor: pointer;
+}
+
+.balloon-primary{
+    background-color: #337ab7;
+    
+}
+
+.balloon-success{
+    background-color: #5cb85c;
+}
+
+.balloon-info{
+    background-color: #5bc0de;
+}
+
+.balloon-warning{
+    background-color: #f0ad4e;
+}
+
+.balloon-danger{
+    background-color: #d9534f;
+}
+
+.balloon-balloon{
+    background-color: #2a2730;
+    /*border: 1px solid white;*/
+}
+
+.balloon-message{
+    color:white;
+    word-break: break-all;
+}
+
+.balloon-closeBtn{
+    color: white;
+    padding: 0;
+    /*text-shadow: 0 1px 0 white;*/
+    cursor: pointer;
+
+    float: right;
+    position: relative;
+    top: -0.9em;
+    right: -0.4em;
+
+    font-weight: bold;
+    font-size: 18px;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+
+    z-index: 99999;
+}
+
+.balloon-closeBtn:hover{
+    color: #adadad;
+    /*text-shadow: 0 1px 0 #adadad;*/
+}
+
+.balloon-loading-bar{
+     height:100%;
+     width:100%;
+     background-color:#000;
+     opacity:0.1;
+     position: absolute;
+     bottom:0;
+     left:0;
+     display: block;
+}
+.balloon-title-bar{
+    width: 100%;
+    background-color: transparent;
+    /*position: absolute;
+    top:0;
+    left:0;*/
+    display: block;
+    font-weight: bold;
+    text-align: left;
+    color: white;
+    border-bottom: 1px solid white;
+    margin-bottom: 3px;
+    font-family: sans-serif;
+}

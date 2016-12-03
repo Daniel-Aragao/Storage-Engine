@@ -3,9 +3,8 @@ package gerenciador.indice.blocos;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Optional;
-import java.util.stream.Stream;
 
+import gerenciador.GerenciadorBuffer;
 import gerenciador.RowId;
 import gerenciador.arquivos.blocos.Coluna;
 import gerenciador.arquivos.blocos.IDados;
@@ -36,7 +35,7 @@ public class DadosNode implements IDados{
 			Chave chave = chaves.get(i);
 			if (compareChave(tupla, chave) <= 0){
 				return ponteiros.get(i);
-			}else if(i+1 == chaves.size()){
+			}else if(i+1 == chaves.size()){ // caso da última chave
 				return ponteiros.get(i+1);
 			}
 		}
@@ -109,8 +108,7 @@ public class DadosNode implements IDados{
 
 	@Override
 	public void addTupla(ITupla tupla) {
-		throw new RuntimeException("Não implementado");
-		
+		chaves.add((Chave) tupla);
 	}
 
 	@Override
@@ -129,16 +127,65 @@ public class DadosNode implements IDados{
 		throw new RuntimeException("Não implementado");
 	}
 
-	public void ordenarFolha(Chave tupla) {
+	public void ordenarChaves() {
 		
 		Collections.sort(chaves, new Comparator<Chave>(){
 		  public int compare(Chave c1, Chave c2){
 		    return compareChave(c1,c2);
 		  }
-		});
+		});			
+	}
+
+	public void ordenarPonteiros(GerenciadorBuffer buffer) {
+		Collections.sort(ponteiros, new Comparator<RowId>(){
+			  public int compare(RowId r1, RowId r2){
+				  Chave c1 = ((Node)buffer.getBloco(r1)).menorChave();
+				  Chave c2 = ((Node)buffer.getBloco(r2)).menorChave();
+			    return compareChave(c1,c2);
+			  }
+			});			
+	}
+
+	public Chave getChave(int i) {
+		return this.chaves.get(i);
+	}
+
+	public ArrayList<Chave> getMetadeChaves() {
+		ArrayList<Chave> retorno = new ArrayList<Chave>();
 		
+		int total = chaves.size();
 		
-		throw new RuntimeException("Não implementado");		
+		int metade = total/2;
+		metade = (total%2 != 0)? (metade - 1):metade;
+		
+		retorno.add(chaves.get(metade));
+		
+		for(int i = metade + 1; i < total; i++){
+			retorno.add(chaves.remove(i));
+		}		
+		
+		return retorno;
+	}
+	
+	public ArrayList<RowId> getMetadePonteiros(){
+		ArrayList<RowId> retorno = new ArrayList<RowId>();
+		
+		int total = ponteiros.size();
+		int metade = total/2;
+		
+		retorno.add(ponteiros.get(metade));
+		
+		for(int i = metade + 1; i < total; i++){
+			retorno.add(ponteiros.remove(i));
+		}		
+		
+		return retorno; 
+//		throw new RuntimeException("Não implementado");
+	}
+
+	public void addPonteiro(RowId ri) {
+		this.ponteiros.add(ri);
+		
 	}
 
 }

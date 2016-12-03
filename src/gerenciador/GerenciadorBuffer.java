@@ -192,6 +192,6 @@ public class GerenciadorBuffer {
 
 	public void addBloco(IArquivo indice, Node node) {
 		indice.addBloco(node);
-
+		getBloco(node.getBlocoTupleId());
 	}
 }
