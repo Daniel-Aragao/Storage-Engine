@@ -1,0 +1,36 @@
+Author : dados
+   COD_AUTHOR[I(5)]
+   NAME_AUTHOR[A(100)]
+
+Fornecedor : dados
+   COD_FORN[I(6)]
+   NOME_FORN[A(25)]
+   END_FORN[A(40)]
+   NASC_FORN[I(4)]
+   FON_FORN[A(15)]
+   COM_CLI[A(101)]
+
+Cliente : dados
+   COD_CLI[I(6)]
+   NOME_CLI[A(25)]
+   END_CLI[A(40)]
+   NASC_CLI[I(4)]
+   FON_CLI[A(15)]
+   MKT_CLI[A(10)]
+   COM_CLI[A(117)]
+
+Author : dados
+   COD_AUTHOR[I(5)]
+   NAME_AUTHOR[A(100)]
+
+Fornecedor : dados
+   COD_FORN[I(6)]
+   NOME_FORN[A(25)]
+   END_FORN[A(40)]
+   NASC_FORN[I(4)]
+   FON_FORN[A(15)]
+   COM_CLI[A(101)]
+
+Author2 : dados
+   COD_AUTHOR[I(5)]
+   NAME_AUTHOR[A(100)]

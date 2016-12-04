@@ -66,6 +66,8 @@ public class GerenciadorBuffer {
 	 */
 
 	public IBloco getBloco(RowId tid) {
+		if(tid == null) return null;
+		
 		int posMem = memoria.getPosition(tid);
 		Log.Write("Buffer => Bloco: " + tid.getBlocoId());
 		Log.Write(System.lineSeparator());

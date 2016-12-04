@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import gerenciador.GerenciadorBuffer;
 import gerenciador.RowId;
+import gerenciador.arquivos.blocos.DadosBloco;
+import gerenciador.arquivos.blocos.HeaderBloco;
 import gerenciador.arquivos.blocos.IDados;
 import gerenciador.arquivos.blocos.IHeader;
 import gerenciador.arquivos.blocosControle.BlocoControle;
@@ -14,6 +16,7 @@ import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBloco;
 import gerenciador.arquivos.interfaces.IBlocoEvents;
 import gerenciador.arquivos.interfaces.ITupla;
+import gerenciador.utils.ByteArrayTools;
 
 public class Node implements IBloco {
 	public static final int HEADER_BLOCO_INDICE_SIZE = HeaderNode.TAMANHO_HEADER;
@@ -33,7 +36,7 @@ public class Node implements IBloco {
 		short ordemArvore = calcularOrdem(descritor);	
 		
 		header = new HeaderNode(containerId, BlockId, tipoBloco, ordemArvore);
-		dados = new DadosNode(descritor);
+		dados = new DadosNode(descritor, header);
 	}
 
 	public Node(byte[] dados, Descritor descritor) throws IncorrectFormatException {
@@ -133,15 +136,21 @@ public class Node implements IBloco {
 
 	@Override
 	public byte[] getByteArray() throws IncorrectFormatException {
-		// intercalar cada chave com um rowid ou não?
-		throw new RuntimeException("Não implementado");
+		byte[] retorno = new byte[HEADER_BLOCO_INDICE_SIZE];
+
+		byte[] content = ByteArrayTools.concatArrays(header.getByteArray(), dados.getByteArray());
+
+		ByteArrayTools.appendArrays(retorno, content, 0);
+
+		return retorno;
 	}
 
 	@Override
 	public void fromByteArray(byte[] dados) throws IncorrectFormatException {
-		// intercalados chaves com rowid ou não?
-		throw new RuntimeException("Não implementado");
+		this.header = new HeaderNode(ByteArrayTools.subArray(dados, 0, HEADER_BLOCO_INDICE_SIZE));
 
+		this.dados = new DadosNode(ByteArrayTools.subArray(dados, HEADER_BLOCO_INDICE_SIZE, dados.length - HEADER_BLOCO_INDICE_SIZE),
+				this.getBlocoTupleId(), descritor, header);
 	}
 
 	public RowId getSubArvore(Chave tupla) {
@@ -166,5 +175,27 @@ public class Node implements IBloco {
 
 	public void addPonteiro(RowId ri) {
 		dados.addPonteiro(ri);
+	}
+	
+	public boolean hasPonteiro(Node noh){
+		return dados.hasPonteiro(noh);
+	}
+
+	public boolean hasChave(Chave chave) {
+		return dados.hasChave(chave);
+		
+	}
+
+	public void setVizinho(RowId blocoTupleId) {
+		this.dados.setVizinho(blocoTupleId);
+		
+	}
+
+	public RowId getVizinho() {
+		return dados.getVizinho();
+	}
+
+	public ArrayList<Chave> getChaves() {
+		return dados.getChaves();
 	}
 }

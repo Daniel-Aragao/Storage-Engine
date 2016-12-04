@@ -15,184 +15,191 @@ import gerenciador.arquivos.interfaces.IBloco;
 import gerenciador.arquivos.interfaces.ILog;
 import gerenciador.arquivos.interfaces.ITupla;
 import gerenciador.indice.blocos.Chave;
+import gerenciador.indice.blocos.DadosNode;
+import gerenciador.indice.blocos.HeaderNode;
 import gerenciador.indice.blocos.Node;
 import gerenciador.loger.Log;
 import gerenciador.utils.ByteArrayTools;
 
 public class GerenciadorIndice {
-	
-	private	GerenciadorBuffer buffer;
+
+	private GerenciadorBuffer buffer;
 	private ILog log;
-	
-	public GerenciadorIndice(){
+
+	public GerenciadorIndice() {
 		buffer = new GerenciadorBuffer();
 		log = new Log();
 	}
-	
-	public int CriarIndice(byte arquivo, UnidadeDescricao[] descricoes, String nome){
-		return CriarIndice((Arquivo)buffer.getGAFromCache().getArquivo(arquivo), descricoes, nome);		
+
+	public int CriarIndice(byte arquivo, UnidadeDescricao[] descricoes, String nome) {
+		return CriarIndice((Arquivo) buffer.getGAFromCache().getArquivo(arquivo), descricoes, nome);
 	}
-	
-	public int CriarIndice(Arquivo arquivo, UnidadeDescricao[] descricoes, String nome){
-		if (descricoes.length < 1){
+
+	public int CriarIndice(Arquivo arquivo, UnidadeDescricao[] descricoes, String nome) {
+		if (descricoes.length < 1) {
 			throw new RuntimeException("Selecione no mínimo uma descrição!");
 		}
-		if (arquivo == null){
+		if (arquivo == null) {
 			throw new RuntimeException("Arquivo não selecionado!");
 		}
-		
+
 		// criar arquivo de indice
 		IArquivo indice = buffer.getGAFromCache().CriarArquivo(nome, descricoes, ETipoBlocoArquivo.indices);
-		indice.setQtdIndice(
-				(byte) ByteArrayTools.byteArrayToInt(indice.getBlocoControle().getIndices()));
-		
+//		indice.setQtdIndice((byte) ByteArrayTools.byteArrayToInt(indice.getBlocoControle().getIndices()));
+
 		// adicionar indice no aruqivo
 		arquivo.adicionarIndice(indice.getId());
-		
+
 		// adicionarEntrada somente no indice novo
 
-		for(int i = 1; i < arquivo.getBlocoControle().getProxBlocoLivre(); i++){
+		for (int i = 1; i < arquivo.getBlocoControle().getProxBlocoLivre(); i++) {
 			IBloco bloco = buffer.getBloco(new RowId(arquivo.getId(), i, 0));
-			
-			for(ITupla tupla : bloco.getDados().getTuplas()){
-				AdicionarAoIndice(indice, tupla, arquivo);				
+
+			for (ITupla tupla : bloco.getDados().getTuplas()) {
+				AdicionarAoIndice(indice, tupla, arquivo);
 			}
 		}
-		
-		
-		// atualizar os arquivos em disco
-		return 0;
+
+		// ordem
+		return indice.qtdIndices();
 	}
-	
-	public void AdicionarEntrada(ITupla tupla, IArquivo arquivo){
+
+	public void AdicionarEntrada(ITupla tupla, IArquivo arquivo) {
 		arquivo.AdicionarLinha(tupla);
-		
-		if(arquivo.qtdIndices() > 0){
-			for(byte indiceId : arquivo.getBlocoControle().getIndices()){
-				if(indiceId > (byte)0){
+
+		if (arquivo.qtdIndices() > 0) {
+			for (byte indiceId : arquivo.getBlocoControle().getIndices()) {
+				if (indiceId > (byte) 0) {
 					AdicionarAoIndice(buffer.getGAFromCache().getArquivo(indiceId), tupla, arquivo);
 				}
 			}
 		}
 	}
-	
-	private void AdicionarAoIndice(IArquivo indice, ITupla tupla, IArquivo tabela){
+
+	private void AdicionarAoIndice(IArquivo indice, ITupla tupla, IArquivo tabela) {
 		BlocoControle bcontroleIndice = indice.getBlocoControle();
 		Chave chave = convertTuplaIntoChave(bcontroleIndice.getDescritor(), tupla, tabela.getDescritor());
-		
-		if(chave != null){
+
+		if (chave != null) {
 			boolean primeira_entrada = bcontroleIndice.getProxBlocoLivre() == 1;
-			
-			if(primeira_entrada){
+
+			if (primeira_entrada) {
 				// vetor indiceids serão a raiz
 				Node node = createNode(indice);
 				atualizarRaiz(bcontroleIndice, node);
+				indice.setQtdIndice((byte) ((HeaderNode)node.getHeader()).getOrdemArvore());
 				
-				node.addTupla(tupla);
+				node.addTupla(chave);
 				buffer.addBloco(indice, node);
-			}else{
+			} else {
 				Node folha = getRaiz(indice);
 				boolean adicionou = false;
-				
-				while (!adicionou){
-					if(!folha.hasChild()){
-						// então é folha						
-						
+
+				while (!adicionou) {
+					if (!folha.hasChild()) {
+						// então é folha
+
 						folha.addTupla(chave);
 						folha.ordenar(buffer);
-						
-						if(folha.overflow()){
-							tratarOverflow(indice, folha);							
-						}else{
+
+						if (folha.overflow()) {
+							tratarOverflow(indice, folha);
+						} else {
 							folha.atualizar();
 						}
-						
+
 						adicionou = true;
-					}else{
+					} else {
 						// não é folha ainda
 						folha = (Node) buffer.getBloco(folha.getSubArvore(chave));
 					}
 				}
-				
-			}				
-		}else{
+
+			}
+		} else {
 			log.Write(tupla.toString() + " imcompativel com o indice " + indice.getNome());
 		}
-			
+
 	}
-	
-	private void tratarOverflow(IArquivo indice, Node folha){
+
+	private void tratarOverflow(IArquivo indice, Node folha) {
 		Node node = createNode(indice);
-		
+
 		ArrayList<Chave> mchaves = folha.getMetadeChaves();
-		
+
 		Chave chaveCentral = mchaves.remove(0);
-		
-		for(Chave c : mchaves){
+
+		for (Chave c : mchaves) {
 			node.addTupla(c);
 		}
-		
+
 		ArrayList<RowId> mponteiros = folha.getMetadePonteiros();
-		for(RowId ri : mponteiros){
+		for (RowId ri : mponteiros) {
 			node.addPonteiro(ri);
 		}
-		
+
 		node.ordenar(buffer);
+		
+		if(folha.hasChild()){
+			node.setVizinho(folha.getVizinho());
+			folha.setVizinho(node.getBlocoTupleId());			
+		}
 		
 		indice.addBloco(node);
 		folha.atualizar();
-		
-		Node pai = getPai(folha, indice);
-		
-		if (pai == null){
+
+		Node pai = getPai(folha, getRaiz(indice));
+
+		if (pai == null) {
 			pai = createNode(indice);
-			
+
 			pai.addPonteiro(folha.getBlocoTupleId());
 			atualizarRaiz(indice.getBlocoControle(), pai);
 		}
-		
+
 		pai.addTupla(chaveCentral);
 		pai.addPonteiro(node.getBlocoTupleId());
 		pai.ordenar(buffer);
-		
-		if(pai.overflow()){
+
+		if (pai.overflow()) {
 			tratarOverflow(indice, pai);
 		}
 		pai.atualizar();
 	}
-	
-	private Node getPai(Node folha, IArquivo indice){
-		
-		Node raiz = getRaiz(indice);
-		if(raiz == null){
-			return null;			
+
+	private Node getPai(Node chaveDeBusca, Node raiz) {
+		if(!raiz.hasChild()){
+			return null;
 		}
-		
-		aqui
-		return null;
+		if (raiz.hasPonteiro(chaveDeBusca)) {
+			return raiz;
+		}
+		raiz = (Node) buffer.getBloco(raiz.getSubArvore(chaveDeBusca.menorChave()));
+		return getPai(chaveDeBusca, raiz);
 	}
-	
+
 	private Chave convertTuplaIntoChave(Descritor descritorIndice, ITupla tupla, Descritor descritorArquivo) {
 		Coluna[] colunas = new Coluna[descritorIndice.getNumberOfColumns()];
-		
-		for(int i = 0; i < descritorIndice.getNumberOfColumns(); i++){
+
+		for (int i = 0; i < descritorIndice.getNumberOfColumns(); i++) {
 			UnidadeDescricao descricao = descritorIndice.getUnidadeDescricao(i);
-			
+
 			int indexDescricaoNaTabela = -1;
-			for(int j = 0; j < descritorArquivo.getNumberOfColumns(); j++){
-				if(descritorArquivo.getUnidadeDescricao(i).getNome().equals(descricao.getNome())){
+			for (int j = 0; j < descritorArquivo.getNumberOfColumns(); j++) {
+				if (descritorArquivo.getUnidadeDescricao(i).getNome().equals(descricao.getNome())) {
 					indexDescricaoNaTabela = j;
 					break;
 				}
 			}
-			
-			if(indexDescricaoNaTabela == -1) return null;
-			
+
+			if (indexDescricaoNaTabela == -1)
+				return null;
+
 			Coluna coluna = tupla.getColuna(indexDescricaoNaTabela);
-			
+
 			colunas[i] = (coluna);
-		}		
-		
+		}
+
 		try {
 			return new Chave(colunas, null, descritorIndice, tupla.getTupleId());
 		} catch (IncorrectFormatException e) {
@@ -201,57 +208,51 @@ public class GerenciadorIndice {
 		}
 	}
 
-	public Node getRaiz(IArquivo indice){
+	public Node getRaiz(IArquivo indice) {
 		return (Node) buffer.getBloco(
-				new RowId(
-						indice.getId(), 
-						ByteArrayTools.byteArrayToInt(indice.getBlocoControle().getIndices()),
-						0));
+				new RowId(indice.getId(), ByteArrayTools.byteArrayToInt(indice.getBlocoControle().getIndices()), 0));
 	}
-	
-	private Node createNode(IArquivo indice){
+
+	private Node createNode(IArquivo indice) {
 		Node node = null;
 		try {
-			
-			node = new Node(indice.getId(), 
-					indice.getBlocoControle().getProxBlocoLivre(), 
-					ETipoBlocoArquivo.indices, 
+
+			node = new Node(indice.getId(), indice.getBlocoControle().getProxBlocoLivre(), ETipoBlocoArquivo.indices,
 					indice.getDescritor());
-			
+
 		} catch (IncorrectFormatException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return node;
 	}
-	
-	private void atualizarRaiz(BlocoControle bcontroleIndice, IBloco node){
+
+	private void atualizarRaiz(BlocoControle bcontroleIndice, IBloco node) {
 		bcontroleIndice.setIndices(ByteArrayTools.intToByteArray(node.getBlocoId()));
 	}
+
+	public ArrayList<ITupla> Buscar(Chave chave, byte indiceId){
+		return Buscar(chave, (Node) getRaiz(buffer.getGAFromCache().getArquivo(indiceId)));
+	}
 	
-//	public IBloco buscar()
+	private ArrayList<ITupla> Buscar(Chave chave, Node raiz){
+		Node folha = raiz;
+		if (folha == null)return null;
+		ArrayList<ITupla> linhas = new ArrayList<ITupla>();
+		
+		while(folha.hasChild()){
+			folha = (Node) buffer.getBloco(folha.getSubArvore(chave));			
+		}
+		
+		while(folha != null && folha.hasChave(chave)){
+			for(Chave key : folha.getChaves()){
+				if(DadosNode.compareChave(key, chave) == 0){
+					linhas.add(buffer.getBloco(key.getRowid())
+							.getDados().getTupla(key.getRowid()));					
+				}
+			}
+			folha = (Node) buffer.getBloco(folha.getVizinho());
+		}
+
+		return linhas;
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

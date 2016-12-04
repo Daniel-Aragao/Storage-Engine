@@ -4,13 +4,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import gerenciador.GerenciadorArquivos;
-import gerenciador.RowId;
-import gerenciador.arquivos.blocos.Tupla;
-import gerenciador.arquivos.blocosControle.Descritor;
+import gerenciador.GerenciadorIndice;
 import gerenciador.arquivos.blocosControle.UnidadeDescricao;
+import gerenciador.arquivos.enums.ETipoColuna;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IArquivo;
-import gerenciador.arquivos.interfaces.ITupla;
 
 public class main {
 
@@ -79,6 +77,22 @@ public class main {
 //		System.out.println(new Integer(2).toString());
 		
 		GerenciadorArquivos ga = new GerenciadorArquivos();
+		printgalera(ga);
+		
+		GerenciadorIndice gi = new GerenciadorIndice();
+		
+		IArquivo a = ga.getArquivo((byte) 1);
+		
+		UnidadeDescricao[] ud = new UnidadeDescricao[1];
+		ud[0] = new UnidadeDescricao("COD_AUTHOR", ETipoColuna.inteiro, (byte) 5);
+		
+		gi.CriarIndice((byte) 1, ud, "primeiro teste");
+		
+		System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+		printgalera(ga);
+	}
+	
+	private static void printgalera(GerenciadorArquivos ga){
 		ArrayList<IArquivo> arquivos = ga.getTabelas();
 		for(IArquivo a : arquivos){
 			System.out.println(a.getNome() + " : "+a.getTipo());
@@ -88,6 +102,7 @@ public class main {
 			System.out.println();
 		}
 	}
+	
 //	
 //	private static ITupla getTupla() throws IncorrectFormatException{
 //		Descritor d = getDescritor();

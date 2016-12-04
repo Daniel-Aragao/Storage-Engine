@@ -10,7 +10,6 @@ import gerenciador.utils.ByteArrayTools;
 public class Chave extends Tupla{
 	
 	private RowId rowid;
-	
 	public Chave(Coluna[] props, RowId tupleId, Descritor descritor, RowId rowid)throws IncorrectFormatException{
 		super(props, tupleId, descritor);
 		this.rowid = rowid;
@@ -18,7 +17,9 @@ public class Chave extends Tupla{
 	}
 	
 	public Chave(byte[] dados, RowId tupleId, Descritor descritor) throws IncorrectFormatException {
-		super(ByteArrayTools.subArray(dados, RowId.ROWID_SIZE, dados.length - RowId.ROWID_SIZE), tupleId, descritor);
+		super(ByteArrayTools.subArray(dados, RowId.ROWID_SIZE, dados.length - RowId.ROWID_SIZE), 
+				tupleId, 
+				descritor);
 		this.rowid = new RowId(ByteArrayTools.subArray(dados, RowId.ROWID_SIZE));
 		this.size += RowId.ROWID_SIZE;
 	}
@@ -34,11 +35,15 @@ public class Chave extends Tupla{
 	
 	@Override
 	public void fromByteArray(byte[] dados) throws IncorrectFormatException {
-		this.rowid = new RowId(ByteArrayTools.subArray(dados, RowId.ROWID_SIZE));
 		
-		super.fromByteArray(ByteArrayTools.subArray(dados, RowId.ROWID_SIZE, dados.length - RowId.ROWID_SIZE));
 		
-		this.size += RowId.ROWID_SIZE;
-		
+	}
+
+	public RowId getRowid() {
+		return rowid;
+	}
+
+	public void setRowid(RowId rowid) {
+		this.rowid = rowid;
 	}
 }

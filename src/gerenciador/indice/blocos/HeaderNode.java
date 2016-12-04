@@ -7,7 +7,7 @@ import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.utils.ByteArrayTools;
 
 public class HeaderNode implements IHeader{
-	public static final int TAMANHO_HEADER = 10;
+	public static final int TAMANHO_HEADER = 12;
 	
 	private byte containerId;
 	private int blocoId; // 3 bytes
@@ -15,6 +15,7 @@ public class HeaderNode implements IHeader{
 	private int bytesUsados; // 3 bytes
 	
 	private short ordemArvore; // 2 bytes
+	private short qtdPonteiros;// 2 bytes
 	
 	private int minPonteiros; // p min
 	private int maxPonteiros;
@@ -36,6 +37,18 @@ public class HeaderNode implements IHeader{
 		this.maxPonteiros = ordemArvore;
 		this.minChaves = (ordemArvore - 1)/2;
 		this.maxChaves = ordemArvore - 1;
+	}
+	
+	public void incQtdPonteiros(int i){
+		qtdPonteiros += i;
+	}
+	
+	public void decQtdPonteiros(int i){
+		qtdPonteiros -= i;
+	}
+	
+	public short getQtdPonteiros(){
+		return this.qtdPonteiros;
 	}
 	
 	public HeaderNode(byte[] dados) throws IncorrectFormatException{
@@ -73,6 +86,10 @@ public class HeaderNode implements IHeader{
 		retorno[8] = ordem[2];
 		retorno[9] = ordem[3];
 		
+		byte[] qtdPonteiros = ByteArrayTools.intToByteArray(this.qtdPonteiros);
+		retorno[8] = qtdPonteiros[2];
+		retorno[9] = qtdPonteiros[3];
+		
 		return retorno;
 	}
 
@@ -90,6 +107,9 @@ public class HeaderNode implements IHeader{
 		
 		this.ordemArvore = (short) ByteArrayTools
 				.byteArrayToInt(ByteArrayTools.subArray(dados, 8, 2));
+		
+		this.qtdPonteiros = (short) ByteArrayTools
+				.byteArrayToInt(ByteArrayTools.subArray(dados, 10, 2));
 	}
 
 	@Override
@@ -138,6 +158,10 @@ public class HeaderNode implements IHeader{
 
 	public int getMaxChaves() {
 		return maxChaves;
+	}
+
+	public short getOrdemArvore() {
+		return ordemArvore;
 	}
 
 }

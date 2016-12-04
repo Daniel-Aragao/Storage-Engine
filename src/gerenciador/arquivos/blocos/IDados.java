@@ -2,9 +2,11 @@ package gerenciador.arquivos.blocos;
 
 import java.util.ArrayList;
 
+import gerenciador.RowId;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBinarizable;
 import gerenciador.arquivos.interfaces.ITupla;
+import gerenciador.indice.blocos.Chave;
 
 public interface IDados extends IBinarizable<IDados>{
 
@@ -33,5 +35,7 @@ public interface IDados extends IBinarizable<IDados>{
 	int size();
 
 	ArrayList<ITupla> getTuplas();
+
+	ITupla getTupla(RowId rowid);
 
 }

@@ -37,7 +37,7 @@ public class Tupla implements ITupla{
 			this.size += coluna.getColumnSize();
 		}		
 		
-		this.size += 4; // tamanho dos bytes padrões - eu acho kkkkk
+		this.size += 4; // tamanho do total de bytes da tupla
 	}
 	
 	public Tupla(Coluna[] props, RowId tupleId, Descritor descritor)throws IncorrectFormatException{

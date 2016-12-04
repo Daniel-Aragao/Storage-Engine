@@ -6,6 +6,7 @@ import java.util.Comparator;
 
 import gerenciador.GerenciadorBuffer;
 import gerenciador.RowId;
+import gerenciador.arquivos.blocos.Bloco;
 import gerenciador.arquivos.blocos.Coluna;
 import gerenciador.arquivos.blocos.IDados;
 import gerenciador.arquivos.blocosControle.BlocoControle;
@@ -13,23 +14,32 @@ import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBloco;
 import gerenciador.arquivos.interfaces.ITupla;
+import gerenciador.utils.ByteArrayTools;
 
 public class DadosNode implements IDados{	
 
 	private ArrayList<RowId> ponteiros;
 	private ArrayList<Chave> chaves;
+	private RowId vizinho;
+	private RowId tupleBlocoId;
+	private Descritor descritor;
+	private HeaderNode header;
 	
 
-	public DadosNode(Descritor descritor) {
-		// TODO Auto-generated constructor stub
+	public DadosNode(byte[] subArray, RowId blocoTupleId, Descritor descritor, HeaderNode header) throws IncorrectFormatException {
+		this.descritor = descritor;
+		this.tupleBlocoId = tupleBlocoId; 
+		ponteiros = new ArrayList<RowId>();
+		chaves = new ArrayList<Chave>();
+		this.header = header;
+		fromByteArray(subArray);
 	}
 
-	@Override
-	public byte[] getByteArray() throws IncorrectFormatException {
-		byte [] array = new byte[BlocoControle.TAMANHO_BLOCO - HeaderNode.TAMANHO_HEADER];
-		throw new RuntimeException("Não implementado");
+	public DadosNode(Descritor descritor, HeaderNode header) {
+		this.header = header;
+		this.descritor = descritor;
 	}
-	
+
 	public RowId getSubArvore(Chave tupla) {
 		for(int i = 0; i < chaves.size(); i++){
 			Chave chave = chaves.get(i);
@@ -39,17 +49,21 @@ public class DadosNode implements IDados{
 				return ponteiros.get(i+1);
 			}
 		}
-		throw new RuntimeException("Não implementado");
+		return null;
 	}
 	
-	public int compareChave(Chave chave1, Chave chave2){
+	public static int compareChave(Chave chave1, Chave chave2){
 		ArrayList<Coluna> colunas1 = chave1.getColunas();
 		ArrayList<Coluna> colunas2 = chave1.getColunas();
 		
-		if(colunas1.size() != colunas2.size()){
+		int comparacoes = colunas2.size();
+		if(colunas2.size() < 1){
+			throw new RuntimeException("A chave deve conter no mínimo um valor");
+		}
+		if(colunas1.size() < comparacoes){
 			throw new RuntimeException("Chaves incompatíveis");
 		}
-		for(int i = 0; i < colunas1.size(); i++){
+		for(int i = 0; i < comparacoes; i++){
 			int comparacao = colunas1.get(i).compare(colunas2.get(i));
 			if (comparacao != 0) return comparacao;
 		}
@@ -103,18 +117,49 @@ public class DadosNode implements IDados{
 
 	@Override
 	public boolean isEmpty() {
-		throw new RuntimeException("Não implementado");
+		return chaves.isEmpty();
 	}
 
 	@Override
 	public void addTupla(ITupla tupla) {
 		chaves.add((Chave) tupla);
 	}
-
+	
+	@Override
+	public byte[] getByteArray() throws IncorrectFormatException {
+		
+		byte[] retorno = new byte[0];
+				
+		for(ITupla t : chaves){
+			retorno = ByteArrayTools.concatArrays(retorno, t.getByteArray());
+		}
+		
+		return retorno;
+	}
+	
 	@Override
 	public void fromByteArray(byte[] dados) throws IncorrectFormatException {
-		throw new RuntimeException("Não implementado");
+		int pointer = 0;
 		
+		for(int i = 0; i < header.getQtdPonteiros(); i++, pointer += RowId.ROWID_SIZE){
+			RowId rowid = new RowId(ByteArrayTools.subArray(dados, pointer, RowId.ROWID_SIZE));
+			ponteiros.add(rowid);
+		}
+		for(int i = 0;i < header.getQtdPonteiros()-1;i++){
+			
+			int chaveSize = ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, pointer, 4));
+			byte[] chaveBA = ByteArrayTools.subArray(dados, pointer, chaveSize);
+			
+			RowId tupleId = new RowId(this.tupleBlocoId.getContainerId(), 
+					this.tupleBlocoId.getBlocoId(), 
+					pointer + Node.HEADER_BLOCO_INDICE_SIZE);
+			
+			Chave chave = new Chave(chaveBA, tupleId, descritor);
+			
+			chaves.add(chave);
+			
+			pointer += chaveSize;
+		}
 	}
 
 	@Override
@@ -175,8 +220,10 @@ public class DadosNode implements IDados{
 		
 		retorno.add(ponteiros.get(metade));
 		
+		
 		for(int i = metade + 1; i < total; i++){
 			retorno.add(ponteiros.remove(i));
+			header.decQtdPonteiros(1);
 		}		
 		
 		return retorno; 
@@ -185,7 +232,53 @@ public class DadosNode implements IDados{
 
 	public void addPonteiro(RowId ri) {
 		this.ponteiros.add(ri);
+		header.incQtdPonteiros(1);
+	}
+
+	public boolean hasPonteiro(Node noh) {
+		for(RowId ri : ponteiros){
+			if(noh.getBlocoTupleId().isSameBloco(ri)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean hasChave(Chave chave) {
+		for(Chave c: chaves){
+			if (compareChave(chave, c) == 0){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public RowId getBlocoId(Chave tupla) {
+		for(int i = 0; i < chaves.size(); i++){
+			Chave chave = chaves.get(i);
+			if (compareChave(chave, tupla) == 0){
+				return chave.getTupleId();
+			}
+		}
+		return null;
+	}
+
+	public void setVizinho(RowId blocoTupleId) {
+		vizinho = blocoTupleId;
 		
+	}
+
+	public RowId getVizinho() {
+		return vizinho;
+	}
+
+	public ArrayList<Chave> getChaves() {
+		return chaves;
+	}
+
+	@Override
+	public ITupla getTupla(RowId rowid) {
+		throw new RuntimeException("Não implementado");
 	}
 
 }

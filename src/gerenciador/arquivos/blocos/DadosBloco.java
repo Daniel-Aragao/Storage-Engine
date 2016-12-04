@@ -26,9 +26,6 @@ public class DadosBloco implements IDados{
 		fromByteArray(dados);
 	}
 	
-	/* (non-Javadoc)
-	 * @see gerenciador.arquivos.blocos.IDados#getByteArray()
-	 */
 	@Override
 	public byte[] getByteArray() throws IncorrectFormatException {
 		byte[] retorno = new byte[0];
@@ -40,16 +37,26 @@ public class DadosBloco implements IDados{
 		return retorno;
 	}
 	
-	/* (non-Javadoc)
-	 * @see gerenciador.arquivos.blocos.IDados#getTupla(int)
-	 */
 	@Override
 	public ITupla getTupla(int index){
 		return tuplas.get(index);
 	}
-	/* (non-Javadoc)
-	 * @see gerenciador.arquivos.blocos.IDados#getSize()
-	 */
+	
+	@Override
+	public ITupla getTupla(RowId rowid){
+		int tamanhoPercorrido = Bloco.HEADER_BLOCO_SIZE;
+		int contador = 0;
+		
+		for(ITupla t : tuplas){
+			if(rowid.getOffSet() == tamanhoPercorrido){
+				break;
+			}
+			contador++;
+		}
+		
+		return getTupla(contador);
+	}
+
 	@Override
 	public int getSize(){
 		return tuplas.size();

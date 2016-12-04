@@ -16,6 +16,7 @@ public class HeaderControle implements IBinarizable<HeaderControle>{
 	private int proxBlocoLivre;
 	private short SizeDescritor;
 	private String Nome;
+	// qtdIndices serão a ordem
 	private byte qtdIndices;
 	// vetor indiceids serão a raiz do arquivo de índices - converter de byte array pra inteiro
 	private byte[] indiceIds;
