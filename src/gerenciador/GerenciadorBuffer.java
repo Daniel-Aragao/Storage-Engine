@@ -10,6 +10,7 @@ import gerenciador.buffer.Memoria;
 import gerenciador.buffer.interfaces.IMemoryEvents;
 import gerenciador.indice.blocos.Node;
 import gerenciador.loger.Log;
+import gerenciador.loger.LogNulo;
 
 public class GerenciadorBuffer {
 
@@ -34,7 +35,7 @@ public class GerenciadorBuffer {
 		hit = 0;
 		miss = 0;
 		swaps = 0;
-		Log = new Log();
+		Log = new LogNulo();
 		GerenciadorArquivos ga = getGAFromCache();
 	}
 
@@ -78,7 +79,7 @@ public class GerenciadorBuffer {
 
 			hit++;
 			atualizarControleLRU(posMem);
-			return memoria.getBloco(posMem);
+			return inserirEventos(memoria.getBloco(posMem));
 		}
 
 		Log.Write("Buffer => buscar no disco");
@@ -108,6 +109,11 @@ public class GerenciadorBuffer {
 		atualizarControleLRU(posMem);
 
 		return novoBloco;
+	}
+
+	private IBloco inserirEventos(IBloco bloco) {
+		eventosDisco.InserirEventos(bloco);
+		return bloco;
 	}
 
 	public IBloco getFromDisk(RowId tid) {
@@ -195,5 +201,11 @@ public class GerenciadorBuffer {
 	public void addBloco(IArquivo indice, Node node) {
 		indice.addBloco(node);
 		getBloco(node.getBlocoTupleId());
+	}
+	
+	public void updateBlocoNoBuffer(IBloco bloco){
+		int posMem = memoria.getPosition(bloco.getBlocoTupleId());
+		if(posMem >= 0)
+				memoria.putBloco(bloco, posMem);
 	}
 }

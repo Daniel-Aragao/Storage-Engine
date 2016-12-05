@@ -1,7 +1,8 @@
 package gerenciador;
 
 import java.util.ArrayList;
-import java.util.Optional;
+import java.util.Collections;
+import java.util.Comparator;
 
 import gerenciador.arquivos.Arquivo;
 import gerenciador.arquivos.blocos.Coluna;
@@ -42,6 +43,7 @@ public class GerenciadorIndice {
 		if (arquivo == null) {
 			throw new RuntimeException("Arquivo não selecionado!");
 		}
+		validarDescricoes(descricoes, arquivo.getDescritor().getDescritores());
 
 		// criar arquivo de indice
 		IArquivo indice = buffer.getGAFromCache().CriarArquivo(nome, descricoes, ETipoBlocoArquivo.indices);
@@ -49,6 +51,7 @@ public class GerenciadorIndice {
 
 		// adicionar indice no aruqivo
 		arquivo.adicionarIndice(indice.getId());
+		
 
 		// adicionarEntrada somente no indice novo
 
@@ -61,7 +64,29 @@ public class GerenciadorIndice {
 		}
 
 		// ordem
-		return indice.qtdIndices();
+		return ((HeaderNode)getRaiz(indice).getHeader()).getOrdemArvore();
+	}
+
+	private void validarDescricoes(UnidadeDescricao[] descricoes, ArrayList<UnidadeDescricao> descritores) {
+		boolean todoscontidos = true;
+		for(UnidadeDescricao udroes : descricoes){
+			boolean contains = false;
+			for(UnidadeDescricao udres : descritores){
+				if(udres.getNome().equals(udroes.getNome())){
+					contains = true;
+					break;
+				}
+			}
+			if(!contains){
+				todoscontidos = false;
+				break;
+			}
+		}
+		
+		if(!todoscontidos){
+			throw new RuntimeException("Descricoes informadas não estão nos descritores da tabela");
+		}
+		
 	}
 
 	public void AdicionarEntrada(ITupla tupla, IArquivo arquivo) {
@@ -87,7 +112,8 @@ public class GerenciadorIndice {
 				// vetor indiceids serão a raiz
 				Node node = createNode(indice);
 				atualizarRaiz(bcontroleIndice, node);
-				indice.setQtdIndice((byte) ((HeaderNode)node.getHeader()).getOrdemArvore());
+//				é um short, acaba armazenando o valor errado
+//				indice.setQtdIndice((byte) ((HeaderNode)node.getHeader()).getOrdemArvore());
 				
 				node.addTupla(chave);
 				buffer.addBloco(indice, node);
@@ -105,7 +131,7 @@ public class GerenciadorIndice {
 						if (folha.overflow()) {
 							tratarOverflow(indice, folha);
 						} else {
-							folha.atualizar();
+							folha.atualizar(buffer);
 						}
 
 						adicionou = true;
@@ -140,21 +166,22 @@ public class GerenciadorIndice {
 
 		node.ordenar(buffer);
 		
-		if(folha.hasChild()){
+		if(!folha.hasChild()){
 			node.setVizinho(folha.getVizinho());
 			folha.setVizinho(node.getBlocoTupleId());			
 		}
 		
-		indice.addBloco(node);
-		folha.atualizar();
+		buffer.addBloco(indice, node);
+		folha.atualizar(buffer);
 
 		Node pai = getPai(folha, getRaiz(indice));
 
 		if (pai == null) {
 			pai = createNode(indice);
-
 			pai.addPonteiro(folha.getBlocoTupleId());
-			atualizarRaiz(indice.getBlocoControle(), pai);
+			
+			buffer.addBloco(indice, pai);
+			atualizarRaiz(indice.getBlocoControle(), pai);			
 		}
 
 		pai.addTupla(chaveCentral);
@@ -164,7 +191,7 @@ public class GerenciadorIndice {
 		if (pai.overflow()) {
 			tratarOverflow(indice, pai);
 		}
-		pai.atualizar();
+		pai.atualizar(buffer);
 	}
 
 	private Node getPai(Node chaveDeBusca, Node raiz) {
@@ -219,6 +246,8 @@ public class GerenciadorIndice {
 
 			node = new Node(indice.getId(), indice.getBlocoControle().getProxBlocoLivre(), ETipoBlocoArquivo.indices,
 					indice.getDescritor());
+			
+			node.setEvents(indice.getBlocoEvents());
 
 		} catch (IncorrectFormatException e) {
 			e.printStackTrace();
@@ -228,6 +257,22 @@ public class GerenciadorIndice {
 
 	private void atualizarRaiz(BlocoControle bcontroleIndice, IBloco node) {
 		bcontroleIndice.setIndices(ByteArrayTools.intToByteArray(node.getBlocoId()));
+	}
+	
+	public ArrayList<ITupla> Buscar(String[] chavestring, byte indiceId){
+		IArquivo indice = buffer.getGAFromCache().getArquivo(indiceId);
+		Node node = (Node) getRaiz(indice);
+		
+		
+		Chave chave = null;
+		try {
+			chave = new Chave(chavestring, null, indice.getDescritor(), null);
+		} catch (IncorrectFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return Buscar(chave, node);
 	}
 
 	public ArrayList<ITupla> Buscar(Chave chave, byte indiceId){
@@ -246,8 +291,8 @@ public class GerenciadorIndice {
 		while(folha != null && folha.hasChave(chave)){
 			for(Chave key : folha.getChaves()){
 				if(DadosNode.compareChave(key, chave) == 0){
-					linhas.add(buffer.getBloco(key.getRowid())
-							.getDados().getTupla(key.getRowid()));					
+					linhas.add(buffer.getBloco(key.getTarget())
+							.getDados().getTupla(key.getTarget()));					
 				}
 			}
 			folha = (Node) buffer.getBloco(folha.getVizinho());

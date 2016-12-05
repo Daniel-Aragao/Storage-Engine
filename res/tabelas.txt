@@ -1,6 +1,15 @@
 Author : dados
    COD_AUTHOR[I(5)]
    NAME_AUTHOR[A(100)]
+(1.1.8) 101 LUIZ RUFFATO 
+(1.1.44) 20 JORGE AMADO 
+(1.1.78) 13 CHARLES DICKENS 
+(1.1.120) 41 MACHADO DE ASSIS 
+(1.1.164) 45 JOSE DE ALENCAR 
+(1.1.206) 112 JUAN RULFO 
+(1.1.238) 213 JOAO GUIMARAES ROSA 
+
+
 
 Fornecedor : dados
    COD_FORN[I(6)]
@@ -18,19 +27,3 @@ Cliente : dados
    FON_CLI[A(15)]
    MKT_CLI[A(10)]
    COM_CLI[A(117)]
-
-Author : dados
-   COD_AUTHOR[I(5)]
-   NAME_AUTHOR[A(100)]
-
-Fornecedor : dados
-   COD_FORN[I(6)]
-   NOME_FORN[A(25)]
-   END_FORN[A(40)]
-   NASC_FORN[I(4)]
-   FON_FORN[A(15)]
-   COM_CLI[A(101)]
-
-Author2 : dados
-   COD_AUTHOR[I(5)]
-   NAME_AUTHOR[A(100)]

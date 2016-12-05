@@ -303,5 +303,16 @@ public class Arquivo implements IArquivo{
 	public int qtdIndices(){
 		return blocoControle.getHeader().qtdIndices();
 	}
+
+
+	public IBlocoEvents getBlocoEvents() {
+		return blocoEvents;
+	}
+
+
+	@Override
+	public void atualizar() {
+		events.BlocoControleAlterado(this);
+	}
 	
 }

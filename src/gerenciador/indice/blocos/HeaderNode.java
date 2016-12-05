@@ -1,5 +1,6 @@
 package gerenciador.indice.blocos;
 
+import gerenciador.RowId;
 import gerenciador.arquivos.blocos.IHeader;
 import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.enums.ETipoBlocoArquivo;
@@ -7,7 +8,7 @@ import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.utils.ByteArrayTools;
 
 public class HeaderNode implements IHeader{
-	public static final int TAMANHO_HEADER = 12;
+	public static final int TAMANHO_HEADER = 20;
 	
 	private byte containerId;
 	private int blocoId; // 3 bytes
@@ -16,6 +17,7 @@ public class HeaderNode implements IHeader{
 	
 	private short ordemArvore; // 2 bytes
 	private short qtdPonteiros;// 2 bytes
+	private RowId vizinho; // 8 bytes
 	
 	private int minPonteiros; // p min
 	private int maxPonteiros;
@@ -28,7 +30,7 @@ public class HeaderNode implements IHeader{
 		this.tipo = tipoBloco;
 		bytesUsados = TAMANHO_HEADER;
 		this.ordemArvore = ordemArvore;
-		
+		vizinho = new RowId((byte) 0, 0, 0);
 		kpConfig();
 	}
 	
@@ -66,7 +68,7 @@ public class HeaderNode implements IHeader{
 
 	@Override
 	public byte[] getByteArray() throws IncorrectFormatException {
-		byte[] retorno = new byte[8];
+		byte[] retorno = new byte[TAMANHO_HEADER];
 		
 		retorno[0] = containerId;
 		
@@ -87,8 +89,10 @@ public class HeaderNode implements IHeader{
 		retorno[9] = ordem[3];
 		
 		byte[] qtdPonteiros = ByteArrayTools.intToByteArray(this.qtdPonteiros);
-		retorno[8] = qtdPonteiros[2];
-		retorno[9] = qtdPonteiros[3];
+		retorno[10] = qtdPonteiros[2];
+		retorno[11] = qtdPonteiros[3];
+		
+		ByteArrayTools.appendArrays(retorno, vizinho.getByteArray(), 12);
 		
 		return retorno;
 	}
@@ -110,6 +114,9 @@ public class HeaderNode implements IHeader{
 		
 		this.qtdPonteiros = (short) ByteArrayTools
 				.byteArrayToInt(ByteArrayTools.subArray(dados, 10, 2));
+		
+		this.vizinho = new RowId(ByteArrayTools
+				.subArray(dados, 12, RowId.ROWID_SIZE));
 	}
 
 	@Override
@@ -162,6 +169,14 @@ public class HeaderNode implements IHeader{
 
 	public short getOrdemArvore() {
 		return ordemArvore;
+	}
+	
+	public void setVizinho(RowId blocoTupleId) {
+		vizinho = blocoTupleId;
+	}
+
+	public RowId getVizinho() {
+		return vizinho;
 	}
 
 }

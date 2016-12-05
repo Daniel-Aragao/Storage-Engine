@@ -36,4 +36,8 @@ public interface IArquivo extends IBinarizable<IArquivo> {
 
 	void setQtdIndice(byte byteArrayToInt);
 
+	void atualizar();
+
+	IBlocoEvents getBlocoEvents();
+
 }

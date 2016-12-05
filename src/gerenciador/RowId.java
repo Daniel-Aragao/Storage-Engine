@@ -41,7 +41,7 @@ public class RowId implements IBinarizable<RowId>{
 	}
 
 	public boolean isContainerEquals(RowId tuple) {
-		return isBlocoEquals(tuple.getBlocoId());
+		return isContainerEquals(tuple.getContainerId());
 	}
 
 	public boolean isContainerEquals(int contId) {
@@ -78,5 +78,16 @@ public class RowId implements IBinarizable<RowId>{
 		this.blocoId = ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 1, 3));
 		
 		this.offSet = ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 4, 4));		
+	}
+	
+	@Override
+	public boolean equals(Object q){
+		RowId other = (RowId) q;
+		
+		if(isSameBloco(other) && offSet == other.offSet){
+			return true;
+		}
+		
+		return false;
 	}
 }

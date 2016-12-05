@@ -16,4 +16,6 @@ public interface IArquivoEvents {
 	public void BlocoAlterado(IBloco bloco);
 	
 	public void BlocoControleAlterado(IArquivo a);
+	
+	public void InserirEventos(IBloco bloco);
 }

@@ -5,10 +5,12 @@ import java.util.ArrayList;
 
 import gerenciador.GerenciadorArquivos;
 import gerenciador.GerenciadorIndice;
+import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.UnidadeDescricao;
 import gerenciador.arquivos.enums.ETipoColuna;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IArquivo;
+import gerenciador.arquivos.interfaces.ILog;
 
 public class main {
 
@@ -76,20 +78,41 @@ public class main {
 //		System.out.println((char)(a + b));
 //		System.out.println(new Integer(2).toString());
 		
-		GerenciadorArquivos ga = new GerenciadorArquivos();
-		printgalera(ga);
 		
+		
+		GerenciadorArquivos ga = new GerenciadorArquivos(new ILog() {
+			
+			@Override
+			public void Write(String msg) {
+				
+				
+			}
+			
+			@Override
+			public void Erro(String msg) {
+				
+				
+			}
+		});
 		GerenciadorIndice gi = new GerenciadorIndice();
 		
-		IArquivo a = ga.getArquivo((byte) 1);
-		
-		UnidadeDescricao[] ud = new UnidadeDescricao[1];
+		int tabela = 6;
+		IArquivo a = ga.getArquivo((byte) tabela);
+		limparIndices(a, ga);
+		UnidadeDescricao[] ud = new UnidadeDescricao[2];
 		ud[0] = new UnidadeDescricao("COD_AUTHOR", ETipoColuna.inteiro, (byte) 5);
+		ud[1] = new UnidadeDescricao("NAME_AUTHOR", ETipoColuna.string, (byte) 100);
+//		ud[0] = new UnidadeDescricao("COD_FORN", ETipoColuna.inteiro, (byte) 5);
 		
-		gi.CriarIndice((byte) 1, ud, "primeiro teste");
+		System.out.println("Ordem: " + gi.CriarIndice((byte) tabela, ud, a.getNome()+ " índice"));
 		
-		System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-		printgalera(ga);
+		
+		String[] chave = {"112"};
+		System.out.println(gi.Buscar(chave, (byte) 9));	 // 7, 8	
+		
+//		System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+//		printgalera(ga);
+//		System.out.println(ga.getArquivo((byte) 7));
 	}
 	
 	private static void printgalera(GerenciadorArquivos ga){
@@ -101,6 +124,12 @@ public class main {
 			}
 			System.out.println();
 		}
+	}
+	
+	private static void limparIndices(IArquivo a, GerenciadorArquivos ga){
+		a.getBlocoControle().setQtdeIndice((byte) 0);
+		a.getBlocoControle().setIndices(new byte[BlocoControle.TAMANHO_INDICES-1]);
+		a.atualizar();
 	}
 	
 //	

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import gerenciador.GerenciadorBuffer;
 import gerenciador.RowId;
+import gerenciador.arquivos.blocos.ColunaInt;
 import gerenciador.arquivos.blocos.DadosBloco;
 import gerenciador.arquivos.blocos.HeaderBloco;
 import gerenciador.arquivos.blocos.IDados;
@@ -12,6 +13,7 @@ import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.blocosControle.UnidadeDescricao;
 import gerenciador.arquivos.enums.ETipoBlocoArquivo;
+import gerenciador.arquivos.enums.ETipoColuna;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBloco;
 import gerenciador.arquivos.interfaces.IBlocoEvents;
@@ -46,14 +48,22 @@ public class Node implements IBloco {
 	
 	private short calcularOrdem(Descritor descritor){
 		short tamanho_chaves = 0;
-		short tamanho_ponteiros = RowId.ROWID_SIZE;
+		short tamanho_ponteiros = RowId.ROWID_SIZE; // ponteiros internos da árvore
 		
 		for(UnidadeDescricao ud : descritor.getDescritores()){
-			tamanho_chaves += ud.getTamanho();
+			if(ud.getTipo() == ETipoColuna.string){
+				tamanho_chaves += ud.getTamanho();
+			}else if(ud.getTipo() == ETipoColuna.inteiro){
+				tamanho_chaves += 4; // tamanho de um inteiro
+			}
+			tamanho_chaves += RowId.ROWID_SIZE; // rowid para qual a chave aponta
+			tamanho_chaves += 2; // tamanho da propriedade "tamanho da coluna"
 		}
+		tamanho_chaves += 4; // tamanho da propriedade "tamanho da tupla"
 
-		short ordem = (short) ((BlocoControle.TAMANHO_BLOCO - Node.HEADER_BLOCO_INDICE_SIZE - tamanho_ponteiros)
-				/(tamanho_chaves + tamanho_ponteiros) + 1);// + 1 é o ponteiro já retirado do total
+		short ordem = (short) ((BlocoControle.TAMANHO_BLOCO 
+				- Node.HEADER_BLOCO_INDICE_SIZE - tamanho_ponteiros) // ponteiro inicial
+				/(tamanho_chaves + tamanho_ponteiros) + 1);// + 1 é o ponteiro já descontado do total
 		
 		return ordem;
 	}
@@ -69,11 +79,12 @@ public class Node implements IBloco {
 	}
 	
 	public boolean overflow(){
-		return dados.getSizePonteiros() > header.getMaxChaves();
+		return dados.getSizePonteiros() > header.getMaxPonteiros() || 
+				dados.getSizeChaves() > header.getMaxChaves();
 	}
 	
 	public boolean hasChild(){
-		return this.dados.getSizeChaves() != 0;
+		return this.dados.getSizePonteiros() != 0;
 	}
 
 	@Override
@@ -136,7 +147,7 @@ public class Node implements IBloco {
 
 	@Override
 	public byte[] getByteArray() throws IncorrectFormatException {
-		byte[] retorno = new byte[HEADER_BLOCO_INDICE_SIZE];
+		byte[] retorno = new byte[BlocoControle.TAMANHO_BLOCO];
 
 		byte[] content = ByteArrayTools.concatArrays(header.getByteArray(), dados.getByteArray());
 
@@ -157,8 +168,9 @@ public class Node implements IBloco {
 		return dados.getSubArvore(tupla);
 	}
 	
-	public void atualizar(){
+	public void atualizar(GerenciadorBuffer buffer){
 		events.blocoAlterado(this);
+		buffer.updateBlocoNoBuffer(this);
 	}
 	
 	public Chave menorChave(){
@@ -187,15 +199,31 @@ public class Node implements IBloco {
 	}
 
 	public void setVizinho(RowId blocoTupleId) {
-		this.dados.setVizinho(blocoTupleId);
+		this.header.setVizinho(blocoTupleId);
 		
 	}
 
 	public RowId getVizinho() {
-		return dados.getVizinho();
+		return header.getVizinho();
 	}
 
 	public ArrayList<Chave> getChaves() {
 		return dados.getChaves();
+	}
+	
+	@Override
+	public String toString() {
+		String retorno = "";
+		byte cId = header.getContainerId();
+		int bId = header.getBlocoId();
+
+		for (int i = 0; i < dados.size(); i++) {
+			Chave tupla = (Chave) dados.getTupla(i);
+			retorno += "(" + tupla.getTarget().toString() + ") "
+			// retorno += "("+cId + " " + bId + " " + dados.getOffSet(i) + ") "
+					+ tupla.toString() + "\n";
+		}
+
+		return retorno;
 	}
 }

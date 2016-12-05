@@ -48,13 +48,15 @@ public class DadosBloco implements IDados{
 		int contador = 0;
 		
 		for(ITupla t : tuplas){
-			if(rowid.getOffSet() == tamanhoPercorrido){
+			if(rowid.equals(t.getTupleId())){
 				break;
 			}
 			contador++;
 		}
-		
-		return getTupla(contador);
+		if(contador < tuplas.size()){
+			return getTupla(contador);			
+		}
+		return null;
 	}
 
 	@Override

@@ -162,8 +162,8 @@ public class Tupla implements ITupla{
 	@Override
 	public void fromByteArray(byte[] dados) throws IncorrectFormatException {
 		// BA = Byte Array
-		if(dados.length < (4 + 6 + 4)) 
-				throw new IncorrectFormatException("Tupla não tem o mínimo de "+14+" bytes exigido");
+//		if(dados.length < (4 + 6 + 4)) 
+//				throw new IncorrectFormatException("Tupla não tem o mínimo de "+14+" bytes exigido");
 		
 		this.size = ByteArrayTools.byteArrayToInt(ByteArrayTools.subArray(dados, 4));
 		

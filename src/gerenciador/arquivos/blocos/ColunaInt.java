@@ -6,11 +6,11 @@ import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.utils.ByteArrayTools;
 
 public class ColunaInt extends Coluna{
-	
+	public static final short TAMANHO_COLUNA_INTEIRA = 4 + 2;
 	private int dado;
 
 	public ColunaInt(String prop, UnidadeDescricao descricao) throws IncorrectFormatException{
-		super((short) (4 + 2));
+		super(TAMANHO_COLUNA_INTEIRA);
 		if (descricao.getTipo() != ETipoColuna.inteiro){
 			throw new IncorrectFormatException("Descritor não possui o tipo inteiro");
 		}

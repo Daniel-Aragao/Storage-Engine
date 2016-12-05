@@ -9,24 +9,30 @@ import gerenciador.utils.ByteArrayTools;
 
 public class Chave extends Tupla{
 	
-	private RowId rowid;
+	private RowId target;
 	public Chave(Coluna[] props, RowId tupleId, Descritor descritor, RowId rowid)throws IncorrectFormatException{
 		super(props, tupleId, descritor);
-		this.rowid = rowid;
-		this.size += RowId.ROWID_SIZE;
+		this.target = rowid;
+//		this.size += RowId.ROWID_SIZE;
+	}
+	
+	public Chave(String[] props, RowId tupleId, Descritor descritor, RowId rowid)throws IncorrectFormatException{
+		super(props, tupleId, descritor);
+		this.target = rowid;
+//		this.size += RowId.ROWID_SIZE;
 	}
 	
 	public Chave(byte[] dados, RowId tupleId, Descritor descritor) throws IncorrectFormatException {
 		super(ByteArrayTools.subArray(dados, RowId.ROWID_SIZE, dados.length - RowId.ROWID_SIZE), 
 				tupleId, 
 				descritor);
-		this.rowid = new RowId(ByteArrayTools.subArray(dados, RowId.ROWID_SIZE));
-		this.size += RowId.ROWID_SIZE;
+		this.target = new RowId(ByteArrayTools.subArray(dados, RowId.ROWID_SIZE));
+//		this.size += RowId.ROWID_SIZE;
 	}
 
 	@Override
 	public byte[] getByteArray() throws IncorrectFormatException {
-		byte[] ba = rowid.getByteArray();
+		byte[] ba = target.getByteArray();
 		
 		ba = ByteArrayTools.concatArrays(ba, super.getByteArray());
 		
@@ -35,15 +41,23 @@ public class Chave extends Tupla{
 	
 	@Override
 	public void fromByteArray(byte[] dados) throws IncorrectFormatException {
-		
-		
+//		this.rowid = new RowId(ByteArrayTools.subArray(dados, RowId.ROWID_SIZE));
+
+  		super.fromByteArray(dados);
+  		
+//  		this.size += RowId.ROWID_SIZE		
 	}
 
-	public RowId getRowid() {
-		return rowid;
+	public RowId getTarget() {
+		return target;
 	}
 
-	public void setRowid(RowId rowid) {
-		this.rowid = rowid;
+	public void setTarget(RowId rowid) {
+		this.target = rowid;
+	}
+	
+	@Override
+	public String toString() {
+		return super.toString();
 	}
 }

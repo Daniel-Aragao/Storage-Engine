@@ -58,7 +58,7 @@ public class BlocoTeste {
 				,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 		};
 		
-		byte[] resultado = ByteArrayTools.subArray(bloco.getByteArray(),0,30);
+		byte[] resultado = ByteArrayTools.subArray(bloco.getByteArray(),0, 30);
 		
 		Assert.assertArrayEquals(ba, resultado);
 	}

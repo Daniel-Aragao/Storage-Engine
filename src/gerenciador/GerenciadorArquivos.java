@@ -20,6 +20,7 @@ import gerenciador.arquivos.interfaces.ILog;
 import gerenciador.arquivos.interfaces.ITupla;
 import gerenciador.indice.blocos.Node;
 import gerenciador.loger.Log;
+import gerenciador.loger.LogNulo;
 import gerenciador.utils.IO_Operations;
 
 public class GerenciadorArquivos {
@@ -45,7 +46,7 @@ public class GerenciadorArquivos {
 		construct();
 	}
 	private void construct(){
-		this.Log = new Log();
+		this.Log = new LogNulo();
 		Log.Write("GerenciadorArquivos iniciado..");
 		createArquivoEvents();
 	}
@@ -109,6 +110,11 @@ public class GerenciadorArquivos {
 			
 			public void BlocoControleAlterado(IArquivo a) {
 				atualziarBlocoControle(a.getFile(),a.getBlocoControle());				
+			}
+			@Override
+			public void InserirEventos(IBloco bloco) {
+				Arquivo a = (Arquivo) getArquivo(bloco.getBlocoTupleId().getContainerId());
+				bloco.setEvents(a.getBlocoEvents());
 			}
 		};
 	}
@@ -322,8 +328,10 @@ public class GerenciadorArquivos {
 	
 	public IBloco getBloco(byte containerId, int blocoId){
 		IArquivo arquivo = loadArquivoFromCache(containerId);
-		
-		return getBloco(arquivo.getFile(), blocoId, arquivo.getDescritor());
+		IBloco b = getBloco(arquivo.getFile(), blocoId, arquivo.getDescritor());
+		if(b != null)
+			b.setEvents(arquivo.getBlocoEvents());
+		return b;
 	}	
 	
 	public IBloco getBloco(byte containerId, int blocoId, Descritor descritor){

@@ -3,9 +3,11 @@ package gerenciador.buffer;
 import gerenciador.RowId;
 import gerenciador.arquivos.blocos.Bloco;
 import gerenciador.arquivos.blocosControle.BlocoControle;
+import gerenciador.arquivos.enums.ETipoBlocoArquivo;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
 import gerenciador.arquivos.interfaces.IBloco;
 import gerenciador.buffer.interfaces.IMemoryEvents;
+import gerenciador.indice.blocos.Node;
 import gerenciador.utils.ByteArrayTools;
 
 public class Memoria {
@@ -67,10 +69,15 @@ public class Memoria {
 	public IBloco getBloco(int index){
 		int i = index * BlocoControle.TAMANHO_BLOCO;
 		try {
-			
-			return new Bloco(
+			if(blocos[i+4] == ETipoBlocoArquivo.dados.getValor()){
+				return new Bloco(
 					ByteArrayTools.subArray(blocos, i, BlocoControle.TAMANHO_BLOCO), 
-						events.requisitarDescritor(blocos[i]));
+						events.requisitarDescritor(blocos[i]));		
+			}else if(blocos[i+4] == ETipoBlocoArquivo.indices.getValor()){
+				return new Node(
+					ByteArrayTools.subArray(blocos, i, BlocoControle.TAMANHO_BLOCO), 
+						events.requisitarDescritor(blocos[i]));		
+			}
 			
 		} catch (IncorrectFormatException e) {
 			e.printStackTrace();
