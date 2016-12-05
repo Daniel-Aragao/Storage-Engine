@@ -47,19 +47,19 @@ public class Node implements IBloco {
 	}
 	
 	private short calcularOrdem(Descritor descritor){
-		short tamanho_chaves = 0;
-		short tamanho_ponteiros = RowId.ROWID_SIZE; // ponteiros internos da árvore
+		short tamanho_chaves = RowId.ROWID_SIZE; // chave inicia-se com um ponteiro
+		short tamanho_ponteiros = RowId.ROWID_SIZE; // ponteiro para Nodes
 		
 		for(UnidadeDescricao ud : descritor.getDescritores()){
 			if(ud.getTipo() == ETipoColuna.string){
-				tamanho_chaves += ud.getTamanho();
+				tamanho_chaves += ud.getTamanho()*2; // string ocupad 2 bytes
 			}else if(ud.getTipo() == ETipoColuna.inteiro){
 				tamanho_chaves += 4; // tamanho de um inteiro
 			}
-			tamanho_chaves += RowId.ROWID_SIZE; // rowid para qual a chave aponta
 			tamanho_chaves += 2; // tamanho da propriedade "tamanho da coluna"
 		}
 		tamanho_chaves += 4; // tamanho da propriedade "tamanho da tupla"
+		tamanho_chaves += RowId.ROWID_SIZE; // rowid para qual a chave aponta
 
 		short ordem = (short) ((BlocoControle.TAMANHO_BLOCO 
 				- Node.HEADER_BLOCO_INDICE_SIZE - tamanho_ponteiros) // ponteiro inicial
@@ -165,7 +165,10 @@ public class Node implements IBloco {
 	}
 
 	public RowId getSubArvore(Chave tupla) {
-		return dados.getSubArvore(tupla);
+		if(hasChild()){
+			return dados.getSubArvore(tupla);			
+		}
+		return null;
 	}
 	
 	public void atualizar(GerenciadorBuffer buffer){
@@ -216,14 +219,24 @@ public class Node implements IBloco {
 		String retorno = "";
 		byte cId = header.getContainerId();
 		int bId = header.getBlocoId();
-
-		for (int i = 0; i < dados.size(); i++) {
+		int i = 0;
+		for (i = 0; i < dados.size(); i++) {
 			Chave tupla = (Chave) dados.getTupla(i);
-			retorno += "(" + tupla.getTarget().toString() + ") "
+			try{
+				retorno += dados.getPonteiro(i).toString()+"\n";				
+			}catch(IndexOutOfBoundsException e){
+				
+			}
+			retorno += "(" + tupla.getTupleId().toString() + ") "
 			// retorno += "("+cId + " " + bId + " " + dados.getOffSet(i) + ") "
-					+ tupla.toString() + "\n";
+					+ tupla.toString() + "(" + tupla.getTarget().toString() + ") " + "\n";
+		}
+		try{
+			retorno += dados.getPonteiro(i).toString()+"\n";				
+		}catch(IndexOutOfBoundsException e){
+			
 		}
 
-		return retorno;
+		return retorno + "\n";
 	}
 }

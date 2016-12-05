@@ -63,6 +63,8 @@ public class ColunaString extends Coluna{
 	@Override
 	public int compare(Coluna coluna) {
 		String dadoColuna =(String)coluna.getDado();
+		if(dadoColuna.isEmpty() || this.dado.isEmpty()) 
+			return 0;
 		return this.dado.compareToIgnoreCase(dadoColuna);
 	}
 

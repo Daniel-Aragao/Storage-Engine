@@ -16,6 +16,7 @@ import gerenciador.arquivos.interfaces.IBlocoEvents;
 import gerenciador.arquivos.interfaces.ILog;
 import gerenciador.arquivos.interfaces.ITupla;
 import gerenciador.loger.Log;
+import gerenciador.loger.LogNulo;
 import gerenciador.utils.ByteArrayTools;
 
 public class Arquivo implements IArquivo{
@@ -28,7 +29,7 @@ public class Arquivo implements IArquivo{
 	private ILog Log;
 	
 	public Arquivo(BlocoControle blocoControle, File file){		
-		this.Log = new Log();
+		this.Log = new LogNulo();
 		this.blocoControle = blocoControle;
 		this.file = file;
 		blocos = new ArrayList<IBloco>();		
@@ -37,7 +38,7 @@ public class Arquivo implements IArquivo{
 	
 	
 	public Arquivo(byte[] dados, File file) throws IncorrectFormatException {
-		this.Log = new Log();
+		this.Log = new LogNulo();
 		this.file = file;
 		blocos = new ArrayList<IBloco>();
 		createEvents();

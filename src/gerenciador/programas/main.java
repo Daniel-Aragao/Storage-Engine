@@ -96,23 +96,24 @@ public class main {
 		});
 		GerenciadorIndice gi = new GerenciadorIndice();
 		
-		int tabela = 6;
-		IArquivo a = ga.getArquivo((byte) tabela);
-		limparIndices(a, ga);
-		UnidadeDescricao[] ud = new UnidadeDescricao[2];
-		ud[0] = new UnidadeDescricao("COD_AUTHOR", ETipoColuna.inteiro, (byte) 5);
-		ud[1] = new UnidadeDescricao("NAME_AUTHOR", ETipoColuna.string, (byte) 100);
+//		int tabela = 2;
+//		IArquivo a = ga.getArquivo((byte) tabela);
+//		limparIndices(a, ga);
+//		UnidadeDescricao[] ud = new UnidadeDescricao[1];
+//		ud[0] = new UnidadeDescricao("COD_AUTHOR", ETipoColuna.inteiro, (byte) 5);
+//		ud[1] = new UnidadeDescricao("NAME_AUTHOR", ETipoColuna.string, (byte) 100);
 //		ud[0] = new UnidadeDescricao("COD_FORN", ETipoColuna.inteiro, (byte) 5);
+//		ud[1] = new UnidadeDescricao("NOME_FORN", ETipoColuna.string, (byte) 25);
 		
-		System.out.println("Ordem: " + gi.CriarIndice((byte) tabela, ud, a.getNome()+ " índice"));
+//		System.out.println("Ordem: " + gi.CriarIndice((byte) tabela, ud, a.getNome()+ " índice"));
 		
 		
-		String[] chave = {"112"};
-		System.out.println(gi.Buscar(chave, (byte) 9));	 // 7, 8	
+		String[] chave = {"716"};
+		System.out.println(gi.Buscar(chave, (byte) 8));	 // 7, 8	
 		
 //		System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 //		printgalera(ga);
-//		System.out.println(ga.getArquivo((byte) 7));
+//		System.out.println(ga.getArquivo((byte) 8));
 	}
 	
 	private static void printgalera(GerenciadorArquivos ga){

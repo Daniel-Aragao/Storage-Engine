@@ -6,13 +6,10 @@ import java.util.Comparator;
 
 import gerenciador.GerenciadorBuffer;
 import gerenciador.RowId;
-import gerenciador.arquivos.blocos.Bloco;
 import gerenciador.arquivos.blocos.Coluna;
 import gerenciador.arquivos.blocos.IDados;
-import gerenciador.arquivos.blocosControle.BlocoControle;
 import gerenciador.arquivos.blocosControle.Descritor;
 import gerenciador.arquivos.exceptions.IncorrectFormatException;
-import gerenciador.arquivos.interfaces.IBloco;
 import gerenciador.arquivos.interfaces.ITupla;
 import gerenciador.utils.ByteArrayTools;
 
@@ -213,7 +210,7 @@ public class DadosNode implements IDados{
 		int total = chaves.size();
 		
 		int metade = total/2;
-		metade = (total%2 != 0)? (metade - 1):metade;
+		metade = (total%2 == 0)? (metade-1):(metade);
 		
 		if(total > metade){
 			retorno.add(chaves.get(metade));
@@ -233,10 +230,10 @@ public class DadosNode implements IDados{
 		int metade = total/2;
 		
 		if(total > metade){
-			retorno.add(ponteiros.get(metade));
+//			retorno.add(ponteiros.get(metade));
 			
-			for(int i = metade + 1; i < total; i++){
-				retorno.add(ponteiros.remove(metade+1));
+			for(int i = metade /*+ 1*/; i < total; i++){
+				retorno.add(ponteiros.remove(metade));
 				header.decQtdPonteiros(1);
 			}
 		}
@@ -285,6 +282,10 @@ public class DadosNode implements IDados{
 	@Override
 	public ITupla getTupla(RowId rowid) {
 		throw new RuntimeException("Não implementado");
+	}
+
+	public RowId getPonteiro(int i) {
+		return ponteiros.get(i);
 	}
 
 }

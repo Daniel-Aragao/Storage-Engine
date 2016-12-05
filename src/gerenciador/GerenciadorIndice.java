@@ -124,7 +124,6 @@ public class GerenciadorIndice {
 				while (!adicionou) {
 					if (!folha.hasChild()) {
 						// então é folha
-
 						folha.addTupla(chave);
 						folha.ordenar(buffer);
 
@@ -158,10 +157,12 @@ public class GerenciadorIndice {
 		for (Chave c : mchaves) {
 			node.addTupla(c);
 		}
-
-		ArrayList<RowId> mponteiros = folha.getMetadePonteiros();
-		for (RowId ri : mponteiros) {
-			node.addPonteiro(ri);
+		
+		if(folha.hasChild()){
+			ArrayList<RowId> mponteiros = folha.getMetadePonteiros();
+			for (RowId ri : mponteiros) {
+				node.addPonteiro(ri);
+			}			
 		}
 
 		node.ordenar(buffer);
@@ -172,6 +173,7 @@ public class GerenciadorIndice {
 		}
 		
 		buffer.addBloco(indice, node);
+		node.atualizar(buffer);
 		folha.atualizar(buffer);
 
 		Node pai = getPai(folha, getRaiz(indice));
@@ -189,6 +191,9 @@ public class GerenciadorIndice {
 		pai.ordenar(buffer);
 
 		if (pai.overflow()) {
+			if(pai.getBlocoId() == 52){
+				System.out.println("overflow do 52");
+			}
 			tratarOverflow(indice, pai);
 		}
 		pai.atualizar(buffer);
@@ -213,7 +218,7 @@ public class GerenciadorIndice {
 
 			int indexDescricaoNaTabela = -1;
 			for (int j = 0; j < descritorArquivo.getNumberOfColumns(); j++) {
-				if (descritorArquivo.getUnidadeDescricao(i).getNome().equals(descricao.getNome())) {
+				if (descritorArquivo.getUnidadeDescricao(j).getNome().equals(descricao.getNome())) {
 					indexDescricaoNaTabela = j;
 					break;
 				}
