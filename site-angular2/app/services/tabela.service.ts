@@ -60,12 +60,12 @@ export class TabelaService {
     */
 
     search(b: Busca): Promise<Resultado[]>{
-        return Promise.resolve(37);
-        /*
-        return this.http.get(this.url)
+        //return Promise.resolve(37);
+        
+        return this.http.post(this.url + "/busca/getBusca", JSON.stringify(b), {headers: this.headers})
             .toPromise()
-            .then(response => response.json().data as Resultado[])
+            .then(response => response.json() as Resultado[])
             .catch(this.handleError);
-        */
+        
     }
 }

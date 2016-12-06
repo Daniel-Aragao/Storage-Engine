@@ -50,13 +50,11 @@ var TabelaService = (function () {
     }
     */
     TabelaService.prototype.search = function (b) {
-        return Promise.resolve(37);
-        /*
-        return this.http.get(this.url)
+        //return Promise.resolve(37);
+        return this.http.post(this.url + "/busca/getBusca", JSON.stringify(b), { headers: this.headers })
             .toPromise()
-            .then(response => response.json().data as Resultado[])
+            .then(function (response) { return response.json(); })
             .catch(this.handleError);
-        */
     };
     TabelaService = __decorate([
         core_1.Injectable(), 
