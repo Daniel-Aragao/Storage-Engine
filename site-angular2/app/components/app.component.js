@@ -17,6 +17,9 @@ var AppComponent = (function () {
     }
     AppComponent.prototype.mudarTela = function (id) {
         this.tela = id;
+        if (this.tela === 1) {
+            this.getTabelas();
+        }
     };
     AppComponent.prototype.ngOnInit = function () {
         this.getTabelas();

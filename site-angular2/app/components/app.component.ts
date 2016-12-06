@@ -21,6 +21,9 @@ export class AppComponent implements OnInit {
     
     mudarTela(id: Number): void{
         this.tela = id;
+        if (this.tela === 1) {
+            this.getTabelas();
+        }
     }
 
     ngOnInit(): void{

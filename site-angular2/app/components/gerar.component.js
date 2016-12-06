@@ -9,9 +9,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var Tabela_1 = require('../Objects/Tabela');
 var GerarComponent = (function () {
     function GerarComponent() {
+        this.indice = new Tabela_1.Tabela();
     }
+    GerarComponent.prototype.tabelaChanged = function () {
+        var tabelaSelecionada = this.tabelas[this.tabelaIndex];
+        this.colunas = tabelaSelecionada.colunas;
+        this.indice.qtdIndices = tabelaSelecionada.id;
+    };
+    GerarComponent.prototype.colunasChanged = function () {
+        var _this = this;
+        this.indice.colunas = [];
+        this.colunasIndexes.forEach(function (element) {
+            _this.indice.colunas.push(_this.colunas[element]);
+        });
+    };
+    GerarComponent.prototype.gerarIndice = function () {
+    };
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Array)
@@ -19,7 +35,9 @@ var GerarComponent = (function () {
     GerarComponent = __decorate([
         core_1.Component({
             selector: 'gerar',
-            templateUrl: 'app/components/htmls/gerar.component.html'
+            templateUrl: 'app/components/htmls/gerar.component.html',
+            styles: ["\n    ul{\n        list-style-type: none;\n    }"
+            ]
         }), 
         __metadata('design:paramtypes', [])
     ], GerarComponent);

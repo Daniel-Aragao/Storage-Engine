@@ -3,25 +3,37 @@ import { Tabela } from '../Objects/Tabela'
 export const  tabelas: Tabela[] = [
         {
             id: 1,
-            nome: 'primeira tabela ',
-            indices: [4,5,6],
-            Colunas: [
+            nome: 'Fornecedor',
+            indices: [4, 5, 6],
+            qtdIndices: 0,
+            colunas: [
                 {
-                nome: 'String',
-                tipo: 1,
-                tamanho: 65
+                    nome: 'Nome',
+                    tipo: 1,
+                    tamanho: 65
+                },
+                {
+                    nome: 'Idade',
+                    tipo: 0,
+                    tamanho: 5
                 }
             ]    
         },
         {
             id: 2,
-            nome: 'segunda  ',
-            indices: [7,12],
-            Colunas: [
+            nome: 'Autor ',
+            indices: [7, 12],
+            qtdIndices: 7,
+            colunas: [
                 {
-                nome: 'inteiro',
-                tipo: 0,
-                tamanho: 5
+                    nome: 'Codigo autor',
+                    tipo: 0,
+                    tamanho: 5
+                },
+                {
+                    nome: 'Nome autor',
+                    tipo: 1,
+                    tamanho: 25
                 }
             ]    
         }

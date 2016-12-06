@@ -1,7 +1,26 @@
 <div>
-    <label for="tabelas">Tabelas: </label>
-    <select id="tabelas" [(ngModel)]='tabelaSelecionada.id'>
-        <option *ngFor="let tabela of tabelas" [value]="tabela.id">{{tabela.nome}}</option>
-    </select>
-    <span *ngIf="tabelaSelecionada">'{{tabelaSelecionada.nome}}' selecionada</span>
+    <div class="col-lg-4 form-group">
+        <label for="tabelas">Tabelas: </label>
+        <select id="tabelas" [(ngModel)]='tabelaIndex' (change)="tabelaChanged()" class="form-control">
+            <option *ngFor="let tabela of tabelas; let i = index" [value]="i">{{tabela.nome}}</option>
+        </select>
+    </div>
+    <div class="col-lg-3 form-group">
+        <label for="nomeindice">Nome do índice: </label>
+        <input type="text" id="nomeindice" [(ngModel)]="indice.nome" class="form-control">
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-lg-6 form-group">
+        <div *ngIf="tabelaIndex">
+            <label for="">Colunas de {{indice.nome}}: </label>
+            <ul>
+                <li class="" *ngFor="let coluna of colunas; let i = index">
+                    <label><input type="checkbox" value="i"> {{coluna.nome}}</label>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-12 form-group">
+        <input type="button" value="Gerar" (click)="gerarIndice()" class="btn btn-primary pull-right">
+    </div>
 </div>

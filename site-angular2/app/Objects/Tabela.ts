@@ -1,8 +1,9 @@
 import { Coluna } from './Coluna';
 
 export class Tabela{
-    id: Number;
+    id: number;
     nome: String;
-    indices: Number[];
-    Colunas: Coluna[];
+    indices: number[];
+    colunas: Coluna[];
+    qtdIndices: number;
 }

@@ -2,25 +2,37 @@
 exports.tabelas = [
     {
         id: 1,
-        nome: 'primeira tabela ',
+        nome: 'Fornecedor',
         indices: [4, 5, 6],
-        Colunas: [
+        qtdIndices: 0,
+        colunas: [
             {
-                nome: 'String',
+                nome: 'Nome',
                 tipo: 1,
                 tamanho: 65
+            },
+            {
+                nome: 'Idade',
+                tipo: 0,
+                tamanho: 5
             }
         ]
     },
     {
         id: 2,
-        nome: 'segunda  ',
+        nome: 'Autor ',
         indices: [7, 12],
-        Colunas: [
+        qtdIndices: 7,
+        colunas: [
             {
-                nome: 'inteiro',
+                nome: 'Codigo autor',
                 tipo: 0,
                 tamanho: 5
+            },
+            {
+                nome: 'Nome autor',
+                tipo: 1,
+                tamanho: 25
             }
         ]
     }
