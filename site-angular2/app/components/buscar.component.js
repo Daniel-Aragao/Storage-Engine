@@ -29,8 +29,9 @@ var BuscarComponent = (function () {
         this.search(busca);
     };
     BuscarComponent.prototype.search = function (b) {
-        //this.tabelaService.search(b).then(result => this.resultados = result);
-        this.tabelaService.search(b).then(function (result) { return console.log(result); });
+        var _this = this;
+        this.tabelaService.search(b).then(function (result) { return _this.resultado = result; });
+        //this.tabelaService.search(b).then(result => console.log(result));
     };
     __decorate([
         core_1.Input(), 

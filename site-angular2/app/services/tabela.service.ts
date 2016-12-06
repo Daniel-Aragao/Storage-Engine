@@ -24,7 +24,6 @@ export class TabelaService {
         params.set('tipo', tipo+"");
         
         return this.http.get(this.url + "/tabelas/getTabelas", { search: params })
-            // headers: this.headers})
             .toPromise()
             .then(response => response.json().tabelas as Tabela[])
             .catch(this.handleError);
@@ -38,7 +37,6 @@ export class TabelaService {
     create(indice: Tabela): Promise<number>{
         console.log(JSON.stringify(indice));
         //return Promise.resolve(10);
-        
         return this.http
             .post(this.url + "/indices/getOrdem",
             JSON.stringify(indice), {headers: this.headers})
@@ -46,25 +44,14 @@ export class TabelaService {
             .then(res => res.json().ordem)
             .catch(this.handleError)
         
-        
     }
 
-    /*
-    create(name: string): Promise<Hero> {
-    return this.http
-        .post(this.heroesUrl, JSON.stringify({name: name}), {headers: this.headers})
-        .toPromise()
-        .then(res => res.json().data)
-        .catch(this.handleError);
-    }
-    */
-
-    search(b: Busca): Promise<Resultado[]>{
+    search(b: Busca): Promise<Resultado>{
         //return Promise.resolve(37);
         
         return this.http.post(this.url + "/busca/getBusca", JSON.stringify(b), {headers: this.headers})
             .toPromise()
-            .then(response => response.json() as Resultado[])
+            .then(response =>response.json() as Resultado)
             .catch(this.handleError);
         
     }

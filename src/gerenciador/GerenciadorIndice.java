@@ -300,7 +300,12 @@ public class GerenciadorIndice {
 							.getDados().getTupla(key.getTarget()));					
 				}
 			}
-			folha = (Node) buffer.getBloco(folha.getVizinho());
+			RowId vizinho = folha.getVizinho();
+			if(vizinho.getContainerId() != 0){
+				folha = (Node) buffer.getBloco(vizinho);
+			}else{
+				folha = null;
+			}
 		}
 
 		return linhas;

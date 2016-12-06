@@ -23,24 +23,16 @@ var GerarComponent = (function () {
         this.colunas = this.tabelaSelecionada.colunas;
         this.indice.qtdIndices = this.tabelaSelecionada.id;
     };
-    GerarComponent.prototype.colunasChanged = function () {
-        var _this = this;
-        this.indice.colunas = [];
-        this.colunasIndexes.forEach(function (element) {
-            _this.indice.colunas.push(_this.colunas[element]);
-        });
-        console.log(this.indice);
-    };
     GerarComponent.prototype.gerarIndice = function () {
         var _this = this;
         this.indice.colunas = [];
-        var i = 0;
-        this.colunasIndexes.forEach(function (ismarcado) {
-            if (ismarcado) {
-                _this.indice.colunas.push(_this.colunas[i]);
+        var self = this;
+        this.colunasIndexes.forEach(function (v, i) {
+            if (v) {
+                self.indice.colunas.push(self.colunas[i]);
             }
-            i++;
         });
+        console.log(this.colunasIndexes);
         console.log(this.indice);
         this.tabelaService.create(this.indice).then(function (result) { return _this.ordem = result; });
     };

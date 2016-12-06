@@ -44,11 +44,7 @@ public class DadosNode implements IDados{
 			if (compareChave(tupla, chave) <= 0){
 				return ponteiros.get(i);
 			}else if(i+1 == chaves.size()){ // caso da última chave
-				if(ponteiros.size() >= chaves.size()){
-					return ponteiros.get(i+1);
-				}else{
-					return null;
-				}
+				return ponteiros.get(i+1);
 			}
 		}
 		return null;

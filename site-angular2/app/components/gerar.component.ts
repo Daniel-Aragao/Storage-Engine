@@ -36,22 +36,15 @@ export class GerarComponent{
         this.indice.qtdIndices = this.tabelaSelecionada.id;
     }
 
-    colunasChanged(): void{
-        this.indice.colunas = []
-        this.colunasIndexes.forEach(element => {
-            this.indice.colunas.push(this.colunas[element]);
-        });
-        console.log(this.indice);
-    }
     gerarIndice(): void {
-        this.indice.colunas = []
-        let i = 0;
-        this.colunasIndexes.forEach(ismarcado => {
-            if (ismarcado) {
-                this.indice.colunas.push(this.colunas[i]);                
+        this.indice.colunas = [];
+        let self = this;
+        this.colunasIndexes.forEach(function(v, i){
+            if (v) {
+                self.indice.colunas.push(self.colunas[i]);                
             }
-            i++;
         });
+        console.log(this.colunasIndexes);
         console.log(this.indice);
 
         this.tabelaService.create(this.indice).then(result => this.ordem = result);

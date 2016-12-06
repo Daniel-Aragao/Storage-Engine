@@ -1,3 +1,3 @@
 export class Resultado {
-    valores: String[][]
+    buscas: any[]
 }

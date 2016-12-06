@@ -40,15 +40,6 @@ var TabelaService = (function () {
             .then(function (res) { return res.json().ordem; })
             .catch(this.handleError);
     };
-    /*
-    create(name: string): Promise<Hero> {
-    return this.http
-        .post(this.heroesUrl, JSON.stringify({name: name}), {headers: this.headers})
-        .toPromise()
-        .then(res => res.json().data)
-        .catch(this.handleError);
-    }
-    */
     TabelaService.prototype.search = function (b) {
         //return Promise.resolve(37);
         return this.http.post(this.url + "/busca/getBusca", JSON.stringify(b), { headers: this.headers })

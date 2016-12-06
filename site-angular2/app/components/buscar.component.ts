@@ -20,7 +20,7 @@ export class BuscarComponent {
 
     chaves: string[] = [];
 
-    resultados: Resultado[];
+    resultado: Resultado;
 
     constructor(private tabelaService: TabelaService) {
     }
@@ -41,8 +41,8 @@ export class BuscarComponent {
     }
     
     search(b: Busca): void{
-        //this.tabelaService.search(b).then(result => this.resultados = result);
-        this.tabelaService.search(b).then(result => console.log(result));
+        this.tabelaService.search(b).then(result => this.resultado = result);
+        //this.tabelaService.search(b).then(result => console.log(result));
     }
     
 }
