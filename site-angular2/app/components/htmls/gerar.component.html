@@ -1,0 +1,7 @@
+<div>
+    <label for="tabelas">Tabelas: </label>
+    <select id="tabelas" [(ngModel)]='tabelaSelecionada.id'>
+        <option *ngFor="let tabela of tabelas" [value]="tabela.id">{{tabela.nome}}</option>
+    </select>
+    <span *ngIf="tabelaSelecionada">'{{tabelaSelecionada.nome}}' selecionada</span>
+</div>

@@ -47,7 +47,7 @@ public class GerenciadorIndice {
 
 		// criar arquivo de indice
 		IArquivo indice = buffer.getGAFromCache().CriarArquivo(nome, descricoes, ETipoBlocoArquivo.indices);
-//		indice.setQtdIndice((byte) ByteArrayTools.byteArrayToInt(indice.getBlocoControle().getIndices()));
+		indice.setQtdIndice(arquivo.getId());
 
 		// adicionar indice no aruqivo
 		arquivo.adicionarIndice(indice.getId());

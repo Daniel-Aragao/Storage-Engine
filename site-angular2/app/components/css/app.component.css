@@ -1,0 +1,6 @@
+div.nav.nav-pills{
+    margin: 5px;
+}
+div.nav.nav-pills li a{
+    cursor: pointer;
+}

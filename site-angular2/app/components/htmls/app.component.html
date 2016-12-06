@@ -1,0 +1,18 @@
+<div class="container">
+    <div class="nav nav-pills">
+        <li [class.active]="tela === 1"><a (click)="mudarTela(1)">Gerar</a></li>
+        <li [class.active]="tela === 2"><a (click)="mudarTela(2)">Buscar</a></li>
+        <li [class.active]="tela === 3"><a (click)="mudarTela(3)">Visualizar</a></li>
+    </div>
+    <div class="panel panel-default">
+        <div *ngIf="tela == 1" class="panel-body">
+            <gerar [tabelas]="tabelas"></gerar>
+        </div>
+        <div *ngIf="tela == 2" class="panel-body">
+            <!--<buscar></buscar>-->
+        </div>
+        <div *ngIf="tela == 3" class="panel-body">
+            <!--<visualizar></visualizar>-->
+        </div>
+    </div>
+</div>
