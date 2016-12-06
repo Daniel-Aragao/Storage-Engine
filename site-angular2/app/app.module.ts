@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './components/app.component';
 import { GerarComponent } from './components/gerar.component';
+import { TabelaService } from './services/tabela.service';
 
 @NgModule({
   imports:      [ BrowserModule, FormsModule ],
