@@ -10,9 +10,9 @@
         <input type="text" id="nomeindice" [(ngModel)]="indice.nome" class="form-control">
     </div>
     <div class="clearfix"></div>
-    <div class="col-lg-6 form-group">
+    <div class="col-lg-4 form-group">
         <div *ngIf="tabelaIndex">
-            <label for="">Colunas de {{indice.nome}}: </label>
+            <label for="">Colunas de {{tabelaSelecionada.nome}}: </label>
             <ul>
                 <li class="" *ngFor="let coluna of colunas; let i = index">
                     <label><input type="checkbox" value="i"> {{coluna.nome}}</label>
@@ -20,11 +20,13 @@
             </ul>
         </div>
     </div>
-    <div class="col-lg-6 form-group">
-        <label>Ordem: </label>
-        <span></span>
-    </div>
     <div class="col-lg-12 form-group">
         <input type="button" value="Gerar" (click)="gerarIndice()" class="btn btn-primary pull-right">
+    </div>
+    <div class="col-lg-12 form-group">
+        <div class="pull-right">
+            <label>Ordem: </label>
+            <span>{{ordem}}</span>
+        </div>
     </div>
 </div>

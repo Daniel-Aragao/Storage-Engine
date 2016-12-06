@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { GerarComponent } from './gerar.component'
+import { BuscarComponent } from './buscar.component'
 import { TabelaService } from '../services/tabela.service'
 import { OnInit } from '@angular/core';
 import { Tabela } from '../Objects/Tabela'
@@ -14,9 +15,10 @@ import { Tabela } from '../Objects/Tabela'
 export class AppComponent implements OnInit {
     tela: Number = 1;
     tabelas: Tabela[];
+    indices: Tabela[];
 
     constructor(private tabelaService: TabelaService) {
-    
+        
     }
     
     mudarTela(id: Number): void{
@@ -24,14 +26,22 @@ export class AppComponent implements OnInit {
         if (this.tela === 1) {
             this.getTabelas();
         }
+        if (this.tela === 2) {
+            this.getIndices();
+        }
     }
 
     ngOnInit(): void{
         this.getTabelas();
+        this.getIndices();
     }
 
     getTabelas(): void {
-        this.tabelaService.getTabelas().then(tabelas => this.tabelas = tabelas);
+        this.tabelaService.getTabelas(0).then(tabelas => this.tabelas = tabelas);
+    }
+
+    getIndices(): void {
+        this.tabelaService.getTabelas(1).then(tabelas => this.tabelas = tabelas);
     }
     
 }

@@ -20,13 +20,21 @@ var AppComponent = (function () {
         if (this.tela === 1) {
             this.getTabelas();
         }
+        if (this.tela === 2) {
+            this.getIndices();
+        }
     };
     AppComponent.prototype.ngOnInit = function () {
         this.getTabelas();
+        this.getIndices();
     };
     AppComponent.prototype.getTabelas = function () {
         var _this = this;
-        this.tabelaService.getTabelas().then(function (tabelas) { return _this.tabelas = tabelas; });
+        this.tabelaService.getTabelas(0).then(function (tabelas) { return _this.tabelas = tabelas; });
+    };
+    AppComponent.prototype.getIndices = function () {
+        var _this = this;
+        this.tabelaService.getTabelas(1).then(function (tabelas) { return _this.tabelas = tabelas; });
     };
     AppComponent = __decorate([
         core_1.Component({

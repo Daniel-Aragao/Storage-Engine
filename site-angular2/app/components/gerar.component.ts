@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Tabela } from '../Objects/Tabela'
 import { Coluna } from '../Objects/Coluna'
+import { TabelaService } from '../services/tabela.service'
 
 
 @Component({
@@ -20,17 +21,19 @@ export class GerarComponent{
 
     tabelaIndex: number;
     colunasIndexes: number[];
+    tabelaSelecionada: Tabela;
 
     indice: Tabela;
+    ordem: number = 0;
 
-    constructor() {
+    constructor(private tabelaService: TabelaService) {
         this.indice = new Tabela();
     }
 
     tabelaChanged(): void{
-        let tabelaSelecionada = this.tabelas[this.tabelaIndex];
-        this.colunas = tabelaSelecionada.colunas; 
-        this.indice.qtdIndices = tabelaSelecionada.id;
+        this.tabelaSelecionada = this.tabelas[this.tabelaIndex];
+        this.colunas = this.tabelaSelecionada.colunas; 
+        this.indice.qtdIndices = this.tabelaSelecionada.id;
     }
 
     colunasChanged(): void{
@@ -40,6 +43,6 @@ export class GerarComponent{
         });
     }
     gerarIndice(): void {
-        
+        this.tabelaService.create(this.indice).then(result => this.ordem = result);
     }
 }

@@ -1,0 +1,17 @@
+<div>
+    <div class="col-lg-4 form-group">
+        <label for="indice">Índices: </label>
+        <select id="indice" [(ngModel)]='indiceIndex' (change)="indiceChanged()" class="form-control">
+            <option *ngFor="let indice of indices; let i = index" [value]="i">{{indice.nome}}</option>
+        </select>
+    </div>
+    <div class="clearfix"></div>
+    <div class="form-group">
+        <div *ngIf="indiceSelecionado">
+            <div *ngFor="let coluna of colunas" class="col-lg-2">
+                <label>{{coluna.nome}}</label>
+                <input [(ngModel)]="coluna.valor" type="text" class="form-control">
+            </div>
+        </div>
+    </div>
+</div>

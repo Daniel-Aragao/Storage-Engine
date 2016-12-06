@@ -10,14 +10,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var Tabela_1 = require('../Objects/Tabela');
+var tabela_service_1 = require('../services/tabela.service');
 var GerarComponent = (function () {
-    function GerarComponent() {
+    function GerarComponent(tabelaService) {
+        this.tabelaService = tabelaService;
+        this.ordem = 0;
         this.indice = new Tabela_1.Tabela();
     }
     GerarComponent.prototype.tabelaChanged = function () {
-        var tabelaSelecionada = this.tabelas[this.tabelaIndex];
-        this.colunas = tabelaSelecionada.colunas;
-        this.indice.qtdIndices = tabelaSelecionada.id;
+        this.tabelaSelecionada = this.tabelas[this.tabelaIndex];
+        this.colunas = this.tabelaSelecionada.colunas;
+        this.indice.qtdIndices = this.tabelaSelecionada.id;
     };
     GerarComponent.prototype.colunasChanged = function () {
         var _this = this;
@@ -27,6 +30,8 @@ var GerarComponent = (function () {
         });
     };
     GerarComponent.prototype.gerarIndice = function () {
+        var _this = this;
+        this.tabelaService.create(this.indice).then(function (result) { return _this.ordem = result; });
     };
     __decorate([
         core_1.Input(), 
@@ -39,7 +44,7 @@ var GerarComponent = (function () {
             styles: ["\n    ul{\n        list-style-type: none;\n    }"
             ]
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [tabela_service_1.TabelaService])
     ], GerarComponent);
     return GerarComponent;
 }());
