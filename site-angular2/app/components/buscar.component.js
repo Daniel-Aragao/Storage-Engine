@@ -9,14 +9,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var tabela_service_1 = require('../services/tabela.service');
 var BuscarComponent = (function () {
-    function BuscarComponent() {
+    function BuscarComponent(tabelaService) {
+        this.tabelaService = tabelaService;
         this.colunas = [];
         this.chaves = [];
     }
     BuscarComponent.prototype.indiceChanged = function () {
         this.indiceSelecionado = this.indices[this.indiceIndex];
         this.colunas = this.indiceSelecionado.colunas;
+    };
+    BuscarComponent.prototype.buscar = function () {
+        var busca;
+        busca = {
+            id: this.indiceSelecionado.id,
+            buscas: this.chaves
+        };
+        this.search(busca);
+    };
+    BuscarComponent.prototype.search = function (b) {
+        //this.tabelaService.search(b).then(result => this.resultados = result);
+        this.tabelaService.search(b).then(function (result) { return console.log(result); });
     };
     __decorate([
         core_1.Input(), 
@@ -27,7 +41,7 @@ var BuscarComponent = (function () {
             selector: 'buscar',
             templateUrl: 'app/components/htmls/buscar.component.html'
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [tabela_service_1.TabelaService])
     ], BuscarComponent);
     return BuscarComponent;
 }());

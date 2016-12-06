@@ -20,7 +20,7 @@ export class GerarComponent{
     colunas: Coluna[];
 
     tabelaIndex: number;
-    colunasIndexes: number[];
+    colunasIndexes: number[] = [];
     tabelaSelecionada: Tabela;
 
     indice: Tabela;
@@ -41,8 +41,19 @@ export class GerarComponent{
         this.colunasIndexes.forEach(element => {
             this.indice.colunas.push(this.colunas[element]);
         });
+        console.log(this.indice);
     }
     gerarIndice(): void {
+        this.indice.colunas = []
+        let i = 0;
+        this.colunasIndexes.forEach(ismarcado => {
+            if (ismarcado) {
+                this.indice.colunas.push(this.colunas[i]);                
+            }
+            i++;
+        });
+        console.log(this.indice);
+
         this.tabelaService.create(this.indice).then(result => this.ordem = result);
     }
 }

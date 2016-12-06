@@ -14,8 +14,8 @@
         <div *ngIf="tabelaIndex">
             <label for="">Colunas de {{tabelaSelecionada.nome}}: </label>
             <ul>
-                <li class="" *ngFor="let coluna of colunas; let i = index">
-                    <label><input type="checkbox" value="i"> {{coluna.nome}}</label>
+                <li *ngFor="let coluna of colunas; let i = index">
+                    <label><input type="checkbox" [(ngModel)]="colunasIndexes[i]" value="i"> {{coluna.nome}}</label>
                 </li>
             </ul>
         </div>

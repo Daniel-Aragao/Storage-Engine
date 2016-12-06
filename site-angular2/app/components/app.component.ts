@@ -13,31 +13,30 @@ import { Tabela } from '../Objects/Tabela'
 })
 
 export class AppComponent implements OnInit {
-    tela: Number = 1;
+    tela: number = 1;
     tabelas: Tabela[];
-    indices: Tabela[];
 
     constructor(private tabelaService: TabelaService) {
         
     }
     
-    mudarTela(id: Number): void{
+    mudarTela(id: number): void{
         this.tela = id;
+        this.getTabelas(id-1);
         if (this.tela === 1) {
-            this.getTabelas();
         }
         if (this.tela === 2) {
-            this.getIndices();
+            //this.getIndices();
         }
     }
 
     ngOnInit(): void{
-        this.getTabelas();
-        this.getIndices();
+        this.getTabelas(this.tela - 1);
+        //this.getIndices();
     }
 
-    getTabelas(): void {
-        this.tabelaService.getTabelas(0).then(tabelas => this.tabelas = tabelas);
+    getTabelas(t : number): void {
+        this.tabelaService.getTabelas(t).then(tabelas => this.tabelas = tabelas);
     }
 
     getIndices(): void {

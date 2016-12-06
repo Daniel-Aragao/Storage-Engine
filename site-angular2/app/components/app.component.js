@@ -17,20 +17,19 @@ var AppComponent = (function () {
     }
     AppComponent.prototype.mudarTela = function (id) {
         this.tela = id;
+        this.getTabelas(id - 1);
         if (this.tela === 1) {
-            this.getTabelas();
         }
         if (this.tela === 2) {
-            this.getIndices();
         }
     };
     AppComponent.prototype.ngOnInit = function () {
-        this.getTabelas();
-        this.getIndices();
+        this.getTabelas(this.tela - 1);
+        //this.getIndices();
     };
-    AppComponent.prototype.getTabelas = function () {
+    AppComponent.prototype.getTabelas = function (t) {
         var _this = this;
-        this.tabelaService.getTabelas(0).then(function (tabelas) { return _this.tabelas = tabelas; });
+        this.tabelaService.getTabelas(t).then(function (tabelas) { return _this.tabelas = tabelas; });
     };
     AppComponent.prototype.getIndices = function () {
         var _this = this;

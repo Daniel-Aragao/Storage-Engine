@@ -14,6 +14,7 @@ var tabela_service_1 = require('../services/tabela.service');
 var GerarComponent = (function () {
     function GerarComponent(tabelaService) {
         this.tabelaService = tabelaService;
+        this.colunasIndexes = [];
         this.ordem = 0;
         this.indice = new Tabela_1.Tabela();
     }
@@ -28,9 +29,19 @@ var GerarComponent = (function () {
         this.colunasIndexes.forEach(function (element) {
             _this.indice.colunas.push(_this.colunas[element]);
         });
+        console.log(this.indice);
     };
     GerarComponent.prototype.gerarIndice = function () {
         var _this = this;
+        this.indice.colunas = [];
+        var i = 0;
+        this.colunasIndexes.forEach(function (ismarcado) {
+            if (ismarcado) {
+                _this.indice.colunas.push(_this.colunas[i]);
+            }
+            i++;
+        });
+        console.log(this.indice);
         this.tabelaService.create(this.indice).then(function (result) { return _this.ordem = result; });
     };
     __decorate([
